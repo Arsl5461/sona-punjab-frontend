@@ -1,0 +1,30 @@
+.Conatiner-Tournament-poster {
+  position: relative;
+  display: inline-block; /* To make sure the element can be hovered */
+}
+
+.Tournament-poster {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease-in-out; /* Smooth transition for opacity */
+}
+
+.Remove-Tournament-poster {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: red;
+  font-size: 23px;
+  opacity: 0; /* Initially hide the trash icon */
+  transition: opacity 0.3s ease-in-out; /* Smooth transition for opacity */
+}
+
+.Conatiner-Tournament-poster:hover .Remove-Tournament-poster {
+  opacity: 1; /* Show the trash icon on hover */
+}
+
+.Conatiner-Tournament-poster:hover .Tournament-poster {
+  opacity: 0.7; /* Apply slight white overlay effect */
+}
