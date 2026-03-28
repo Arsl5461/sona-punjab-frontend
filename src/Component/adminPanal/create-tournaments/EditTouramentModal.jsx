@@ -577,9 +577,10 @@ const EditTournamentModal = ({ show, handleClose, tournamentId, onSubmit }) => {
             </div>
             <div
               className=" border rounded-3 rounded-top-0"
-              style={{ maxHeight: "300px", overflowY: "auto" }}
+              style={{ maxHeight: "300px", overflowY: "auto", overflowX: "auto" }}
             >
               <div className="d-flex flex-column gap-2 px-4">
+                <div className="table-responsive-app">
                 <table className="table bordered-table mb-0">
                   <thead>
                     <tr>
@@ -649,6 +650,7 @@ const EditTournamentModal = ({ show, handleClose, tournamentId, onSubmit }) => {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
             </div>
           </div>

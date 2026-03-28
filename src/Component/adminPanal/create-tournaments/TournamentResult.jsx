@@ -446,6 +446,7 @@ const TournamentResult = () => {
               </div>
             </div>
             <div className="card-body">
+              <div className="table-responsive-app">
               <table className="table bordered-table mb-0">
                 <thead>
                   <tr>
@@ -735,6 +736,7 @@ const TournamentResult = () => {
                     })}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
           {/* card end */}

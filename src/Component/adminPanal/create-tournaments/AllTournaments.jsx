@@ -120,6 +120,7 @@ const AllTournaments = () => {
                   <ScaleLoader color="#0d6efd" />
                 </div>
               ) : tournamentsList?.length > 0 ? (
+                <div className="table-responsive-app">
                 <table className="table bordered-table mb-0">
                   <thead>
                     <tr>
@@ -133,7 +134,7 @@ const AllTournaments = () => {
                         Name
                       </th>
                       <th scope="col" className="text-start">
-                        Category
+                        Club
                       </th>
                       <th scope="col" className="text-start">
                         Start Date
@@ -156,7 +157,7 @@ const AllTournaments = () => {
                           <td className="text-center align-middle">
                             {index + 1}
                           </td>
-                          <td className="text-start align-middle">
+                          <td className="text-start align-middle tournament-poster-cell">
                             <div
                               className="rounded-2 overflow-hidden bg-secondary"
                               style={{
@@ -255,6 +256,7 @@ const AllTournaments = () => {
                     })}
                   </tbody>
                 </table>
+                </div>
               ) : (
                 <div
                   className="d-flex justify-content-center align-items-center text-muted"

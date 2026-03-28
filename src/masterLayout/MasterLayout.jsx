@@ -166,22 +166,11 @@ const MasterLayout = ({ children }) => {
                   >
                     <LuUsers className="menu-icon" />
 
-                    <span>Categories</span>
+                    <span>Club</span>
                   </NavLink>
                 </li>
               </>
             )}
-
-            <li>
-              <NavLink
-                to="/all-pigeon-owners"
-                className={(navData) => (navData.isActive ? "active-page" : "")}
-              >
-                <LuUsers className="menu-icon" />
-
-                <span>Pigeon Owners</span>
-              </NavLink>
-            </li>
 
             <li>
               <NavLink
@@ -192,6 +181,17 @@ const MasterLayout = ({ children }) => {
                 <CiBoxList className="menu-icon" />
 
                 <span>Tournaments List</span>
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/all-pigeon-owners"
+                className={(navData) => (navData.isActive ? "active-page" : "")}
+              >
+                <LuUsers className="menu-icon" />
+
+                <span>Pigeon Owners</span>
               </NavLink>
             </li>
 

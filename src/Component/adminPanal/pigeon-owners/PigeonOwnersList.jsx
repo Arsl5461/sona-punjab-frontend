@@ -103,6 +103,7 @@ const PigeonOwnersList = () => {
                   <ScaleLoader color="#0d6efd" />
                 </div>
               ) : pigeonOwners?.length > 0 ? (
+                <div className="table-responsive-app">
                 <table className="table bordered-table mb-0">
                   <thead>
                     <tr>
@@ -189,6 +190,7 @@ const PigeonOwnersList = () => {
                     })}
                   </tbody>
                 </table>
+                </div>
               ) : (
                 <div
                   className="d-flex justify-content-center align-items-center text-muted"

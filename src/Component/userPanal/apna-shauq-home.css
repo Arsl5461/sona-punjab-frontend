@@ -1,0 +1,608 @@
+/* Public home theme — layout inspired by apnashauq.com */
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap");
+
+.sp-public {
+  --sp-green-dark: #134c2e;
+  --sp-green: #1b5e3a;
+  --sp-green-light: #2d6a4f;
+  --sp-gold: #c9a227;
+  --sp-gold-light: #e8d48b;
+  --sp-cream: #f5f2e8;
+  --sp-paper: #eef2e0;
+  --sp-ink: #1a1a1a;
+
+  font-family: "Noto Sans", system-ui, -apple-system, sans-serif;
+  background: var(--sp-paper);
+  color: var(--sp-ink);
+  min-height: 100vh;
+}
+
+.sp-public .urdu,
+.sp-public .urdu * {
+  font-family: "Noto Nastaliq Urdu", "Noto Sans", serif;
+  line-height: 1.75;
+}
+
+/* —— Marquee (Latest news) —— */
+.sp-marquee-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(90deg, #fffef8 0%, #f0edd4 50%, #fffef8 100%);
+  border-bottom: 2px solid var(--sp-gold);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.sp-marquee-label {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: var(--sp-green-dark);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sp-marquee-wrap .rfm-marquee-container {
+  flex: 1;
+  min-width: 0;
+  color: #333;
+}
+
+/* —— Banner —— */
+.sp-banner-outer {
+  background: #0d2818;
+  border-bottom: 3px solid var(--sp-gold);
+}
+
+.sp-banner-placeholder {
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* —— Tournament heading (home active tournament) —— */
+.sp-tournament-head {
+  text-align: center;
+  padding: 0.5rem 0.75rem 0.35rem;
+  background: var(--sp-cream);
+  border-bottom: 1px solid rgba(19, 76, 46, 0.15);
+}
+
+/* Compact title — Nastaliq reads large at equal font-size */
+.sp-tournament-head:not(.sp-club-head) .sp-tournament-title {
+  font-size: clamp(0.72rem, 1.65vw, 0.88rem);
+  font-weight: 600;
+  color: var(--sp-green-dark);
+  margin: 0 0 0.2rem;
+  line-height: 1.3;
+}
+
+.sp-tournament-title {
+  font-weight: 600;
+  color: var(--sp-green-dark);
+  margin: 0 0 0.35rem;
+  line-height: 1.35;
+}
+
+.sp-tournament-head:not(.sp-club-head) .sp-tournament-meta {
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+/* Club listing page — compact page title */
+.sp-club-head {
+  padding: 0.4rem 0.75rem 0.3rem;
+}
+
+.sp-club-head .sp-tournament-title {
+  font-size: clamp(0.7rem, 1.5vw, 0.82rem);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* Club tournament cards: wider table area */
+.sp-club-tournament-card {
+  max-width: min(100%, 1180px);
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+
+.sp-club-poster-wrap {
+  text-align: center;
+  padding: 0.75rem 1rem 0;
+  background: rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(19, 76, 46, 0.1);
+}
+
+.sp-club-poster-wrap a {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.sp-club-poster-img {
+  max-height: 140px;
+  width: auto;
+  max-width: min(100%, 260px);
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid rgba(19, 76, 46, 0.15);
+  vertical-align: middle;
+}
+
+.sp-club-poster-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  min-width: 160px;
+  max-width: 260px;
+  margin: 0 auto;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #e8ebe4;
+  color: #5a6b5e;
+  font-size: 0.8rem;
+  border: 1px dashed rgba(19, 76, 46, 0.25);
+}
+
+.sp-club-tournament-card .card-header {
+  text-align: center;
+  background: transparent;
+  border-bottom: none;
+  padding-bottom: 0.25rem;
+}
+
+.sp-club-tournament-card .card-header h2,
+.sp-club-tournament-card .card-header .sp-club-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.sp-club-tournament-card .card-header .text-muted {
+  font-size: 0.8rem;
+  margin-bottom: 0;
+}
+
+.sp-club-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sp-club-tournament-card .table-responsive-app {
+  display: flex;
+  justify-content: center;
+}
+
+.sp-club-tournament-card .table-responsive-app > .table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Club table: fill wide card */
+.sp-club-tournament-card .sp-club-table-wrap .sp-results-table {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  font-size: 0.9rem;
+}
+
+.sp-club-tournament-card .sp-club-table-wrap .sp-results-table thead th,
+.sp-club-tournament-card .sp-club-table-wrap .sp-results-table tbody td {
+  padding: 0.5rem 0.65rem !important;
+}
+
+.sp-club-tournament-card .mt-3.text-muted {
+  text-align: center;
+}
+
+.sp-tournament-meta {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.sp-tournament-meta strong {
+  color: var(--sp-green);
+}
+
+/* —— Date / Total tabs —— */
+.sp-date-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.sp-date-tab {
+  min-width: 7.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: 4px;
+  border: 2px solid var(--sp-green-light);
+  background: #fff;
+  color: var(--sp-green-dark);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.sp-date-tab:hover {
+  background: rgba(45, 106, 79, 0.08);
+}
+
+.sp-date-tab--active {
+  background: var(--sp-green);
+  color: #fff;
+  border-color: var(--sp-green);
+  box-shadow: 0 2px 8px rgba(27, 94, 58, 0.35);
+}
+
+/* —— Winner callout —— */
+.sp-winner-box {
+  margin: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  font-size: 0.95rem;
+}
+
+.sp-winner-box .sp-label {
+  font-weight: 700;
+  color: var(--sp-green-dark);
+}
+
+/* —— Stats strip —— */
+.sp-stats-strip {
+  margin: 0 0.75rem 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  background: linear-gradient(180deg, var(--sp-green) 0%, var(--sp-green-dark) 100%);
+  color: #fff;
+  border: 1px solid var(--sp-gold);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  font-size: 0.88rem;
+}
+
+.sp-stats-strip .d-flex {
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
+
+.sp-stats-strip .fw-bold {
+  color: var(--sp-gold-light);
+}
+
+.sp-last-winner-bar {
+  margin-top: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.88rem;
+}
+
+/* —— Results table —— */
+.sp-table-shell {
+  margin: 0 0.5rem 1.25rem;
+  max-width: calc(100vw - 1rem);
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 6px;
+  overflow-x: auto;
+  overflow-y: visible;
+  border: 2px solid var(--sp-green-dark);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+@media (max-width: 575.98px) {
+  .sp-table-shell {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    max-width: calc(100vw - 0.5rem);
+    border-radius: 4px;
+  }
+}
+
+.sp-results-table {
+  font-size: 0.82rem;
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  margin: 0 !important;
+}
+
+@media (max-width: 991.98px) {
+  .sp-results-table {
+    font-size: 0.74rem;
+  }
+
+  .sp-results-table .sp-owner-pic {
+    width: 36px;
+    height: 36px;
+  }
+
+  .sp-results-table thead th,
+  .sp-results-table tbody td {
+    padding: 0.28rem 0.22rem !important;
+  }
+
+  /* Sticky # + owner while scrolling many pigeon columns */
+  .sp-results-table th:nth-child(1),
+  .sp-results-table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    min-width: 2rem;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.06);
+  }
+
+  .sp-results-table th:nth-child(2),
+  .sp-results-table td:nth-child(2) {
+    position: sticky;
+    left: 2rem;
+    z-index: 2;
+    min-width: 88px;
+    max-width: 120px;
+    box-shadow: 4px 0 6px -2px rgba(0, 0, 0, 0.1);
+  }
+
+  .sp-results-table tbody td:nth-child(1) {
+    background: #fff;
+  }
+
+  .sp-results-table tbody tr:nth-child(even) td:nth-child(1) {
+    background: #f7faf6;
+  }
+
+  .sp-results-table tbody td:nth-child(2) {
+    background: #fff;
+  }
+
+  .sp-results-table tbody tr:nth-child(even) td:nth-child(2) {
+    background: #f7faf6;
+  }
+
+  .sp-results-table thead th:nth-child(1),
+  .sp-results-table thead th:nth-child(2) {
+    z-index: 4;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sp-results-table {
+    font-size: 0.68rem;
+  }
+
+  .sp-results-table th:nth-child(2),
+  .sp-results-table td:nth-child(2) {
+    left: 1.85rem;
+    min-width: 76px;
+    max-width: 100px;
+  }
+}
+
+.sp-results-table thead tr {
+  background: var(--sp-green-dark) !important;
+  color: #fff !important;
+}
+
+.sp-results-table thead th {
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  padding: 0.4rem 0.35rem !important;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sp-results-table tbody tr:nth-child(even) {
+  background: #f7faf6 !important;
+}
+
+.sp-results-table tbody tr:hover {
+  background: #eef6f0 !important;
+}
+
+.sp-results-table tbody td {
+  border: 1px solid #c5d4c8 !important;
+  vertical-align: middle !important;
+}
+
+.sp-results-table .sp-owner-pic {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--sp-gold);
+}
+
+.sp-results-table .sp-owner-name {
+  font-weight: 700;
+  color: var(--sp-green-dark);
+}
+
+.sp-pigeon-cell--lead {
+  background: #b8860b !important;
+  background: linear-gradient(180deg, #d4a84b 0%, #b8892c 100%) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+}
+
+@keyframes sp-blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+.sp-pigeon-cell--blink {
+  animation: sp-blink 1s infinite alternate;
+}
+
+/* —— Empty state —— */
+.sp-empty-tournament {
+  margin: 2rem 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: #fff;
+  border: 2px dashed var(--sp-green-light);
+  border-radius: 8px;
+  color: #555;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sp-empty-tournament strong {
+  color: var(--sp-green-dark);
+}
+
+/* —— Top navigation (Home + clubs + actions) —— */
+.sp-topnav {
+  background: linear-gradient(180deg, #1b5e3a 0%, #134c2e 100%);
+  color: #fff;
+  border-bottom: 3px solid #c9a227;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.sp-topnav-row {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 52px;
+}
+
+.sp-topnav-brand {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.4rem 0.85rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sp-topnav-brand .sp-nav-home {
+  display: inline-block;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  padding: 0.28rem 0.55rem;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.sp-topnav-brand .sp-nav-home:hover {
+  color: #f5e6a8;
+}
+
+.sp-topnav-brand .sp-nav-home--active {
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.sp-topnav-scroll {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  padding: 0.35rem 0.65rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #c9a227 transparent;
+}
+
+.sp-topnav-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.sp-topnav-scroll::-webkit-scrollbar-thumb {
+  background: #c9a227;
+  border-radius: 3px;
+}
+
+.sp-club-link {
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  max-width: 130px;
+  text-align: center;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.sp-club-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sp-club-link--active {
+  background: rgba(0, 0, 0, 0.22);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.sp-topnav-side {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.65rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sp-nav-pill {
+  display: inline-block;
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.sp-nav-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.sp-nav-pill--accent {
+  background: rgba(201, 162, 39, 0.28);
+  border-color: #c9a227;
+}

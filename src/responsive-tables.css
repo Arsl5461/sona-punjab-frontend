@@ -1,0 +1,74 @@
+/**
+ * Responsive tables — mobile, tablet, desktop.
+ * Use wrapper: <div class="table-responsive-app">...</div> around wide tables.
+ */
+
+.dashboard-main-body {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.table-responsive-app {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+/* Table grows with content; scroll horizontally when needed */
+.table-responsive-app > table {
+  width: max-content;
+  min-width: 100%;
+  margin-bottom: 0;
+}
+
+/* Bootstrap .table-responsive — same hardening */
+.table-responsive {
+  width: 100%;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.table-responsive > .table {
+  min-width: 100%;
+}
+
+/* Card bodies that only contain a direct table (no wrapper) */
+.card-body:has(> table) {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.card-body:has(> table) > table {
+  min-width: max(100%, 520px);
+}
+
+/* Modal bodies with wide tables */
+.modal-body:has(> .table-responsive-app),
+.modal-body:has(> table) {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Dashboard: shrink poster column on narrow screens */
+@media (max-width: 767.98px) {
+  .table-responsive-app .tournament-poster-cell .rounded-2.overflow-hidden.bg-secondary {
+    height: 100px !important;
+    width: 72px !important;
+  }
+
+  .table-responsive-app .tournament-poster-cell img {
+    max-height: 100px !important;
+    object-fit: cover;
+  }
+}
+
+/* Large screens: comfortable max width inside dashboard */
+@media (min-width: 1400px) {
+  .table-responsive-app {
+    max-width: 100%;
+  }
+}

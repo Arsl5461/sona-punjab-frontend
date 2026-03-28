@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getAllClubs } from "../../adminPanal/club/__requests/ClubRequests";
 import {
@@ -27,64 +27,65 @@ const HomeNavbar = () => {
   }, []);
 
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const clubListPath = (name) =>
+    `/club-all-tournaments/${encodeURIComponent(name || "")}`;
+
+  const activeClubFromPath = (() => {
+    const prefix = "/club-all-tournaments/";
+    if (!location.pathname.startsWith(prefix)) return null;
+    const raw = location.pathname.slice(prefix.length);
+    try {
+      return decodeURIComponent(raw);
+    } catch {
+      return raw;
+    }
+  })();
 
   return (
-    <>
-      <div
-        className="w-100 d-flex align-items-start justify-content-between p-3"
-        style={{ backgroundColor: "#133E87", color: "white" }}
-      >
-        <div>
-          <Link to="/" className="nav-btn">
+    <header className="sp-topnav">
+      <div className="sp-topnav-row">
+        <div className="sp-topnav-brand">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              isActive ? "sp-nav-home sp-nav-home--active" : "sp-nav-home"
+            }
+          >
             Home
-          </Link>
+          </NavLink>
         </div>
-        <div className="w-100 px-5 d-flex align-items-start justify-content-center gap-5 flex-wrap">
+        <nav className="sp-topnav-scroll" aria-label="Clubs">
           {allClubs?.length > 0 ? (
-            allClubs?.map((Club) => {
+            allClubs.map((Club) => {
+              const path = clubListPath(Club?.name);
+              const isClubActive = activeClubFromPath === Club?.name;
               return (
-                <>
-                  <Link
-                    to={`/club-all-tournaments/${Club?.name}`}
-                    style={{
-                      maxWidth: "100px",
-                      display: "flex",
-                      flexDirection: "column",
-                      cursor: "pointer",
-                    }}
-                    className="club-link"
-                    onClick={() => {
-                      dispatch(clunNameDispatcher(Club?.name));
-                      dispatch(clunRefreshDispatcher(true));
-                    }}
-                  >
-                    <span
-                      className="club-name"
-                      style={{
-                        // whiteSpace: "pre-wrap",
-                        textAlign: "start",
-                      }}
-                    >
-                      {Club?.name.split(" ").join("\n")}
-                    </span>
-                  </Link>
-                </>
+                <Link
+                  key={Club?._id || Club?.name}
+                  to={path}
+                  className={`sp-club-link urdu${
+                    isClubActive ? " sp-club-link--active" : ""
+                  }`}
+                  onClick={() => {
+                    dispatch(clunNameDispatcher(Club?.name));
+                    dispatch(clunRefreshDispatcher(true));
+                  }}
+                >
+                  {Club?.name}
+                </Link>
               );
             })
-          ) : (
-            <></>
-          )}
-        </div>
-        <div className="d-flex align-items-center justify-content-center flex-column gap-2">
-          <Link
-            to="/login"
-            className="nav-btn w-100"
-            style={{ textWrap: "nowrap" }}
-          >
+          ) : null}
+        </nav>
+        <div className="sp-topnav-side">
+          <Link to="/login" className="sp-nav-pill sp-nav-pill--accent">
             Sona Punjab
           </Link>
           <Link
-            className="nav-btn"
+            className="sp-nav-pill"
             to="https://wa.me/13063510172"
             target="_blank"
             rel="noopener noreferrer"
@@ -93,7 +94,7 @@ const HomeNavbar = () => {
           </Link>
         </div>
       </div>
-    </>
+    </header>
   );
 };
 

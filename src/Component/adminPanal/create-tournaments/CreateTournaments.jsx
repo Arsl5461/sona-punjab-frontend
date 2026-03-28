@@ -215,8 +215,8 @@ const CreateTournaments = () => {
     }
 
     if (!formData.club) {
-      newErrors.club = "Category is required";
-      toast.error("Please select a category");
+      newErrors.club = "Club is required";
+      toast.error("Please select a club");
       scrollToField("club");
       setErrors(newErrors);
       return false;
@@ -525,7 +525,7 @@ const CreateTournaments = () => {
 
             <div className="mb-3">
               <label htmlFor="club" className="form-label">
-                Category {errors.club && <span className="text-danger">*</span>}
+                Club {errors.club && <span className="text-danger">*</span>}
               </label>
               <select
                 className={getInputClassName("club")}
@@ -798,9 +798,10 @@ const CreateTournaments = () => {
                 className={`border rounded-3 rounded-top-0 ${
                   errors.participatingLofts ? "border-danger" : ""
                 }`}
-                style={{ maxHeight: "300px", overflowY: "auto" }}
+                style={{ maxHeight: "300px", overflowY: "auto", overflowX: "auto" }}
               >
                 <div className="d-flex flex-column gap-2 px-4">
+                  <div className="table-responsive-app">
                   <table className="table bordered-table mb-0">
                     <thead>
                       <tr>
@@ -870,6 +871,7 @@ const CreateTournaments = () => {
                       ))}
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </div>
               {errors.participatingLofts && (

@@ -3,9 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="SonaPunjab.jpg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#000000" />
-    <meta name="viewport" content="width=device-width, initial-scale=0.4, maximum-scale=5, user-scalable=yes">
 
     <meta name="title" content="SONA PUNJAB | Pigeon Tournaments" />
     <meta
@@ -68,21 +67,6 @@
       window.onload = adjustZoom;
       window.onresize = adjustZoom;
     </script> -->
-    <script>
-      function adjustZoom() {
-        if (window.innerWidth < 500) {
-          document.body.style.transform = "scale(0.4)";
-          document.body.style.transformOrigin = "0 0";
-          document.body.style.width = "250%"; // Adjust width to counteract scaling
-        } else {
-          document.body.style.transform = "scale(1)";
-          document.body.style.width = "100%";
-        }
-      }
-    
-      window.onload = adjustZoom;
-      window.onresize = adjustZoom;
-    </script>
     
   </body>
 </html>

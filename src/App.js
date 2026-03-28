@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
+import "./responsive-tables.css";
 import CreateSubAdmin from "./Component/adminPanal/create-user/CreateSubAdmin";
 import HomePageOne from "./Component/adminPanal/HomePageOne";
 import RouteScrollToTop from "./helper/RouteScrollToTop";

@@ -871,13 +871,15 @@ const OtherTournamentresult = () => {
             )}
       </div>
 
-      <div className="card-body p-0">
+      <div className="table-responsive-app card-body p-0">
         <table
           className="table table-sm table-hover table-striped bordered-table mb-0"
           style={{
-            fontSize: "0.9rem", // Even smaller font
+            fontSize: "0.9rem",
             borderCollapse: "collapse",
             border: "1px solid #dee2e6",
+            width: "max-content",
+            minWidth: "100%",
           }}
         >
           <thead>

@@ -7,13 +7,12 @@ const HomeBanner = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef(null);
 
-  // Fetch banners
   const getBanners = async () => {
     try {
       const response = await getAllBanners();
       setBanners(response?.banners || []);
     } catch (err) {
-      console.lerrorog("Error in fetching Banners", err);
+      console.error("Error in fetching Banners", err);
     }
   };
 
@@ -21,16 +20,14 @@ const HomeBanner = () => {
     getBanners();
   }, []);
 
-  // Auto-slide functionality
   useEffect(() => {
+    if (!banners.length) return undefined;
     const slideInterval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
-    }, 3000); // Slide every 3 seconds
-
-    return () => clearInterval(slideInterval); // Cleanup on unmount
+    }, 4000);
+    return () => clearInterval(slideInterval);
   }, [banners]);
 
-  // Infinite loop effect for the slider
   useEffect(() => {
     if (sliderRef.current) {
       sliderRef.current.style.transition = "transform 0.5s ease-in-out";
@@ -38,33 +35,37 @@ const HomeBanner = () => {
     }
   }, [currentIndex]);
 
-  if (!banners.length) return <p>Loading...</p>;
+  if (!banners.length) {
+    return (
+      <div className="sp-banner-outer">
+        <div className="sp-banner-placeholder">
+          Tournament banners appear here — add slides from the dashboard (Home
+          slider).
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div
-      className="slider-container"
-      style={{ overflow: "hidden", width: "100%" }}
-    >
+    <div className="sp-banner-outer">
       <div
-        ref={sliderRef}
-        className="slider-wrapper"
-        style={{
-          display: "flex",
-          width: `100%`,
-        }}
+        className="slider-container"
+        style={{ overflow: "hidden", width: "100%" }}
       >
-        {banners.map((banner, index) => (
-          <img
-            key={index}
-            src={banner.bannerPicture}
-            alt={`Banner ${index + 1}`}
-            style={{
-              width: "100%",
-              height: "auto",
-              flexShrink: 0,
-            }}
-          />
-        ))}
+        <div
+          ref={sliderRef}
+          className="slider-wrapper"
+          style={{ display: "flex", width: "100%" }}
+        >
+          {banners.map((banner, index) => (
+            <img
+              key={banner._id || banner.id || index}
+              src={banner.bannerPicture}
+              alt=""
+              className="sp-banner-slide-img"
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

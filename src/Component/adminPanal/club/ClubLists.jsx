@@ -68,7 +68,7 @@ const ClubLists = () => {
                 className="btn btn-primary"
                 onClick={() => setShowModal(true)}
               >
-                Create Category
+                Create club
               </button>
             </div>
             <div className="card-body">
@@ -80,6 +80,7 @@ const ClubLists = () => {
                   <ScaleLoader color="#0d6efd" />
                 </div>
               ) : allClubs?.length > 0 ? (
+                <div className="table-responsive-app">
                 <table className="table bordered-table mb-0">
                   <thead>
                     <tr>
@@ -87,7 +88,7 @@ const ClubLists = () => {
                         #
                       </th>
                       <th scope="col" className="text-start">
-                        Category Name
+                        Club name
                       </th>
                       <th scope="col" className="text-center">
                         Options
@@ -127,6 +128,7 @@ const ClubLists = () => {
                     })}
                   </tbody>
                 </table>
+                </div>
               ) : (
                 <div
                   className="d-flex justify-content-center align-items-center text-muted"

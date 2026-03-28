@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import Marquee from "react-fast-marquee";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
+import "../../apna-shauq-home.css";
 import {
   clunRefreshDispatcher,
   tournamentDataDispatcher,
@@ -146,15 +148,13 @@ const ClubAllTournaments = () => {
     return [...new Set(years)].sort((a, b) => b - a); // Sort descending
   };
 
-  // Add this function to filter and sort tournaments
-  const getFilteredTournaments = () => {
-    return clubAllTournaments
+  const getFilteredTournaments = () =>
+    clubAllTournaments
       .filter((tournament) => {
         const tournamentYear = new Date(tournament.dates[0]).getFullYear();
         return tournamentYear === activeYear;
       })
-      .sort((a, b) => new Date(a.dates[0]) - new Date(b.dates[0])); // Sort by month
-  };
+      .sort((a, b) => new Date(a.dates[0]) - new Date(b.dates[0]));
 
   // Initialize data when component mounts or when clubName/refreshClub changes
   useEffect(() => {
@@ -172,23 +172,25 @@ const ClubAllTournaments = () => {
   }, [clubAllTournaments]);
 
   return (
-    <div className="">
+    <div className="sp-public">
       <HomeBanner />
       <HomeNavbar />
-      <div
-        className="w-100 d-flex align-items-center justify-content-start p-1"
-        style={{ backgroundColor: "#608BC1" }}
-      >
-        <span className="fw-bold text-white fs-5">Club Name : {clubName}</span>
+      <div className="sp-marquee-wrap">
+        <span className="sp-marquee-label">Latest news:</span>
+        <Marquee speed={42} gradient={false} pauseOnHover>
+          {process.env.REACT_APP_NEWS_TICKER ||
+            "خوش آمدید — Sona Punjab | Club tournaments and archives."}
+        </Marquee>
       </div>
 
       <div className="container mt-3">
-        <div className="d-flex gap-2 mb-3">
+        <div className="sp-date-row justify-content-center flex-wrap py-2">
           {getUniqueYears().map((year) => (
             <button
+              type="button"
               key={year}
-              className={`btn ${
-                activeYear === year ? "btn-primary" : "btn-outline-primary"
+              className={`sp-date-tab${
+                activeYear === year ? " sp-date-tab--active" : ""
               }`}
               onClick={() => setActiveYear(year)}
             >
@@ -198,7 +200,7 @@ const ClubAllTournaments = () => {
         </div>
       </div>
 
-      <div className="px-4 mt-4 w-100">
+      <div className="px-2 px-md-4 mt-3 mt-md-4 w-100 mx-auto" style={{ maxWidth: "1240px" }}>
         {loading ? (
           <div
             className="card p-5 d-flex justify-content-center align-items-center"
@@ -217,52 +219,59 @@ const ClubAllTournaments = () => {
           getFilteredTournaments().map((tournament) => {
             const sortedOwners = getSortedOwners(tournament._id, tournament);
             return (
-              <div key={tournament._id} className="card mb-4">
-                <div className="d-flex align-items-start flex-column flex-md-row">
+              <div key={tournament._id} className="card mb-4 sp-club-tournament-card">
+                <div className="sp-club-poster-wrap">
                   <Link
                     to={`/tournament-view/${tournament?._id}`}
                     onClick={() => {
                       dispatch(tournamentDataDispatcher(tournament));
                     }}
                   >
-                    <img
-                      src={tournament?.tournamentPicture}
-                      height={200}
-                      width={200}
-                      alt=""
-                      className="rounded"
-                    />
-                  </Link>
-                  <div className="d-flex flex-column w-100">
-                    <div className="card-header">
-                      <div>
-                        <Link
-                          to={`/tournament-view/${tournament?._id}`}
-                          onClick={() => {
-                            dispatch(tournamentDataDispatcher(tournament));
-                          }}
-                        >
-                          <h5 className="mb-2">{tournament.tournamentName}</h5>
-                        </Link>
-                        <p className="text-muted">
-                          {new Date(tournament.dates[0]).toLocaleDateString()} -{" "}
-                          {tournament.numberOfDays} days
-                        </p>
-                      </div>
+                    {tournament?.tournamentPicture ? (
+                      <img
+                        src={tournament.tournamentPicture}
+                        alt=""
+                        className="sp-club-poster-img"
+                        onError={(e) => {
+                          e.currentTarget.classList.add("d-none");
+                          const fb = e.currentTarget.nextElementSibling;
+                          if (fb) fb.classList.remove("d-none");
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className={`sp-club-poster-fallback ${
+                        tournament?.tournamentPicture ? "d-none" : ""
+                      }`}
+                    >
+                      No poster
                     </div>
-                    <div className="card-body p-0">
-                      <div className="table-responsive">
-                        <table
-                          className="table table-sm table-hover table-striped mb-0"
-                          style={{
-                            fontSize: "0.9rem",
-                            borderCollapse: "collapse",
-                            border: "1px solid #dee2e6",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
+                  </Link>
+                </div>
+                <div className="card-header">
+                  <Link
+                    to={`/tournament-view/${tournament?._id}`}
+                    className="text-decoration-none text-dark"
+                    onClick={() => {
+                      dispatch(tournamentDataDispatcher(tournament));
+                    }}
+                  >
+                    <h2 className="sp-club-card-title urdu mb-0">
+                      {tournament.tournamentName}
+                    </h2>
+                  </Link>
+                  <p className="text-muted mb-0 mt-1">
+                    {new Date(tournament.dates[0]).toLocaleDateString()} —{" "}
+                    {tournament.numberOfDays}{" "}
+                    {tournament.numberOfDays === 1 ? "day" : "days"}
+                  </p>
+                </div>
+                <div className="card-body pt-2 px-2 px-md-3">
+                  <div className="sp-club-table-wrap">
+                    <div className="table-responsive table-responsive-app">
+                        <table className="table table-sm mb-0 sp-results-table">
                           <thead>
-                            <tr className="bg-light">
+                            <tr>
                               <th
                                 scope="col"
                                 className="text-center p-1 border"
@@ -331,20 +340,19 @@ const ClubAllTournaments = () => {
                             })}
                           </tbody>
                         </table>
-                      </div>
-
-                      <div className="mt-3 text-muted p-2">
-                        <small>
-                          <strong>Total Participants:</strong>{" "}
-                          {sortedOwners.length} |{" "}
-                          <strong>Total Prize Pool:</strong>{" "}
-                          {tournament.prizes.reduce(
-                            (a, b) => Number(a) + Number(b),
-                            0
-                          )}
-                        </small>
-                      </div>
                     </div>
+                  </div>
+
+                  <div className="mt-3 text-muted px-1 pb-2">
+                    <small>
+                      <strong>Total Participants:</strong>{" "}
+                      {sortedOwners.length} |{" "}
+                      <strong>Total Prize Pool:</strong>{" "}
+                      {tournament.prizes.reduce(
+                        (a, b) => Number(a) + Number(b),
+                        0
+                      )}
+                    </small>
                   </div>
                 </div>
               </div>

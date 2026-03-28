@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
+import Marquee from "react-fast-marquee";
 import HomeBanner from "./Home-Banne/HomeBanner";
 import HomeNavbar from "./Home-Navbar/HomeNavbar";
+import "./apna-shauq-home.css";
 import { getCurrentTournamentsReq } from "./__request/HomePagerequests";
 import {
   getResultByDate,
   getTotalDaysResultReq,
   GetTournamentOwnersReq,
 } from "../adminPanal/create-tournaments/__request/CraeteTournamentRequest";
-import { Button } from "react-bootstrap";
 
 const Home = () => {
   const [currentTournament, setCurrentTournament] = useState();
@@ -558,125 +559,74 @@ const Home = () => {
   }, [highestTime]);
 
   return (
-    <div className="">
+    <div className="sp-public">
       <HomeBanner />
       <HomeNavbar />
-      <div
-        className="w-100 d-flex align-items-center justify-content-start p-1"
-        style={{ backgroundColor: "#608BC1" }}
-      >
-        <span className="fw-bold text-white fs-5">
-          Currect Tournament : {currentTournament?.tournamentName}
-        </span>
+      <div className="sp-marquee-wrap">
+        <span className="sp-marquee-label">Latest news:</span>
+        <Marquee speed={42} gradient={false} pauseOnHover>
+          {process.env.REACT_APP_NEWS_TICKER ||
+            "خوش آمدید — Sona Punjab | Best of luck to all flyers. Committee updates and offers will appear here."}
+        </Marquee>
       </div>
 
-      <div
-        className="w-100 d-flex align-items-center justify-content-center gap-3 flex-wrap"
-        style={{ padding: "10px" }}
-      >
-        {/* {currentTournament?.dates?.map((date, index) => {
-          const isSelected = !showTotal && selectedDateIndex === index;
+      {!currentTournament?._id ? (
+        <div className="sp-empty-tournament">
+          <p>
+            No active tournament is set. An admin can activate one from the
+            dashboard: <strong>Tournaments → Edit → Screen on/off</strong>.
+          </p>
+        </div>
+      ) : (
+        <>
+          <div className="sp-tournament-head">
+            <h1 className="sp-tournament-title urdu">
+              {currentTournament?.tournamentName}
+            </h1>
+            <p className="sp-tournament-meta">
+              Start time:{" "}
+              <strong>
+                {(currentTournament?.startTime || "").toString().slice(0, 5)}
+              </strong>
+            </p>
+          </div>
 
-          const formattedDate = date.split("-").reverse().join("-");
-          return (
-            <Button
-              key={index}
-              variant={isSelected ? "primary" : "outline-primary"}
-              onClick={() => {
-                handleDateSelect(date, index);
-                setShowTotal(false);
-              }}
-              className={`px-4 py-2 rounded-pill shadow-sm ${
-                isSelected ? "fw-bold text-white" : "text-primary"
-              }`}
-              style={{
-                minWidth: "160px",
-                border: isSelected ? "none" : "2px solid #0d6efd",
-                transform: isSelected ? "scale(1.05)" : "scale(1)",
-                transition: "all 0.3s ease-in-out",
-                backgroundColor: isSelected ? "#0d6efd" : "white",
-                boxShadow: isSelected
-                  ? "0 4px 12px rgba(13, 110, 253, 0.3)"
-                  : "0 2px 6px rgba(0, 0, 0, 0.1)",
-                letterSpacing: "0.5px",
-              }}
+          <div className="sp-date-row">
+            {currentTournament?.dates
+              ?.slice()
+              .sort((a, b) => a.localeCompare(b))
+              .map((date, index) => {
+                const isSelected = !showTotal && selectedDateIndex === index;
+                const formattedDate = date.split("-").reverse().join("-");
+                return (
+                  <button
+                    type="button"
+                    key={index}
+                    className={`sp-date-tab${
+                      isSelected ? " sp-date-tab--active" : ""
+                    }`}
+                    onClick={() => {
+                      handleDateSelect(date, index);
+                      setShowTotal(false);
+                    }}
+                  >
+                    {formattedDate}
+                  </button>
+                );
+              })}
+
+            <button
+              type="button"
+              className={`sp-date-tab${showTotal ? " sp-date-tab--active" : ""}`}
+              onClick={() => setShowTotal(true)}
             >
-              {formattedDate}
-            </Button>
-          );
-        })} */}
-        {currentTournament?.dates
-          ?.slice() // Create a copy to avoid mutating the original array
-          .sort((a, b) => a.localeCompare(b)) // Sort as strings in "YYYY-MM-DD" format
-          .map((date, index) => {
-            const isSelected = !showTotal && selectedDateIndex === index;
-
-            const formattedDate = date.split("-").reverse().join("-"); // Convert "YYYY-MM-DD" to "DD-MM-YYYY"
-            return (
-              <Button
-                key={index}
-                variant={isSelected ? "primary" : "outline-primary"}
-                onClick={() => {
-                  handleDateSelect(date, index);
-                  setShowTotal(false);
-                }}
-                className={`px-4 py-2 rounded-pill shadow-sm ${
-                  isSelected ? "fw-bold text-white" : "text-primary"
-                }`}
-                style={{
-                  minWidth: "160px",
-                  border: isSelected ? "none" : "2px solid #0d6efd",
-                  transform: isSelected ? "scale(1.05)" : "scale(1)",
-                  transition: "all 0.3s ease-in-out",
-                  backgroundColor: isSelected ? "#0d6efd" : "white",
-                  boxShadow: isSelected
-                    ? "0 4px 12px rgba(13, 110, 253, 0.3)"
-                    : "0 2px 6px rgba(0, 0, 0, 0.1)",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                {formattedDate}
-              </Button>
-            );
-          })}
-
-        <Button
-          variant={showTotal ? "primary" : "outline-primary"}
-          onClick={() => setShowTotal(true)}
-          className={`px-4 py-2 rounded-pill shadow-sm ${
-            showTotal ? "fw-bold text-white" : "text-primary"
-          }`}
-          style={{
-            minWidth: "160px",
-            border: showTotal ? "none" : "2px solid #0d6efd",
-            transform: showTotal ? "scale(1.05)" : "scale(1)",
-            transition: "all 0.3s ease-in-out",
-            backgroundColor: showTotal ? "#0d6efd" : "white",
-            boxShadow: showTotal
-              ? "0 4px 12px rgba(13, 110, 253, 0.3)"
-              : "0 2px 6px rgba(0, 0, 0, 0.1)",
-            letterSpacing: "0.5px",
-          }}
-        >
-          Total
-        </Button>
-      </div>
+              Total
+            </button>
+          </div>
 
       {!showTotal && (
-        <div
-          className=""
-          style={{
-            padding: "10px",
-            border: " solid #dee2e6",
-            margin: "10px",
-            borderRadius: "10px",
-            boxShadow: "2px 0 8px rgba(40, 167, 69, 0.2)",
-            backgroundColor: "#FAFFC5",
-          }}
-        >
-          <span className="fw-bold" style={{ color: "#2C3E50" }}>
-            Today's first pigeon winner:
-          </span>{" "}
+        <div className="sp-winner-box">
+          <span className="sp-label">Today&apos;s first pigeon winner:</span>{" "}
           <span>
             {(() => {
               const firstPigeonHighest = findFirstPigeonHighestTime();
@@ -700,32 +650,17 @@ const Home = () => {
         </div>
       )}
 
-      <div
-        className=""
-        style={{
-          padding: "10px",
-          border: "1px solid #dee2e6",
-          margin: "10px",
-          borderRadius: "10px",
-          borderLeft: "10px solid #608BC1",
-          boxShadow: "2px 0 8px rgba(40, 167, 69, 0.2)",
-          backgroundColor: "#133E87",
-        }}
-      >
+      <div className="sp-stats-strip">
         <div className="d-flex align-items-center gap-3">
           <div>
-            <span className="fw-bold" style={{ color: "white" }}>
-              Lofts:
-            </span>{" "}
-            <span className="text-white">
+            <span className="fw-bold">Lofts:</span>{" "}
+            <span>
               {currentTournament?.participatingLofts?.length}
             </span>
           </div>
           <div>
-            <span className="fw-bold" style={{ color: "white" }}>
-              Pigeons:
-            </span>{" "}
-            <span className="text-white">
+            <span className="fw-bold">Pigeons:</span>{" "}
+            <span>
               {(currentTournament?.numberOfPigeons +
                 (currentTournament?.helperPigeons || 0)) *
                 currentTournament?.participatingLofts?.length}
@@ -733,10 +668,8 @@ const Home = () => {
           </div>
 
           <div>
-            <span className="fw-bold" style={{ color: "white" }}>
-              Landed:
-            </span>{" "}
-            <span className="text-white">
+            <span className="fw-bold">Landed:</span>{" "}
+            <span>
               {showTotal
                 ? totalDaysResult?.ownerResults?.reduce((total, owner) => {
                     return (
@@ -759,10 +692,8 @@ const Home = () => {
           </div>
 
           <div>
-            <span className="fw-bold" style={{ color: "white" }}>
-              Pigeons remaining:
-            </span>{" "}
-            <span className="text-white">
+            <span className="fw-bold">Pigeons remaining:</span>{" "}
+            <span>
               {(() => {
                 const totalPigeons =
                   (currentTournament?.numberOfPigeons +
@@ -797,21 +728,8 @@ const Home = () => {
           ? totalDaysResult?.ownerResults?.length > 0 && <></>
           : gerResult?.length > 0 && (
               <>
-                <div
-                  className="rounded-3 shadow-lg"
-                  style={{
-                    backgroundColor: "#608BC1",
-                    border: "1px solid white",
-                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Soft shadow
-                    color: "white", // Dark text for better visibility
-                    fontSize: "16px", // Improve readability
-                    fontWeight: "500",
-                    padding: "5px",
-                  }}
-                >
-                  <span className="fw-bold" style={{ color: "white" }}>
-                    Last pigeon winner:
-                  </span>{" "}
+                <div className="sp-last-winner-bar">
+                  <span className="fw-bold">Last pigeon winner:</span>{" "}
                   <span>
                     {(() => {
                       const globalHighest = findGlobalHighestTime();
@@ -840,43 +758,27 @@ const Home = () => {
             )}
       </div>
 
-      <div className="card-body p-0">
-        <table
-          className="table table-sm table-hover table-striped bordered-table mb-0"
-          style={{
-            fontSize: "0.9rem", // Even smaller font
-            borderCollapse: "collapse",
-            border: "1px solid #dee2e6",
-          }}
-        >
+      <div className="sp-table-shell card-body p-0">
+        <table className="table table-sm mb-0 sp-results-table">
           <thead>
-            <tr
-              style={{
-                backgroundColor: "#f8f9fa",
-                borderBottom: "2px solid #dee2e6",
-              }}
-            >
-              <th scope="col" className="text-center p-0 border">
+            <tr>
+              <th scope="col" className="text-center">
                 #
               </th>
-              <th scope="col" className="text-start p-0 border">
-                Owner
+              <th scope="col" className="text-start">
+                Pic / Owner
               </th>
-              <th scope="col" className="text-center p-0 border">
+              <th scope="col" className="text-center">
                 Pigeons
               </th>
-              <th scope="col" className="text-center p-0 border">
+              <th scope="col" className="text-center">
                 Time
               </th>
               {showTotal ? (
                 // Show dates as columns when Total is selected
                 <>
                   {currentTournament?.dates?.map((date, index) => (
-                    <th
-                      key={index}
-                      scope="col"
-                      className="text-center p-1 border"
-                    >
+                    <th key={index} scope="col" className="text-center">
                       {date.split("-").reverse().join("-")}
                     </th>
                   ))}
@@ -887,11 +789,7 @@ const Home = () => {
                   {Array.from(
                     { length: currentTournament?.numberOfPigeons },
                     (_, index) => (
-                      <th
-                        key={index}
-                        scope="col"
-                        className="text-center p-1 border"
-                      >
+                      <th key={index} scope="col" className="text-center">
                         #{index + 1}
                       </th>
                     )
@@ -899,18 +797,14 @@ const Home = () => {
                   {Array.from(
                     { length: currentTournament?.helperPigeons || 0 },
                     (_, index) => (
-                      <th
-                        key={`helper-${index}`}
-                        scope="col"
-                        className="text-center p-1 border"
-                      >
+                      <th key={`helper-${index}`} scope="col" className="text-center">
                         #{currentTournament?.numberOfPigeons + index + 1}
                       </th>
                     )
                   )}
                 </>
               )}
-              <th scope="col" className="text-center p-0 border">
+              <th scope="col" className="text-center">
                 Total
               </th>
             </tr>
@@ -929,45 +823,32 @@ const Home = () => {
                 : null;
 
               return (
-                <tr
-                  key={owner?._id}
-                  style={{
-                    backgroundColor: idx % 2 === 0 ? "#ffffff" : "#f8f9fa",
-                  }}
-                  className="hover-row"
-                >
-                  <td className="text-center p-1 border">{idx + 1}</td>
-                  <td className="text-start p-1 border">
+                <tr key={owner?._id} className="hover-row">
+                  <td className="text-center">{idx + 1}</td>
+                  <td className="text-start">
                     <div className="d-flex align-items-center justify-content-start gap-2">
-                      <div
-                        className="overflow-hidden"
-                        style={{
-                          height: "50px",
-                          width: "50px",
-                          borderRadius: "100%",
-                        }}
-                      >
-                        <img
-                          src={
-                            owner?.ownerPicture
-                              ? owner?.ownerPicture
-                              : "/default_avatar.avif"
-                          }
-                          className="rounded-3 h-100 w-100 object-fit-cover"
-                          alt=""
-                        />
-                      </div>
-                      <div className="d-flex flex-column align-items-start justify-content-start fw-bold">
-                        {owner?.name}
-                        <span className="fw-normal">{owner?.address}</span>
-                        <span className="fw-normal">{owner?.phone}</span>
+                      <img
+                        src={
+                          owner?.ownerPicture
+                            ? owner?.ownerPicture
+                            : "/default_avatar.avif"
+                        }
+                        className="sp-owner-pic"
+                        alt=""
+                      />
+                      <div className="d-flex flex-column align-items-start justify-content-start">
+                        <span className="sp-owner-name urdu">{owner?.name}</span>
+                        <span className="small text-muted urdu">
+                          {owner?.address}
+                        </span>
+                        <span className="small text-muted">{owner?.phone}</span>
                       </div>
                     </div>
                   </td>
-                  <td className="text-center p-1 border fw-bold">
+                  <td className="text-center fw-bold">
                     {currentTournament?.numberOfPigeons}
                   </td>
-                  <td className="text-center p-1 border fw-bold">
+                  <td className="text-center fw-bold">
                     {(
                       (gerResult &&
                         gerResult?.length > 0 &&
@@ -995,10 +876,7 @@ const Home = () => {
                           : null;
 
                         return (
-                          <td
-                            key={dateIndex}
-                            className="text-center p-1 border fw-bold"
-                          >
+                          <td key={dateIndex} className="text-center fw-bold">
                             {ownerResult?.formattedTotalTime?.slice(0, 5) ||
                               "No Result"}
                           </td>
@@ -1105,20 +983,11 @@ const Home = () => {
                         return (
                           <td
                             key={index}
-                            className={`text-center p-1 border fw-bold ${
+                            className={`text-center fw-bold ${
                               isExcluded ? "text-muted" : ""
+                            } ${isHighestTime ? "sp-pigeon-cell--lead" : ""} ${
+                              shouldBlink ? "sp-pigeon-cell--blink" : ""
                             }`}
-                            style={{
-                              backgroundColor: isHighestTime
-                                ? shouldBlink
-                                  ? "#78B3CE"
-                                  : "#78B3CE"
-                                : "",
-                              color: isHighestTime ? "white" : "inherit",
-                              animation: shouldBlink
-                                ? "blink 1s infinite alternate"
-                                : "none",
-                            }}
                           >
                             {showTotal
                               ? pigeonTime
@@ -1144,7 +1013,7 @@ const Home = () => {
                       })}
                     </>
                   )}
-                  <td className="text-center p-1 border fw-bold">
+                  <td className="text-center fw-bold">
                     {showTotal
                       ? (() => {
                           const ownerDayResults = allDaysResults
@@ -1193,6 +1062,8 @@ const Home = () => {
           </tbody>
         </table>
       </div>
+        </>
+      )}
     </div>
   );
 };
