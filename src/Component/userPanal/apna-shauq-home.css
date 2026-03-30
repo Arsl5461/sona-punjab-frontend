@@ -161,11 +161,13 @@
   padding-bottom: 0.25rem;
 }
 
-.sp-club-tournament-card .card-header h2,
-.sp-club-tournament-card .card-header .sp-club-card-title {
-  font-size: 1rem;
-  font-weight: 700;
+/* Title under poster: modest size (h6 + class, not a page-level headline) */
+.sp-club-tournament-card .card-header h6.sp-club-card-title {
+  font-size: clamp(0.78rem, 2.1vw, 0.92rem);
+  font-weight: 600;
+  line-height: 1.35;
   margin-bottom: 0.2rem;
+  color: var(--sp-green-dark, #134c2e);
 }
 
 .sp-club-tournament-card .card-header .text-muted {

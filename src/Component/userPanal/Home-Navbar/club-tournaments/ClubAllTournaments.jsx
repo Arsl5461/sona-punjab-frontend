@@ -256,9 +256,9 @@ const ClubAllTournaments = () => {
                       dispatch(tournamentDataDispatcher(tournament));
                     }}
                   >
-                    <h2 className="sp-club-card-title urdu mb-0">
+                    <h6 className="sp-club-card-title urdu mb-0">
                       {tournament.tournamentName}
-                    </h2>
+                    </h6>
                   </Link>
                   <p className="text-muted mb-0 mt-1">
                     {new Date(tournament.dates[0]).toLocaleDateString()} —{" "}
