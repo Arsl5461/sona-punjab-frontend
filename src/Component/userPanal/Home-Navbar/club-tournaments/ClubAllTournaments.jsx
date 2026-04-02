@@ -17,6 +17,39 @@ import HomeNavbar from "../HomeNavbar";
 import { getClubTournaments } from "./__requests/ClubTournamentsRequests";
 import { useParams } from "react-router-dom";
 
+function TournamentTablePoster({ tournament }) {
+  const dispatch = useDispatch();
+  return (
+    <Link
+      to={`/tournament-view/${tournament?._id}`}
+      className="sp-club-poster-table-link"
+      onClick={() => {
+        dispatch(tournamentDataDispatcher(tournament));
+      }}
+    >
+      {tournament?.tournamentPicture ? (
+        <img
+          src={tournament.tournamentPicture}
+          alt=""
+          className="sp-club-poster-img sp-club-poster-img--table"
+          onError={(e) => {
+            e.currentTarget.classList.add("d-none");
+            const fb = e.currentTarget.nextElementSibling;
+            if (fb) fb.classList.remove("d-none");
+          }}
+        />
+      ) : null}
+      <div
+        className={`sp-club-poster-fallback sp-club-poster-fallback--table ${
+          tournament?.tournamentPicture ? "d-none" : ""
+        }`}
+      >
+        No poster
+      </div>
+    </Link>
+  );
+}
+
 const ClubAllTournaments = () => {
   const [clubAllTournaments, setClubAllTournaments] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -220,34 +253,6 @@ const ClubAllTournaments = () => {
             const sortedOwners = getSortedOwners(tournament._id, tournament);
             return (
               <div key={tournament._id} className="card mb-4 sp-club-tournament-card">
-                <div className="sp-club-poster-wrap">
-                  <Link
-                    to={`/tournament-view/${tournament?._id}`}
-                    onClick={() => {
-                      dispatch(tournamentDataDispatcher(tournament));
-                    }}
-                  >
-                    {tournament?.tournamentPicture ? (
-                      <img
-                        src={tournament.tournamentPicture}
-                        alt=""
-                        className="sp-club-poster-img"
-                        onError={(e) => {
-                          e.currentTarget.classList.add("d-none");
-                          const fb = e.currentTarget.nextElementSibling;
-                          if (fb) fb.classList.remove("d-none");
-                        }}
-                      />
-                    ) : null}
-                    <div
-                      className={`sp-club-poster-fallback ${
-                        tournament?.tournamentPicture ? "d-none" : ""
-                      }`}
-                    >
-                      No poster
-                    </div>
-                  </Link>
-                </div>
                 <div className="card-header">
                   <Link
                     to={`/tournament-view/${tournament?._id}`}
@@ -269,40 +274,76 @@ const ClubAllTournaments = () => {
                 <div className="card-body pt-2 px-2 px-md-3">
                   <div className="sp-club-table-wrap">
                     <div className="table-responsive table-responsive-app">
-                        <table className="table table-sm mb-0 sp-results-table">
+                        <table className="table table-sm mb-0 sp-results-table sp-club-results-table">
                           <thead>
                             <tr>
                               <th
                                 scope="col"
-                                className="text-center p-1 border"
+                                className="text-center p-1 border sp-club-col-idx"
                               >
                                 #
                               </th>
-                              <th scope="col" className="text-start p-1 border">
-                                Owner Name
+                              <th
+                                scope="col"
+                                className="text-center p-1 border sp-club-col-tournament"
+                              >
+                                Tournament
                               </th>
                               <th
                                 scope="col"
-                                className="text-center p-1 border"
+                                className="text-start p-1 border sp-club-col-owner"
+                              >
+                                Name
+                              </th>
+                              <th
+                                scope="col"
+                                className="text-center p-1 border sp-club-col-time"
                               >
                                 Time
                               </th>
                               <th
                                 scope="col"
-                                className="text-center p-1 border"
+                                className="text-center p-1 border sp-club-col-prize"
                               >
                                 Prize
                               </th>
                             </tr>
                           </thead>
                           <tbody>
+                            {sortedOwners.length === 0 ? (
+                              <tr>
+                                <td className="text-center p-1 border text-muted sp-club-col-idx">
+                                  —
+                                </td>
+                                <td className="text-center p-1 border align-middle sp-club-poster-cell sp-club-col-tournament">
+                                  <TournamentTablePoster tournament={tournament} />
+                                </td>
+                                <td
+                                  colSpan={3}
+                                  className="text-start p-1 border text-muted align-middle sp-club-empty-row-msg"
+                                >
+                                  No participants yet.
+                                </td>
+                              </tr>
+                            ) : null}
                             {sortedOwners.map((owner, index) => {
+                              const rowSpan = sortedOwners.length;
                               return (
                                 <tr key={owner?._id}>
-                                  <td className="text-center p-1 border fw-bold">
+                                  <td className="text-center p-1 border fw-bold sp-club-col-idx">
                                     {index + 1}
                                   </td>
-                                  <td className="text-start p-1 border fw-bold">
+                                  {index === 0 ? (
+                                    <td
+                                      rowSpan={rowSpan}
+                                      className="text-center p-1 border align-middle sp-club-poster-cell sp-club-col-tournament"
+                                    >
+                                      <TournamentTablePoster
+                                        tournament={tournament}
+                                      />
+                                    </td>
+                                  ) : null}
+                                  <td className="text-start p-1 border fw-bold sp-club-col-owner">
                                     <div className="d-flex align-items-center gap-2">
                                       <img
                                         src={
@@ -323,10 +364,10 @@ const ClubAllTournaments = () => {
                                       </span>
                                     </div>
                                   </td>
-                                  <td className="text-center p-1 border fw-bold">
+                                  <td className="text-center p-1 border fw-bold sp-club-col-time">
                                     {formatTime(owner?.grandTotal)}
                                   </td>
-                                  <td className="text-center p-1 border fw-bold">
+                                  <td className="text-center p-1 border fw-bold sp-club-col-prize">
                                     {owner?.hasResult && owner?.prize ? (
                                       <span className="fw-bold">
                                         {owner?.prize}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   getResultByDate,
   getTotalDaysResultReq,
@@ -605,23 +605,63 @@ const OtherTournamentresult = () => {
     return localStorage.getItem("highestTime") || null;
   });
   const [isBlinking, setIsBlinking] = useState(false);
+  const leadBlinkTimerRef = useRef(null);
+  const leadTournamentIdRef = useRef(null);
 
   useEffect(() => {
-    const globalHighest = findGlobalHighestTime();
-    if (globalHighest?.time && globalHighest.time !== highestTime) {
-      if (!localStorage.getItem(globalHighest.time)) {
-        // New highest time, blink for 1 min
-        setIsBlinking(true);
-        localStorage.setItem(globalHighest.time, "true"); // Store it to prevent future blinks
-        localStorage.setItem("highestTime", globalHighest.time); // Store highest time globally
-
-        setTimeout(() => {
-          setIsBlinking(false);
-        }, 600000); // Stop blinking after 10 min
+    return () => {
+      if (leadBlinkTimerRef.current) {
+        clearTimeout(leadBlinkTimerRef.current);
+        leadBlinkTimerRef.current = null;
       }
-      setHighestTime(globalHighest.time);
+    };
+  }, []);
+
+  useEffect(() => {
+    const tid = tournamentId;
+    if (leadTournamentIdRef.current !== tid) {
+      leadTournamentIdRef.current = tid;
+      setHighestTime(null);
+      setIsBlinking(false);
+      return;
     }
-  }, [highestTime]);
+
+    const globalHighest = findGlobalHighestTime();
+    if (!globalHighest) return;
+
+    const nextVal = globalHighest.time;
+    if (!showTotal) {
+      if (!nextVal || nextVal === "00:00") return;
+    } else {
+      if (typeof nextVal !== "number" || nextVal <= 0) return;
+    }
+
+    const nextStr = String(nextVal);
+    const prevStr = highestTime == null ? "" : String(highestTime);
+    if (nextStr === prevStr) return;
+
+    const storageKey = `spLead:${tid || "na"}:${nextStr}`;
+    if (!localStorage.getItem(storageKey)) {
+      if (leadBlinkTimerRef.current) {
+        clearTimeout(leadBlinkTimerRef.current);
+      }
+      setIsBlinking(true);
+      localStorage.setItem(storageKey, "1");
+      localStorage.setItem("highestTime", nextStr);
+      leadBlinkTimerRef.current = window.setTimeout(() => {
+        setIsBlinking(false);
+        leadBlinkTimerRef.current = null;
+      }, 5000);
+    }
+
+    setHighestTime(nextVal);
+  }, [
+    gerResult,
+    totalDaysResult,
+    showTotal,
+    highestTime,
+    tournamentId,
+  ]);
 
   return (
     <div className="">

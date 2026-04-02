@@ -15,5 +15,36 @@
   height: auto;
   max-height: min(52vh, 420px);
   object-fit: cover;
+  object-position: center top;
   display: block;
+}
+
+@media (max-width: 1199.98px) {
+  .sp-banner-slide-img {
+    max-height: min(45vh, 360px);
+  }
+}
+
+@media (max-width: 991.98px) {
+  .sp-banner-slide-img {
+    max-height: min(40vh, 300px);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .sp-banner-slide-img {
+    max-height: min(36vh, 240px);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sp-banner-slide-img {
+    max-height: min(32vh, 200px);
+  }
+}
+
+@media (max-width: 399.98px) {
+  .sp-banner-slide-img {
+    max-height: min(28vh, 160px);
+  }
 }
