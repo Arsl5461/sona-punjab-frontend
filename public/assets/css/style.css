@@ -371,16 +371,6 @@ body {
   overflow-x: hidden;
 }
 
-@media screen and (max-width: 500px) {
-  body {
-    transform: scale(0.4);
-    transform-origin: top left;
-    width: 250%; /* Prevent content clipping */
-    height: auto;
-    overflow-x: hidden;
-  }
-}
-
 body.overlay-active::after {
   width: 100%;
 }
