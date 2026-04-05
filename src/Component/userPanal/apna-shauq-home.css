@@ -1,15 +1,16 @@
-/* Public home theme — layout inspired by apnashauq.com */
+/* Public home theme — royal blue + gold accents */
 
 @import url("https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap");
 
 .sp-public {
-  --sp-green-dark: #134c2e;
-  --sp-green: #1b5e3a;
-  --sp-green-light: #2d6a4f;
+  /* Primary = royal blue (legacy names --sp-green-* kept for existing references) */
+  --sp-green-dark: #122654;
+  --sp-green: #1e3d8f;
+  --sp-green-light: #2d55c8;
   --sp-gold: #c9a227;
   --sp-gold-light: #e8d48b;
-  --sp-cream: #f5f2e8;
-  --sp-paper: #eef2e0;
+  --sp-cream: #f5f7fc;
+  --sp-paper: #e9eef9;
   --sp-ink: #1a1a1a;
 
   font-family: "Noto Sans", system-ui, -apple-system, sans-serif;
@@ -36,7 +37,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: linear-gradient(90deg, #fffef8 0%, #f0edd4 50%, #fffef8 100%);
+  background: linear-gradient(90deg, #fafcff 0%, #e4ebfa 50%, #fafcff 100%);
   border-bottom: 2px solid var(--sp-gold);
   padding: 0.35rem 0.75rem;
   font-size: 0.9rem;
@@ -59,7 +60,7 @@
 
 /* —— Banner —— */
 .sp-banner-outer {
-  background: #0d2818;
+  background: #0a142e;
   border-bottom: 3px solid var(--sp-gold);
 }
 
@@ -79,7 +80,7 @@
   text-align: center;
   padding: 0.5rem 0.75rem 0.35rem;
   background: var(--sp-cream);
-  border-bottom: 1px solid rgba(19, 76, 46, 0.15);
+  border-bottom: 1px solid rgba(18, 55, 120, 0.18);
 }
 
 /* Compact title — Nastaliq reads large at equal font-size */
@@ -133,7 +134,7 @@
   height: auto;
   object-fit: contain;
   border-radius: 6px;
-  border: 1px solid rgba(19, 76, 46, 0.15);
+  border: 1px solid rgba(18, 55, 120, 0.18);
   vertical-align: middle;
 }
 
@@ -147,9 +148,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  background: #e8ebe4;
-  color: #5a6b5e;
-  border: 1px dashed rgba(19, 76, 46, 0.25);
+  background: #e4e9f5;
+  color: #4a5570;
+  border: 1px dashed rgba(18, 55, 120, 0.28);
 }
 
 .sp-club-poster-fallback--table {
@@ -214,7 +215,7 @@
   font-weight: 600;
   line-height: 1.35;
   margin-bottom: 0.2rem;
-  color: var(--sp-green-dark, #134c2e);
+  color: var(--sp-green-dark, #122654);
 }
 
 .sp-club-tournament-card .card-header .text-muted {
@@ -280,31 +281,54 @@
   padding: 0.75rem;
   background: #fff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .sp-date-tab {
+  flex: 0 0 auto;
   min-width: 7.5rem;
   padding: 0.45rem 1rem;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 2px solid var(--sp-green-light);
   background: #fff;
   color: var(--sp-green-dark);
   font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
   transition: background 0.15s, color 0.15s, border-color 0.15s,
     box-shadow 0.15s;
 }
 
 .sp-date-tab:hover {
-  background: rgba(45, 106, 79, 0.08);
+  background: rgba(45, 92, 200, 0.1);
+}
+
+/* No browser “outside” ring — selected state shows the fill; keyboard gets an inset ring */
+.sp-date-tab:focus {
+  outline: none;
+}
+
+.sp-date-tab:focus-visible:not(.sp-date-tab--active) {
+  box-shadow: inset 0 0 0 2px var(--sp-green-light);
 }
 
 .sp-date-tab--active {
   background: var(--sp-green);
   color: #fff;
   border-color: var(--sp-green);
-  box-shadow: 0 2px 8px rgba(27, 94, 58, 0.35);
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(30, 61, 143, 0.42);
+}
+
+.sp-date-tab--active:focus,
+.sp-date-tab--active:focus-visible {
+  outline: none;
+  box-shadow: 0 2px 10px rgba(30, 61, 143, 0.42),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.45);
 }
 
 /* —— Winner callout —— */
@@ -335,9 +359,17 @@
   font-size: 0.88rem;
 }
 
-.sp-stats-strip .d-flex {
+.sp-stats-row {
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.75rem 1.25rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.sp-stats-row > div {
+  flex: 0 0 auto;
 }
 
 .sp-stats-strip .fw-bold {
@@ -359,10 +391,10 @@
   max-width: calc(100vw - 1rem);
   width: 100%;
   box-sizing: border-box;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow-x: auto;
   overflow-y: visible;
-  border: 2px solid var(--sp-green-dark);
+  border: 3px solid var(--sp-green-dark);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   background: #fff;
   -webkit-overflow-scrolling: touch;
@@ -441,7 +473,7 @@
   .sp-results-table tbody tr:nth-child(even) td:nth-child(1),
   .sp-results-table tbody tr:nth-child(even) td:nth-child(2),
   .sp-results-table tbody tr:nth-child(even) td:nth-child(3) {
-    background: #f7faf6;
+    background: #f8f9fb;
   }
 
   .sp-results-table thead th:nth-child(1),
@@ -477,29 +509,38 @@
   }
 }
 
+/* Listing style: grey header band, dark labels (client mockup) */
 .sp-results-table thead tr {
-  background: var(--sp-green-dark) !important;
-  color: #fff !important;
+  background: #e9ecef !important;
+  color: #1a1d24 !important;
 }
 
 .sp-results-table thead th {
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  padding: 0.4rem 0.35rem !important;
-  font-weight: 600;
+  background: #e9ecef !important;
+  border: 1px solid #d0d4dd !important;
+  padding: 0.45rem 0.4rem !important;
+  font-weight: 700;
+  font-size: 0.8rem;
   white-space: nowrap;
+  color: #1a1d24 !important;
 }
 
 .sp-results-table tbody tr:nth-child(even) {
-  background: #f7faf6 !important;
+  background: #f8f9fb !important;
+}
+
+.sp-results-table tbody tr:nth-child(odd) {
+  background: #fff !important;
 }
 
 .sp-results-table tbody tr:hover {
-  background: #eef6f0 !important;
+  background: #eef2f9 !important;
 }
 
 .sp-results-table tbody td {
-  border: 1px solid #c5d4c8 !important;
+  border: 1px solid #dee2e6 !important;
   vertical-align: middle !important;
+  color: #212529;
 }
 
 .sp-results-table .sp-owner-pic {
@@ -513,6 +554,36 @@
 .sp-results-table .sp-owner-name {
   font-weight: 700;
   color: var(--sp-green-dark);
+}
+
+.sp-results-table a.sp-owner-phone,
+.sp-results-table .sp-owner-phone {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.sp-results-table a.sp-owner-phone:hover {
+  text-decoration: underline;
+}
+
+/* Flying / release time — dashed underline cue */
+.sp-results-table .sp-flying-time {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 3px;
+  text-decoration-color: #adb5bd;
+}
+
+/* Vacant pigeon slot */
+.sp-results-table .sp-pigeon-empty {
+  color: #c1121f;
+  font-style: italic;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 2px;
+  text-decoration-color: #c1121f;
 }
 
 .sp-pigeon-cell--lead {
@@ -555,9 +626,13 @@
 
 /* —— Top navigation (Home + clubs + actions) —— */
 .sp-topnav {
-  background: linear-gradient(180deg, #1b5e3a 0%, #134c2e 100%);
+  background: linear-gradient(
+    180deg,
+    var(--sp-green) 0%,
+    var(--sp-green-dark) 100%
+  );
   color: #fff;
-  border-bottom: 3px solid #c9a227;
+  border-bottom: 3px solid var(--sp-gold);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
 }
 
@@ -704,7 +779,7 @@
   }
 }
 
-/* Tablets */
+/* Tablets — date tabs: one row, horizontal scroll */
 @media (max-width: 991.98px) {
   .sp-tournament-head:not(.sp-club-head) .sp-tournament-title {
     font-size: clamp(0.78rem, 2.4vw, 0.95rem);
@@ -712,13 +787,33 @@
   }
 
   .sp-date-row {
-    padding: 0.6rem 0.5rem;
-    gap: 0.4rem;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    padding: 0.6rem max(0.5rem, env(safe-area-inset-right, 0))
+      0.6rem max(0.5rem, env(safe-area-inset-left, 0));
+    gap: 0.45rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sp-green-light) rgba(0, 0, 0, 0.06);
+  }
+
+  .sp-date-row::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  .sp-date-row::-webkit-scrollbar-thumb {
+    background: var(--sp-green-light);
+    border-radius: 4px;
   }
 
   .sp-date-tab {
-    min-width: 5.75rem;
-    padding: 0.38rem 0.65rem;
+    flex: 0 0 auto;
+    min-width: 5.5rem;
+    max-width: none;
+    padding: 0.38rem 0.75rem;
     font-size: 0.8rem;
   }
 
@@ -732,6 +827,8 @@
     margin-left: 0.5rem;
     margin-right: 0.5rem;
     font-size: 0.82rem;
+    padding-left: max(0.65rem, env(safe-area-inset-left, 0));
+    padding-right: max(0.65rem, env(safe-area-inset-right, 0));
   }
 
   .sp-club-tournament-card .sp-club-col-tournament {
@@ -741,6 +838,42 @@
   .sp-club-tournament-card .sp-club-col-time,
   .sp-club-tournament-card .sp-club-col-prize {
     width: 4.75rem;
+  }
+
+  /* Stats: one row, horizontal scroll (same idea as .sp-date-row) */
+
+  .sp-stats-row {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    gap: 0.5rem;
+    padding-bottom: 0.2rem;
+    margin-left: -0.15rem;
+    margin-right: -0.15rem;
+    padding-left: 0.15rem;
+    padding-right: 0.15rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.45) rgba(0, 0, 0, 0.12);
+  }
+
+  .sp-stats-row::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .sp-stats-row::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+  }
+
+  .sp-stats-row > div {
+    white-space: nowrap;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
   }
 }
 
@@ -820,12 +953,6 @@
     padding: 0.75rem;
   }
 
-  .sp-date-tab {
-    min-width: 5rem;
-    flex: 1 1 auto;
-    max-width: calc(50% - 0.25rem);
-  }
-
   .sp-winner-box {
     margin: 0.45rem 0.35rem;
     font-size: 0.84rem;
@@ -839,11 +966,6 @@
     margin-bottom: 0.55rem;
     padding: 0.55rem 0.65rem;
     font-size: 0.78rem;
-  }
-
-  .sp-stats-strip .d-flex {
-    justify-content: center;
-    gap: 0.5rem 0.85rem;
   }
 
   .sp-last-winner-bar {
@@ -870,14 +992,13 @@
   }
 
   .sp-date-row {
-    padding: 0.5rem 0.35rem;
+    padding: 0.5rem max(0.35rem, env(safe-area-inset-right, 0)) 0.5rem
+      max(0.35rem, env(safe-area-inset-left, 0));
   }
 
   .sp-date-tab {
-    min-width: 0;
-    flex: 1 1 calc(50% - 0.35rem);
-    max-width: none;
-    padding: 0.4rem 0.45rem;
+    min-width: 4.85rem;
+    padding: 0.4rem 0.55rem;
     font-size: 0.74rem;
   }
 
@@ -894,20 +1015,9 @@
     font-size: 0.72rem;
   }
 
-  .sp-stats-strip .d-flex {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.35rem;
-    text-align: center;
-  }
-
-  .sp-stats-strip .d-flex > div {
-    padding: 0.15rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  }
-
-  .sp-stats-strip .d-flex > div:last-child {
-    border-bottom: none;
+  .sp-stats-row > div {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.72rem;
   }
 
   .sp-last-winner-bar {

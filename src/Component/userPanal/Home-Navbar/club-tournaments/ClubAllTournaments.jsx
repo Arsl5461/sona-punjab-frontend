@@ -217,7 +217,7 @@ const ClubAllTournaments = () => {
       </div>
 
       <div className="container mt-3">
-        <div className="sp-date-row justify-content-center flex-wrap py-2">
+        <div className="sp-date-row py-2">
           {getUniqueYears().map((year) => (
             <button
               type="button"
@@ -239,7 +239,7 @@ const ClubAllTournaments = () => {
             className="card p-5 d-flex justify-content-center align-items-center"
             style={{ minHeight: "200px" }}
           >
-            <ScaleLoader color="#0d6efd" />
+            <ScaleLoader color="#2d55c8" />
           </div>
         ) : clubAllTournaments.length === 0 ? (
           <div className="card p-5 text-center">

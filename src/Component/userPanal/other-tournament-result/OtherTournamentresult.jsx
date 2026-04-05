@@ -5,11 +5,11 @@ import {
   GetTournamentOwnersReq,
 } from "../../adminPanal/create-tournaments/__request/CraeteTournamentRequest";
 import { useSelector } from "react-redux";
-import { Button } from "react-bootstrap";
 import HomeBanner from "../Home-Banne/HomeBanner";
 import HomeNavbar from "../Home-Navbar/HomeNavbar";
 import { useParams } from "react-router-dom";
 import { getSingleTournamentReq } from "../__request/HomePagerequests";
+import "../apna-shauq-home.css";
 
 const OtherTournamentresult = () => {
   // const currentTournament = useSelector((state) => state.tournamentDataReducer);
@@ -664,95 +664,54 @@ const OtherTournamentresult = () => {
   ]);
 
   return (
-    <div className="">
+    <div className="sp-public">
       <HomeBanner />
       <HomeNavbar />
       <div
         className="w-100 d-flex align-items-center justify-content-start p-1"
-        style={{ backgroundColor: "#608BC1" }}
+        style={{ backgroundColor: "#1e3d8f" }}
       >
         <span className="fw-bold text-white fs-5">
           Currect Tournament : {currentTournament?.tournamentName}
         </span>
       </div>
 
-      <div
-        className="w-100 d-flex align-items-center justify-content-center gap-3 flex-wrap"
-        style={{ padding: "10px" }}
-      >
+      <div className="sp-date-row w-100" style={{ padding: "10px" }}>
         {currentTournament?.dates
-          ?.slice() // Create a copy to avoid mutating the original array
-          .sort((a, b) => a.localeCompare(b)) // Sort as strings in "YYYY-MM-DD" format
+          ?.slice()
+          .sort((a, b) => a.localeCompare(b))
           .map((date, index) => {
             const isSelected = !showTotal && selectedDateIndex === index;
-
-            const formattedDate = date.split("-").reverse().join("-"); // Convert "YYYY-MM-DD" to "DD-MM-YYYY"
+            const formattedDate = date.split("-").reverse().join("-");
             return (
-              <Button
+              <button
+                type="button"
                 key={index}
-                variant={isSelected ? "primary" : "outline-primary"}
+                className={`sp-date-tab${
+                  isSelected ? " sp-date-tab--active" : ""
+                }`}
                 onClick={() => {
                   handleDateSelect(date, index);
                   setShowTotal(false);
                 }}
-                className={`px-4 py-2 rounded-pill shadow-sm ${
-                  isSelected ? "fw-bold text-white" : "text-primary"
-                }`}
-                style={{
-                  minWidth: "160px",
-                  border: isSelected ? "none" : "2px solid #0d6efd",
-                  transform: isSelected ? "scale(1.05)" : "scale(1)",
-                  transition: "all 0.3s ease-in-out",
-                  backgroundColor: isSelected ? "#0d6efd" : "white",
-                  boxShadow: isSelected
-                    ? "0 4px 12px rgba(13, 110, 253, 0.3)"
-                    : "0 2px 6px rgba(0, 0, 0, 0.1)",
-                  letterSpacing: "0.5px",
-                }}
               >
                 {formattedDate}
-              </Button>
+              </button>
             );
           })}
 
-        <Button
-          variant={showTotal ? "primary" : "outline-primary"}
-          env
+        <button
+          type="button"
+          className={`sp-date-tab${showTotal ? " sp-date-tab--active" : ""}`}
           onClick={() => setShowTotal(true)}
-          className={`px-4 py-2 rounded-pill shadow-sm ${
-            showTotal ? "fw-bold text-white" : "text-primary"
-          }`}
-          style={{
-            minWidth: "160px",
-            border: showTotal ? "none" : "2px solid #0d6efd",
-            transform: showTotal ? "scale(1.05)" : "scale(1)",
-            transition: "all 0.3s ease-in-out",
-            backgroundColor: showTotal ? "#0d6efd" : "white",
-            boxShadow: showTotal
-              ? "0 4px 12px rgba(13, 110, 253, 0.3)"
-              : "0 2px 6px rgba(0, 0, 0, 0.1)",
-            letterSpacing: "0.5px",
-          }}
         >
           Total
-        </Button>
+        </button>
       </div>
 
       {!showTotal && (
-        <div
-          className=""
-          style={{
-            padding: "10px",
-            border: " solid #dee2e6",
-            margin: "10px",
-            borderRadius: "10px",
-            boxShadow: "2px 0 8px rgba(40, 167, 69, 0.2)",
-            backgroundColor: "#FAFFC5",
-          }}
-        >
-          <span className="fw-bold" style={{ color: "#2C3E50" }}>
-            Today's first pigeon winner:
-          </span>{" "}
+        <div className="sp-winner-box">
+          <span className="sp-label">Today&apos;s first pigeon winner:</span>{" "}
           <span>
             {(() => {
               const firstPigeonHighest = findFirstPigeonHighestTime();
@@ -770,21 +729,10 @@ const OtherTournamentresult = () => {
         </div>
       )}
 
-      <div
-        className=""
-        style={{
-          padding: "10px",
-          border: "1px solid #dee2e6",
-          margin: "10px",
-          borderRadius: "10px",
-          borderLeft: "10px solid #608BC1",
-          boxShadow: "2px 0 8px rgba(40, 167, 69, 0.2)",
-          backgroundColor: "#133E87",
-        }}
-      >
-        <div className="d-flex align-items-center gap-3">
+      <div className="sp-stats-strip">
+        <div className="sp-stats-row d-flex align-items-center gap-3">
           <div>
-            <span className="fw-bold" style={{ color: "white" }}>
+            <span className="fw-bold" style={{ color: "var(--sp-gold-light)" }}>
               Lofts:
             </span>{" "}
             <span className="text-white">
@@ -792,7 +740,7 @@ const OtherTournamentresult = () => {
             </span>
           </div>
           <div>
-            <span className="fw-bold" style={{ color: "white" }}>
+            <span className="fw-bold" style={{ color: "var(--sp-gold-light)" }}>
               Pigeons:
             </span>{" "}
             <span className="text-white">
@@ -803,7 +751,7 @@ const OtherTournamentresult = () => {
           </div>
 
           <div>
-            <span className="fw-bold" style={{ color: "white" }}>
+            <span className="fw-bold" style={{ color: "var(--sp-gold-light)" }}>
               Landed:
             </span>{" "}
             <span className="text-white">
@@ -829,7 +777,7 @@ const OtherTournamentresult = () => {
           </div>
 
           <div>
-            <span className="fw-bold" style={{ color: "white" }}>
+            <span className="fw-bold" style={{ color: "var(--sp-gold-light)" }}>
               Pigeons remaining:
             </span>{" "}
             <span className="text-white">
@@ -871,7 +819,7 @@ const OtherTournamentresult = () => {
                 <div
                   className="rounded-3 shadow-lg"
                   style={{
-                    backgroundColor: "#608BC1",
+                    backgroundColor: "#2d55c8",
                     border: "1px solid white",
                     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Soft shadow
                     color: "white", // Dark text for better visibility
@@ -911,9 +859,9 @@ const OtherTournamentresult = () => {
             )}
       </div>
 
-      <div className="table-responsive-app card-body p-0">
+      <div className="sp-table-shell table-responsive-app card-body p-0">
         <table
-          className="table table-sm table-hover table-striped bordered-table mb-0"
+          className="table table-sm mb-0 sp-results-table"
           style={{
             fontSize: "0.9rem",
             borderCollapse: "collapse",
@@ -1180,18 +1128,9 @@ const OtherTournamentresult = () => {
                             key={index}
                             className={`text-center p-1 border fw-bold ${
                               isExcluded ? "text-muted" : ""
+                            } ${isHighestTime ? "sp-pigeon-cell--lead" : ""} ${
+                              shouldBlink ? "sp-pigeon-cell--blink" : ""
                             }`}
-                            style={{
-                              backgroundColor: isHighestTime
-                                ? shouldBlink
-                                  ? "#78B3CE"
-                                  : "#78B3CE"
-                                : "",
-                              color: isHighestTime ? "white" : "inherit",
-                              animation: shouldBlink
-                                ? "blink 1s infinite alternate"
-                                : "none",
-                            }}
                           >
                             {showTotal
                               ? pigeonTime

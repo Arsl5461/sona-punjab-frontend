@@ -691,7 +691,7 @@ const Home = () => {
       )}
 
       <div className="sp-stats-strip">
-        <div className="d-flex align-items-center gap-3">
+        <div className="sp-stats-row d-flex align-items-center gap-3">
           <div>
             <span className="fw-bold">Lofts:</span>{" "}
             <span>
@@ -818,7 +818,7 @@ const Home = () => {
                 Helper
               </th>
               <th scope="col" className="text-center">
-                Time
+                Flying time
               </th>
               {showTotal ? (
                 // Show dates as columns when Total is selected
@@ -885,10 +885,19 @@ const Home = () => {
                   <td className="text-start">
                     <div className="d-flex flex-column align-items-start justify-content-start">
                       <span className="sp-owner-name urdu">{owner?.name}</span>
-                      <span className="small text-muted urdu">
-                        {owner?.address}
-                      </span>
-                      <span className="small text-muted">{owner?.phone}</span>
+                      {owner?.address ? (
+                        <span className="small text-muted urdu">
+                          {owner.address}
+                        </span>
+                      ) : null}
+                      {owner?.phone ? (
+                        <a
+                          href={`tel:${String(owner.phone).replace(/\s/g, "")}`}
+                          className="sp-owner-phone small urdu"
+                        >
+                          {owner.phone}
+                        </a>
+                      ) : null}
                     </div>
                   </td>
                   <td className="text-center fw-bold">
@@ -897,7 +906,7 @@ const Home = () => {
                   <td className="text-center fw-bold">
                     {currentTournament?.helperPigeons ?? 0}
                   </td>
-                  <td className="text-center fw-bold">
+                  <td className="text-center fw-bold sp-flying-time">
                     {(
                       (gerResult &&
                         gerResult?.length > 0 &&
@@ -926,8 +935,11 @@ const Home = () => {
 
                         return (
                           <td key={dateIndex} className="text-center fw-bold">
-                            {ownerResult?.formattedTotalTime?.slice(0, 5) ||
-                              "No Result"}
+                            {ownerResult?.formattedTotalTime?.slice(0, 5) ? (
+                              ownerResult.formattedTotalTime.slice(0, 5)
+                            ) : (
+                              <span className="sp-pigeon-empty">Empty</span>
+                            )}
                           </td>
                         );
                       })}
@@ -1029,6 +1041,26 @@ const Home = () => {
 
                         const shouldBlink = isHighestTime && isBlinking;
 
+                        const pigeonCellInner = showTotal
+                          ? pigeonTime
+                            ? (() => {
+                                const hours = Math.floor(pigeonTime / 3600);
+                                const minutes = Math.floor(
+                                  (pigeonTime % 3600) / 60
+                                );
+                                return `${hours}:${minutes}${
+                                  isExcluded ? "" : ""
+                                }`;
+                              })()
+                            : isExcluded
+                            ? "(excluded)"
+                            : null
+                          : pigeonTime
+                          ? `${formattedPigeonTime}${isExcluded ? "" : ""}`
+                          : isExcluded
+                          ? "(excluded)"
+                          : null;
+
                         return (
                           <td
                             key={index}
@@ -1038,25 +1070,13 @@ const Home = () => {
                               shouldBlink ? "sp-pigeon-cell--blink" : ""
                             }`}
                           >
-                            {showTotal
-                              ? pigeonTime
-                                ? (() => {
-                                    const hours = Math.floor(pigeonTime / 3600);
-                                    const minutes = Math.floor(
-                                      (pigeonTime % 3600) / 60
-                                    );
-                                    return `${hours}:${minutes}${
-                                      isExcluded ? "" : ""
-                                    }`;
-                                  })()
-                                : isExcluded
-                                ? "(excluded)"
-                                : ""
-                              : pigeonTime
-                              ? `${formattedPigeonTime}${isExcluded ? "" : ""}`
-                              : isExcluded
-                              ? "(excluded)"
-                              : ""}
+                            {pigeonCellInner != null && pigeonCellInner !== ""
+                              ? pigeonCellInner
+                              : !isExcluded && (
+                                  <span className="sp-pigeon-empty">
+                                    Empty
+                                  </span>
+                                )}
                           </td>
                         );
                       })}
