@@ -884,9 +884,6 @@ const OtherTournamentresult = () => {
                 Owner
               </th>
               <th scope="col" className="text-center p-0 border">
-                Pigeons
-              </th>
-              <th scope="col" className="text-center p-0 border">
                 Time
               </th>
               {showTotal ? (
@@ -984,9 +981,6 @@ const OtherTournamentresult = () => {
                         <span className="fw-normal">{owner?.phone}</span>
                       </div>
                     </div>
-                  </td>
-                  <td className="text-center p-1 border fw-bold">
-                    {currentTournament?.numberOfPigeons}
                   </td>
                   <td className="text-center p-1 border fw-bold">
                     {(

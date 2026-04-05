@@ -812,12 +812,6 @@ const Home = () => {
                 Name
               </th>
               <th scope="col" className="text-center">
-                Pigeons
-              </th>
-              <th scope="col" className="text-center">
-                Helper
-              </th>
-              <th scope="col" className="text-center">
                 Flying time
               </th>
               {showTotal ? (
@@ -899,12 +893,6 @@ const Home = () => {
                         </a>
                       ) : null}
                     </div>
-                  </td>
-                  <td className="text-center fw-bold">
-                    {currentTournament?.numberOfPigeons}
-                  </td>
-                  <td className="text-center fw-bold">
-                    {currentTournament?.helperPigeons ?? 0}
                   </td>
                   <td className="text-center fw-bold sp-flying-time">
                     {(
