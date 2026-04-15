@@ -621,7 +621,10 @@ const Home = () => {
         <>
           <div className="sp-tournament-head">
             <h3 className="sp-tournament-title urdu">
-              {currentTournament?.tournamentName}
+              {String(currentTournament?.tournamentName ?? "")
+                .replace(/\r\n|\r|\n/g, " ")
+                .replace(/\s+/g, " ")
+                .trim()}
             </h3>
             {/* <p className="sp-tournament-meta">
               Start time:{" "}
@@ -923,11 +926,9 @@ const Home = () => {
 
                         return (
                           <td key={dateIndex} className="text-center fw-bold">
-                            {ownerResult?.formattedTotalTime?.slice(0, 5) ? (
-                              ownerResult.formattedTotalTime.slice(0, 5)
-                            ) : (
-                              <span className="sp-pigeon-empty">Empty</span>
-                            )}
+                            {ownerResult?.formattedTotalTime?.slice(0, 5)
+                              ? ownerResult.formattedTotalTime.slice(0, 5)
+                              : null}
                           </td>
                         );
                       })}
@@ -1060,11 +1061,7 @@ const Home = () => {
                           >
                             {pigeonCellInner != null && pigeonCellInner !== ""
                               ? pigeonCellInner
-                              : !isExcluded && (
-                                  <span className="sp-pigeon-empty">
-                                    Empty
-                                  </span>
-                                )}
+                              : null}
                           </td>
                         );
                       })}

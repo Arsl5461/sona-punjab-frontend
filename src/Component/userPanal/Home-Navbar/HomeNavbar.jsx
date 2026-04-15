@@ -81,7 +81,7 @@ const HomeNavbar = () => {
           ) : null}
         </nav>
         <div className="sp-topnav-side">
-          <Link to="/login" className="sp-nav-pill sp-nav-pill--accent">
+          <Link to="/login" className="sp-nav-pill sp-nav-pill--accent sp-nav-pill--brand">
             Sona Punjab
           </Link>
           <Link
