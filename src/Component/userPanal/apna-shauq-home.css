@@ -328,6 +328,14 @@
   background: rgba(45, 92, 200, 0.1);
 }
 
+.sp-date-tab--active:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(30, 61, 143, 0.18) 0%,
+    rgba(30, 61, 143, 0.1) 100%
+  );
+}
+
 /* No browser “outside” ring — selected state shows the fill; keyboard gets an inset ring */
 .sp-date-tab:focus {
   outline: none;
@@ -337,19 +345,24 @@
   box-shadow: inset 0 0 0 2px var(--sp-green-light);
 }
 
+/* Selected tab: dark text on light blue fill — readable on all screens (avoids white-on-pale) */
 .sp-date-tab--active {
-  background: var(--sp-green);
-  color: #fff;
+  background: linear-gradient(
+    180deg,
+    rgba(30, 61, 143, 0.14) 0%,
+    rgba(30, 61, 143, 0.08) 100%
+  );
+  color: var(--sp-green-dark);
   border-color: var(--sp-green);
   font-weight: 700;
-  box-shadow: 0 2px 10px rgba(30, 61, 143, 0.42);
+  box-shadow: 0 2px 8px rgba(30, 61, 143, 0.18);
 }
 
 .sp-date-tab--active:focus,
 .sp-date-tab--active:focus-visible {
   outline: none;
-  box-shadow: 0 2px 10px rgba(30, 61, 143, 0.42),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.45);
+  box-shadow: 0 2px 8px rgba(30, 61, 143, 0.18),
+    inset 0 0 0 2px rgba(30, 61, 143, 0.35);
 }
 
 /* —— Winner callout —— */
@@ -378,19 +391,43 @@
   border: 1px solid var(--sp-gold);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
   font-size: 0.88rem;
-}
-
-.sp-stats-row {
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem 1.25rem;
-  width: 100%;
+  min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
 }
 
+/* One row + horizontal scroll when chips don’t fit (min-width:0 so flex chain allows shrinking) */
+.sp-stats-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.45) rgba(0, 0, 0, 0.12);
+}
+
+.sp-stats-row::-webkit-scrollbar {
+  height: 5px;
+}
+
+.sp-stats-row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+}
+
 .sp-stats-row > div {
   flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .sp-stats-strip .fw-bold {
@@ -867,32 +904,14 @@
     width: 4.75rem;
   }
 
-  /* Stats: one row, horizontal scroll (same idea as .sp-date-row) */
+  /* Stats: tighter gap + pill chips (scroll comes from base .sp-stats-row) */
 
   .sp-stats-row {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
     gap: 0.5rem;
-    padding-bottom: 0.2rem;
     margin-left: -0.15rem;
     margin-right: -0.15rem;
     padding-left: 0.15rem;
     padding-right: 0.15rem;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.45) rgba(0, 0, 0, 0.12);
-  }
-
-  .sp-stats-row::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  .sp-stats-row::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.35);
-    border-radius: 4px;
   }
 
   .sp-stats-row > div {

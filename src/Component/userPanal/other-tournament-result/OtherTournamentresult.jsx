@@ -730,7 +730,7 @@ const OtherTournamentresult = () => {
       )}
 
       <div className="sp-stats-strip">
-        <div className="sp-stats-row d-flex align-items-center gap-3">
+        <div className="sp-stats-row">
           <div>
             <span className="fw-bold" style={{ color: "var(--sp-gold-light)" }}>
               Lofts:

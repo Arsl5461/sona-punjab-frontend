@@ -694,7 +694,7 @@ const Home = () => {
       )}
 
       <div className="sp-stats-strip">
-        <div className="sp-stats-row d-flex align-items-center gap-3">
+        <div className="sp-stats-row">
           <div>
             <span className="fw-bold">Lofts:</span>{" "}
             <span>
