@@ -1,13 +1,10 @@
-/* Full-width app shell — avoids shrink-to-content gaps on mobile */
+/* Full-width app shell — avoid max-width/overflow-x on html that block pinch zoom on phones */
 html {
   width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
 }
 
 body {
   width: 100%;
-  max-width: 100vw;
   min-height: 100vh;
   margin: 0;
 }

@@ -599,7 +599,7 @@ const Home = () => {
   ]);
 
   return (
-    <div className="sp-public sp-home-desktop-view">
+    <div className="sp-public">
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
