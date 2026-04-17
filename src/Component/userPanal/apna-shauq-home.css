@@ -66,7 +66,7 @@
 }
 
 .sp-banner-placeholder {
-  min-height: 140px;
+  min-height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1000,7 +1000,7 @@
   }
 
   .sp-banner-placeholder {
-    min-height: 100px;
+    min-height: 140px;
     font-size: 0.82rem;
     padding: 0.75rem;
   }
