@@ -116,25 +116,36 @@ const ClubAllTournaments = () => {
     }
   };
 
+  /**
+   * Row cap from API `numberOfPrizes` only. If missing/zero, show full ranked list.
+   */
+  const getClubLeaderboardRowCap = (tournament) => {
+    const n = Number(tournament?.numberOfPrizes);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  };
+
+  /**
+   * Returns ranked rows for the table (capped by backend `numberOfPrizes` when results exist)
+   * plus counts for the footer.
+   */
   const getSortedOwners = (tournamentId, tournament) => {
     const owners = tournamentOwners[tournamentId] || [];
     const results = tournamentResults[tournamentId]?.ownerResults || [];
     const prizes = [...(tournament.prizes || [])].sort((a, b) => b - a);
 
-    // Debug logs
-
     if (!owners.length) {
-      console.error("No owners found");
-      return [];
+      return {
+        rows: [],
+        rankedWithResultsCount: 0,
+        allOwnersCount: 0,
+        showTournamentOnly: false,
+      };
     }
 
-    // Combine owners with their results
     const ownersWithResults = owners.map((owner) => {
       const ownerResult = results.find(
         (result) => result.ownerId === owner._id
       );
-
-      // Debug log for each owner mapping
 
       return {
         ...owner,
@@ -143,24 +154,47 @@ const ClubAllTournaments = () => {
       };
     });
 
-    // If there are results, sort and filter owners
     if (results.length > 0) {
       const sortedOwners = ownersWithResults
         .filter((owner) => owner.hasResult)
-        .sort((a, b) => b.grandTotal - a.grandTotal);
+        .sort((a, b) => b.grandTotal - a.grandTotal)
+        .map((owner, index) => ({
+          ...owner,
+          prize: index < prizes.length ? prizes[index] : null,
+        }));
 
-      // Map prizes to top performers
-      return sortedOwners.map((owner, index) => ({
-        ...owner,
-        prize: index < prizes.length ? prizes[index] : null,
-      }));
+      const anyWinner = sortedOwners.some(
+        (o) => Number(o.grandTotal) > 0
+      );
+      if (!anyWinner) {
+        return {
+          rows: [],
+          rankedWithResultsCount: 0,
+          allOwnersCount: owners.length,
+          showTournamentOnly: true,
+        };
+      }
+
+      const cap = getClubLeaderboardRowCap(tournament);
+      const rankedWithResultsCount = sortedOwners.length;
+      const rows =
+        cap != null ? sortedOwners.slice(0, cap) : sortedOwners;
+
+      return {
+        rows,
+        rankedWithResultsCount,
+        allOwnersCount: owners.length,
+        showTournamentOnly: false,
+      };
     }
 
-    // If no results yet, return all owners without prizes
-    return ownersWithResults.map((owner) => ({
-      ...owner,
-      prize: null,
-    }));
+    /* No total results from API yet — show tournament only, not the full owner list */
+    return {
+      rows: [],
+      rankedWithResultsCount: 0,
+      allOwnersCount: owners.length,
+      showTournamentOnly: true,
+    };
   };
 
   const formatTime = (seconds) => {
@@ -250,7 +284,12 @@ const ClubAllTournaments = () => {
           </div>
         ) : (
           getFilteredTournaments().map((tournament) => {
-            const sortedOwners = getSortedOwners(tournament._id, tournament);
+            const {
+              rows: sortedOwners,
+              rankedWithResultsCount,
+              allOwnersCount,
+              showTournamentOnly,
+            } = getSortedOwners(tournament._id, tournament);
             return (
               <div key={tournament._id} className="card mb-4 sp-club-tournament-card">
                 <div className="card-header">
@@ -310,7 +349,7 @@ const ClubAllTournaments = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {sortedOwners.length === 0 ? (
+                            {allOwnersCount === 0 ? (
                               <tr>
                                 <td className="text-center p-1 border text-muted sp-club-col-idx">
                                   —
@@ -325,8 +364,25 @@ const ClubAllTournaments = () => {
                                   No participants yet.
                                 </td>
                               </tr>
+                            ) : showTournamentOnly ? (
+                              <tr>
+                                <td className="text-center p-1 border text-muted sp-club-col-idx">
+                                  —
+                                </td>
+                                <td className="text-center p-1 border align-middle sp-club-poster-cell sp-club-col-tournament">
+                                  <TournamentTablePoster tournament={tournament} />
+                                </td>
+                                <td
+                                  colSpan={3}
+                                  className="text-start p-1 border text-muted align-middle sp-club-empty-row-msg"
+                                >
+                                  No winner or final results yet. Check back
+                                  after the tournament.
+                                </td>
+                              </tr>
                             ) : null}
-                            {sortedOwners.map((owner, index) => {
+                            {!showTournamentOnly && allOwnersCount > 0
+                              ? sortedOwners.map((owner, index) => {
                               const rowSpan = sortedOwners.length;
                               return (
                                 <tr key={owner?._id}>
@@ -378,7 +434,8 @@ const ClubAllTournaments = () => {
                                   </td>
                                 </tr>
                               );
-                            })}
+                            })
+                              : null}
                           </tbody>
                         </table>
                     </div>
@@ -386,10 +443,28 @@ const ClubAllTournaments = () => {
 
                   <div className="mt-3 text-muted px-1 pb-2">
                     <small>
-                      <strong>Total Participants:</strong>{" "}
-                      {sortedOwners.length} |{" "}
+                      {showTournamentOnly ? (
+                        <>
+                          <strong>Results:</strong> pending |{" "}
+                        </>
+                      ) : rankedWithResultsCount > 0 ? (
+                        <>
+                          <strong>Winners listed:</strong>{" "}
+                          {sortedOwners.length}
+                          {rankedWithResultsCount > sortedOwners.length ? (
+                            <>
+                              {" "}
+                              (top {sortedOwners.length} of{" "}
+                              {rankedWithResultsCount} ranked)
+                            </>
+                          ) : null}
+                          {" "}
+                          |{" "}
+                        </>
+                      ) : null}
+                      <strong>Registered:</strong> {allOwnersCount} |{" "}
                       <strong>Total Prize Pool:</strong>{" "}
-                      {tournament.prizes.reduce(
+                      {(tournament.prizes || []).reduce(
                         (a, b) => Number(a) + Number(b),
                         0
                       )}

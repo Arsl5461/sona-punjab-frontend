@@ -28,6 +28,17 @@ const Home = () => {
     getCurrentTournament();
   }, []);
 
+  /**
+   * Home uses a wide minimum canvas + browser pinch-zoom / horizontal pan
+   * instead of shrinking the layout for narrow viewports (see apna-shauq-home.css
+   * body.sp-home-zoom-layout). Removed on unmount so other public pages keep
+   * responsive behavior.
+   */
+  useEffect(() => {
+    document.body.classList.add("sp-home-zoom-layout");
+    return () => document.body.classList.remove("sp-home-zoom-layout");
+  }, []);
+
   // const handleDateSelect = (date, index) => {
   //   // Convert "YYYY-MM-DD" to "DD-MM-YYYY"
   //   const [year, month, day] = date.split("-");

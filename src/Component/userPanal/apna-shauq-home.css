@@ -1131,3 +1131,259 @@
   }
 }
 
+/* =====================================================================
+ * Home only — body.sp-home-zoom-layout (class toggled from Home.jsx)
+ * Wide canvas + pinch-zoom / horizontal pan instead of mobile reflow.
+ * Viewport scaling: public/index.html (user-scalable=yes, min/max scale).
+ * ===================================================================== */
+
+html:has(body.sp-home-zoom-layout) {
+  overflow-x: auto;
+}
+
+body.sp-home-zoom-layout {
+  overflow-x: auto;
+}
+
+body.sp-home-zoom-layout .sp-public {
+  min-width: 1024px;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1199.98px) {
+  body.sp-home-zoom-layout .sp-public .sp-topnav-row {
+    max-width: 1400px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-results-table {
+    font-size: 0.82rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-results-table .sp-owner-pic {
+    width: clamp(20px, 4.5vw, 34px);
+    height: clamp(20px, 4.5vw, 34px);
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-results-table thead th,
+  body.sp-home-zoom-layout .sp-public .sp-results-table tbody td {
+    padding: 0.45rem 0.4rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-results-table th:nth-child(1),
+  body.sp-home-zoom-layout .sp-public .sp-results-table td:nth-child(1),
+  body.sp-home-zoom-layout .sp-public .sp-results-table th:nth-child(2),
+  body.sp-home-zoom-layout .sp-public .sp-results-table td:nth-child(2),
+  body.sp-home-zoom-layout .sp-public .sp-results-table th:nth-child(3),
+  body.sp-home-zoom-layout .sp-public .sp-results-table td:nth-child(3) {
+    position: static !important;
+    left: auto !important;
+    z-index: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  body.sp-home-zoom-layout .sp-public .sp-tournament-head:not(.sp-club-head)
+    .sp-tournament-title {
+    font-size: clamp(0.72rem, 1.65vw, 0.88rem) !important;
+    padding: 0 0.25rem;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-date-row {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    overscroll-behavior-x: auto !important;
+    padding: 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-date-tab {
+    min-width: 7.5rem !important;
+    max-width: none !important;
+    padding: 0.45rem 1rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-winner-box {
+    margin: 0.75rem !important;
+    padding: 0.65rem 1rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-stats-strip {
+    margin: 0 0.75rem 0.75rem !important;
+    padding: 0.65rem 1rem !important;
+    font-size: 0.88rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-stats-row {
+    gap: 0.75rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-stats-row > div {
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    font-size: inherit !important;
+  }
+
+  body.sp-home-zoom-layout
+    .sp-public
+    .sp-results-table--fit.sp-results-table--leaderboard {
+    font-size: clamp(0.65rem, 0.85vw + 0.45rem, 0.94rem) !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  body.sp-home-zoom-layout .sp-public .sp-topnav-row {
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    min-height: 52px !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-topnav-brand {
+    order: 0 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 0.4rem 0.85rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-topnav-brand .sp-nav-home {
+    font-size: 1rem !important;
+    padding: 0.28rem 0.55rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-topnav-side {
+    order: 0 !important;
+    margin-left: 0 !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    gap: 0.3rem !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 0.35rem 0.65rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-topnav-scroll {
+    order: 0 !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 0.35rem 0.65rem !important;
+    border-top: none !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-marquee-wrap {
+    flex-wrap: nowrap !important;
+    gap: 0.75rem !important;
+    padding: 0.35rem 0.75rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-marquee-label {
+    font-size: 0.8rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-nav-pill,
+  body.sp-home-zoom-layout .sp-public .sp-club-link {
+    min-height: 0 !important;
+    font-size: 0.75rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-nav-pill--brand {
+    font-size: 0.68rem !important;
+    min-height: 0 !important;
+    padding: 0.24rem 0.48rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-winner-box {
+    margin: 0.75rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-stats-strip {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-table-shell {
+    margin-left: 0.5rem !important;
+    margin-right: 0.5rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-empty-tournament {
+    margin: 1.25rem 0.75rem !important;
+    padding: 1.1rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  body.sp-home-zoom-layout .sp-public .sp-table-shell {
+    margin-left: 0.5rem !important;
+    margin-right: 0.5rem !important;
+    max-width: 100% !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-results-table {
+    font-size: 0.82rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-tournament-head:not(.sp-club-head)
+    .sp-tournament-title {
+    font-size: clamp(0.72rem, 1.65vw, 0.88rem) !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-date-tab {
+    min-width: 7.5rem !important;
+    font-size: 0.875rem !important;
+    padding: 0.45rem 1rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-results-table thead th {
+    font-size: 0.8rem !important;
+    padding: 0.45rem 0.4rem !important;
+  }
+}
+
+@media (max-width: 399.98px) {
+  body.sp-home-zoom-layout .sp-public .sp-topnav-brand .sp-nav-home {
+    font-size: 1rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-nav-pill {
+    font-size: 0.75rem !important;
+    padding: 0.28rem 0.6rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-nav-pill--brand {
+    font-size: 0.68rem !important;
+    padding: 0.24rem 0.48rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-date-tab {
+    font-size: 0.875rem !important;
+    padding: 0.45rem 1rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-marquee-wrap {
+    font-size: 0.9rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-public .sp-results-table thead th {
+    font-size: 0.8rem !important;
+    padding: 0.45rem 0.4rem !important;
+  }
+}
+
