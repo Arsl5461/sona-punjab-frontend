@@ -1,12 +1,39 @@
 /* Full-width app shell — avoid max-width/overflow-x on html that block pinch zoom on phones */
 html {
   width: 100%;
+  /* Site-wide base size: 1rem = 13px (body copy); Bootstrap/components scale with rem */
+  font-size: 13px;
 }
 
 body {
   width: 100%;
   min-height: 100vh;
   margin: 0;
+  font-family: "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+/* Consistent heading treatment site-wide */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-weight: 700;
+}
+
+/* Bootstrap’s <small> is ~87.5% — align with 13px body when you want uniform copy */
+small {
+  font-size: 1em;
 }
 
 #root {

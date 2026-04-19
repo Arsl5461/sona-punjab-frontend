@@ -16,6 +16,7 @@ import HomeBanner from "../../Home-Banne/HomeBanner";
 import HomeNavbar from "../HomeNavbar";
 import { getClubTournaments } from "./__requests/ClubTournamentsRequests";
 import { useParams } from "react-router-dom";
+import { usePublicMarqueeText } from "../../../../helper/usePublicMarqueeText";
 
 function TournamentTablePoster({ tournament }) {
   const dispatch = useDispatch();
@@ -51,6 +52,10 @@ function TournamentTablePoster({ tournament }) {
 }
 
 const ClubAllTournaments = () => {
+  const headlineText = usePublicMarqueeText({
+    fallback:
+      "خوش آمدید — Sona Punjab | Club tournaments and archives.",
+  });
   const [clubAllTournaments, setClubAllTournaments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tournamentOwners, setTournamentOwners] = useState({});
@@ -139,6 +144,8 @@ const ClubAllTournaments = () => {
         rankedWithResultsCount: 0,
         allOwnersCount: 0,
         showTournamentOnly: false,
+        firstWinnerOwner: null,
+        lastWinnerOwner: null,
       };
     }
 
@@ -172,6 +179,8 @@ const ClubAllTournaments = () => {
           rankedWithResultsCount: 0,
           allOwnersCount: owners.length,
           showTournamentOnly: true,
+          firstWinnerOwner: null,
+          lastWinnerOwner: null,
         };
       }
 
@@ -180,11 +189,21 @@ const ClubAllTournaments = () => {
       const rows =
         cap != null ? sortedOwners.slice(0, cap) : sortedOwners;
 
+      /* Full list: index 0 = top of table (highest grandTotal) = “last winner”; last index = “first winner” */
+      const lastWinnerOwner =
+        sortedOwners.length > 0 ? sortedOwners[0] : null;
+      const firstWinnerOwner =
+        sortedOwners.length > 0
+          ? sortedOwners[sortedOwners.length - 1]
+          : null;
+
       return {
         rows,
         rankedWithResultsCount,
         allOwnersCount: owners.length,
         showTournamentOnly: false,
+        firstWinnerOwner,
+        lastWinnerOwner,
       };
     }
 
@@ -194,6 +213,8 @@ const ClubAllTournaments = () => {
       rankedWithResultsCount: 0,
       allOwnersCount: owners.length,
       showTournamentOnly: true,
+      firstWinnerOwner: null,
+      lastWinnerOwner: null,
     };
   };
 
@@ -243,10 +264,9 @@ const ClubAllTournaments = () => {
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
-        <span className="sp-marquee-label">Latest news:</span>
+        <span className="sp-marquee-label">Headline:</span>
         <Marquee speed={42} gradient={false} pauseOnHover>
-          {process.env.REACT_APP_NEWS_TICKER ||
-            "خوش آمدید — Sona Punjab | Club tournaments and archives."}
+          {headlineText}
         </Marquee>
       </div>
 
@@ -289,6 +309,8 @@ const ClubAllTournaments = () => {
               rankedWithResultsCount,
               allOwnersCount,
               showTournamentOnly,
+              firstWinnerOwner,
+              lastWinnerOwner,
             } = getSortedOwners(tournament._id, tournament);
             return (
               <div key={tournament._id} className="card mb-4 sp-club-tournament-card">
@@ -311,6 +333,27 @@ const ClubAllTournaments = () => {
                   </p>
                 </div>
                 <div className="card-body pt-2 px-2 px-md-3">
+                  {!showTournamentOnly &&
+                    rankedWithResultsCount > 0 &&
+                    firstWinnerOwner &&
+                    lastWinnerOwner && (
+                      <div className="sp-club-winner-callouts mb-2">
+                        <div className="sp-winner-box mb-2">
+                          <span className="sp-label">Last winner:</span>{" "}
+                          <span>
+                            {formatTime(lastWinnerOwner.grandTotal)},{" "}
+                            {lastWinnerOwner.name}
+                          </span>
+                        </div>
+                        <div className="sp-last-winner-bar">
+                          <span className="fw-bold">First winner:</span>{" "}
+                          <span>
+                            {formatTime(firstWinnerOwner.grandTotal)},{" "}
+                            {firstWinnerOwner.name}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   <div className="sp-club-table-wrap">
                     <div className="table-responsive table-responsive-app">
                         <table className="table table-sm mb-0 sp-results-table sp-club-results-table">

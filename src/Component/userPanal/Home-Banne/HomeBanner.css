@@ -13,8 +13,7 @@
   flex-shrink: 0;
   width: 100%;
   height: auto;
-  /* Taller strip so collage faces / lions aren’t cropped (was min(52vh, 420px)) */
-  max-height: min(68vh, 580px);
+  max-height: min(74vh, 640px);
   object-fit: cover;
   object-position: center center;
   display: block;
@@ -22,30 +21,30 @@
 
 @media (max-width: 1199.98px) {
   .sp-banner-slide-img {
-    max-height: min(62vh, 520px);
+    max-height: min(68vh, 580px);
   }
 }
 
 @media (max-width: 991.98px) {
   .sp-banner-slide-img {
-    max-height: min(56vh, 460px);
+    max-height: min(62vh, 520px);
   }
 }
 
 @media (max-width: 767.98px) {
   .sp-banner-slide-img {
-    max-height: min(50vh, 400px);
+    max-height: min(56vh, 460px);
   }
 }
 
 @media (max-width: 575.98px) {
   .sp-banner-slide-img {
-    max-height: min(46vh, 340px);
+    max-height: min(52vh, 400px);
   }
 }
 
 @media (max-width: 399.98px) {
   .sp-banner-slide-img {
-    max-height: min(42vh, 280px);
+    max-height: min(48vh, 340px);
   }
 }

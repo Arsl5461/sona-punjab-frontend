@@ -18,6 +18,7 @@ import TournamentResult from "./Component/adminPanal/create-tournaments/Tourname
 import OtherTournamentresult from "./Component/userPanal/other-tournament-result/OtherTournamentresult";
 import ClubLists from "./Component/adminPanal/club/ClubLists";
 import ClubAllTournaments from "./Component/userPanal/Home-Navbar/club-tournaments/ClubAllTournaments";
+import AllMarqueeList from "./Component/adminPanal/Marquee/AllMarqueeList";
 
 function App() {
   const [token, setToken] = useState(() => {
@@ -80,6 +81,8 @@ function App() {
             <Route path="/create-tournaments" element={<CreateTournaments />} />
             <Route path="/all-tournaments" element={<AllTournaments />} />
             <Route path="/banners" element={<AllBannersList />} />
+            <Route path="/headline" element={<AllMarqueeList />} />
+            <Route path="/marquee" element={<Navigate to="/headline" replace />} />
             <Route path="/all-pigeon-owners" element={<PigeonOwnersList />} />
             <Route path="/all-clubs" element={<ClubLists />} />
 

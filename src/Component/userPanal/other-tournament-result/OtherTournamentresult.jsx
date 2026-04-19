@@ -626,10 +626,12 @@ const OtherTournamentresult = () => {
       return;
     }
 
-    const globalHighest = findGlobalHighestTime();
-    if (!globalHighest) return;
+    const leadPeak = showTotal
+      ? findGlobalHighestTime()
+      : findFirstPigeonHighestTime();
+    if (!leadPeak) return;
 
-    const nextVal = globalHighest.time;
+    const nextVal = leadPeak.time;
     if (!showTotal) {
       if (!nextVal || nextVal === "00:00") return;
     } else {
@@ -711,18 +713,18 @@ const OtherTournamentresult = () => {
 
       {!showTotal && (
         <div className="sp-winner-box">
-          <span className="sp-label">Today&apos;s first pigeon winner:</span>{" "}
+          <span className="sp-label">Last winner:</span>{" "}
           <span>
             {(() => {
-              const firstPigeonHighest = findFirstPigeonHighestTime();
-              if (!firstPigeonHighest || !firstPigeonHighest.time)
+              const globalHighest = findGlobalHighestTime();
+              if (!globalHighest || !globalHighest.time)
                 return "No results yet";
 
               const winnerOwner =
-                owners?.find((o) => o._id === firstPigeonHighest.ownerId)
-                  ?.name || "";
+                owners?.find((o) => o._id === globalHighest.ownerId)?.name ||
+                "";
 
-              const [hours, minutes] = firstPigeonHighest?.time.split(":");
+              const [hours, minutes] = String(globalHighest.time).split(":");
               return `${hours}:${minutes}, ${winnerOwner}`;
             })()}
           </span>
@@ -829,28 +831,22 @@ const OtherTournamentresult = () => {
                   }}
                 >
                   <span className="fw-bold" style={{ color: "white" }}>
-                    Last pigeon winner:
+                    First winner:
                   </span>{" "}
                   <span>
                     {(() => {
-                      const globalHighest = findGlobalHighestTime();
-                      if (!globalHighest || !globalHighest.time)
+                      const firstPigeonHighest = findFirstPigeonHighestTime();
+                      if (!firstPigeonHighest || !firstPigeonHighest.time)
                         return "No results yet";
 
                       const winnerOwner =
-                        owners?.find((o) => o._id === globalHighest.ownerId)
+                        owners?.find((o) => o._id === firstPigeonHighest.ownerId)
                           ?.name || "";
 
-                      if (showTotal) {
-                        const hours = Math.floor(globalHighest.time / 3600);
-                        const minutes = Math.floor(
-                          (globalHighest.time % 3600) / 60
-                        );
-                        return `${hours}h ${minutes}m, ${winnerOwner}`;
-                      } else {
-                        const [hours, minutes] = globalHighest.time.split(":");
-                        return `${hours}:${minutes}, ${winnerOwner}`;
-                      }
+                      const [hours, minutes] = String(
+                        firstPigeonHighest.time
+                      ).split(":");
+                      return `${hours}:${minutes}, ${winnerOwner}`;
                     })()}
                   </span>
                   <br />
@@ -945,6 +941,11 @@ const OtherTournamentresult = () => {
                     (result) => result?.pigeonOwnerId === owner?._id
                   )
                 : null;
+
+              const firstPigeonLead =
+                !showTotal && Array.isArray(gerResult) && gerResult.length > 0
+                  ? findFirstPigeonHighestTime()
+                  : null;
 
               return (
                 <tr
@@ -1098,17 +1099,19 @@ const OtherTournamentresult = () => {
                           pigeonTime?.length > 0 &&
                           pigeonTime?.split(":").slice(0, 2).join(":");
 
-                        const globalHighest = findGlobalHighestTime();
-                        const lastIndexOfHighest =
-                          globalHighest &&
-                          ownerResult?.timeList?.lastIndexOf(
-                            globalHighest.time
-                          );
+                        const firstValidIndex = ownerResult?.timeList?.findIndex(
+                          (time, idx) =>
+                            !ownerResult?.excludedIndices?.includes(idx) &&
+                            time
+                        );
 
                         const isHighestTime =
-                          globalHighest &&
-                          owner._id === globalHighest.ownerId &&
-                          index === lastIndexOfHighest;
+                          firstPigeonLead &&
+                          owner._id === firstPigeonLead.ownerId &&
+                          firstValidIndex !== -1 &&
+                          index === firstValidIndex &&
+                          ownerResult?.timeList?.[index] ===
+                            firstPigeonLead.time;
 
                         const isExcluded =
                           ownerResult?.excludedIndices?.includes(index);

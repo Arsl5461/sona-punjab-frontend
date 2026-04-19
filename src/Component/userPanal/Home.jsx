@@ -9,8 +9,10 @@ import {
   getTotalDaysResultReq,
   GetTournamentOwnersReq,
 } from "../adminPanal/create-tournaments/__request/CraeteTournamentRequest";
+import { usePublicMarqueeText } from "../../helper/usePublicMarqueeText";
 
 const Home = () => {
+  const headlineText = usePublicMarqueeText();
   const [currentTournament, setCurrentTournament] = useState();
   const [resultDate, setResultDate] = useState();
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
@@ -572,10 +574,12 @@ const Home = () => {
       return;
     }
 
-    const globalHighest = findGlobalHighestTime();
-    if (!globalHighest) return;
+    const leadPeak = showTotal
+      ? findGlobalHighestTime()
+      : findFirstPigeonHighestTime();
+    if (!leadPeak) return;
 
-    const nextVal = globalHighest.time;
+    const nextVal = leadPeak.time;
     if (!showTotal) {
       if (!nextVal || nextVal === "00:00") return;
     } else {
@@ -609,15 +613,19 @@ const Home = () => {
     currentTournament?._id,
   ]);
 
+  const firstPigeonLeadDay =
+    !showTotal && Array.isArray(gerResult) && gerResult.length > 0
+      ? findFirstPigeonHighestTime()
+      : null;
+
   return (
     <div className="sp-public">
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
-        <span className="sp-marquee-label">Latest news:</span>
+        <span className="sp-marquee-label">Headline:</span>
         <Marquee speed={42} gradient={false} pauseOnHover>
-          {process.env.REACT_APP_NEWS_TICKER ||
-            "خوش آمدید — Sona Punjab | Best of luck to all flyers. Committee updates and offers will appear here."}
+          {headlineText}
         </Marquee>
       </div>
 
@@ -680,25 +688,19 @@ const Home = () => {
 
       {!showTotal && (
         <div className="sp-winner-box">
-          <span className="sp-label">Today&apos;s first pigeon winner:</span>{" "}
+          <span className="sp-label">Last winner:</span>{" "}
           <span>
             {(() => {
-              const firstPigeonHighest = findFirstPigeonHighestTime();
-              if (!firstPigeonHighest || !firstPigeonHighest.time)
+              const globalHighest = findGlobalHighestTime();
+              if (!globalHighest || !globalHighest.time)
                 return "No results yet";
 
               const winnerOwner =
-                owners?.find((o) => o._id === firstPigeonHighest.ownerId)
-                  ?.name || "";
+                owners?.find((o) => o._id === globalHighest.ownerId)?.name ||
+                "";
 
-              // if (showTotal) {
-              //   const hours = Math.floor(firstPigeonHighest.time / 3600);
-              //   const minutes = Math.floor((firstPigeonHighest.time % 3600) / 60);
-              //   return `${hours}h ${minutes}m, ${winnerOwner}`;
-              // } else {
-              const [hours, minutes] = firstPigeonHighest?.time.split(":");
+              const [hours, minutes] = globalHighest.time.split(":");
               return `${hours}:${minutes}, ${winnerOwner}`;
-              // }
             })()}
           </span>
         </div>
@@ -783,27 +785,20 @@ const Home = () => {
           : gerResult?.length > 0 && (
               <>
                 <div className="sp-last-winner-bar">
-                  <span className="fw-bold">Last pigeon winner:</span>{" "}
+                  <span className="fw-bold">First winner:</span>{" "}
                   <span>
                     {(() => {
-                      const globalHighest = findGlobalHighestTime();
-                      if (!globalHighest || !globalHighest.time)
+                      const firstPigeonHighest = findFirstPigeonHighestTime();
+                      if (!firstPigeonHighest || !firstPigeonHighest.time)
                         return "No results yet";
 
                       const winnerOwner =
-                        owners?.find((o) => o._id === globalHighest.ownerId)
+                        owners?.find((o) => o._id === firstPigeonHighest.ownerId)
                           ?.name || "";
 
-                      if (showTotal) {
-                        const hours = Math.floor(globalHighest.time / 3600);
-                        const minutes = Math.floor(
-                          (globalHighest.time % 3600) / 60
-                        );
-                        return `${hours}h ${minutes}m, ${winnerOwner}`;
-                      } else {
-                        const [hours, minutes] = globalHighest.time.split(":");
-                        return `${hours}:${minutes}, ${winnerOwner}`;
-                      }
+                      const [hours, minutes] =
+                        String(firstPigeonHighest.time).split(":");
+                      return `${hours}:${minutes}, ${winnerOwner}`;
                     })()}
                   </span>
                   <br />
@@ -1022,17 +1017,19 @@ const Home = () => {
                           pigeonTime?.length > 0 &&
                           pigeonTime?.split(":").slice(0, 2).join(":");
 
-                        const globalHighest = findGlobalHighestTime();
-                        const lastIndexOfHighest =
-                          globalHighest &&
-                          ownerResult?.timeList?.lastIndexOf(
-                            globalHighest.time
-                          );
+                        const firstValidIndex = ownerResult?.timeList?.findIndex(
+                          (time, idx) =>
+                            !ownerResult?.excludedIndices?.includes(idx) &&
+                            time
+                        );
 
                         const isHighestTime =
-                          globalHighest &&
-                          owner._id === globalHighest.ownerId &&
-                          index === lastIndexOfHighest;
+                          firstPigeonLeadDay &&
+                          owner._id === firstPigeonLeadDay.ownerId &&
+                          firstValidIndex !== -1 &&
+                          index === firstValidIndex &&
+                          ownerResult?.timeList?.[index] ===
+                            firstPigeonLeadDay.time;
 
                         const isExcluded =
                           ownerResult?.excludedIndices?.includes(index);
