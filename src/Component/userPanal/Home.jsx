@@ -10,6 +10,12 @@ import {
   GetTournamentOwnersReq,
 } from "../adminPanal/create-tournaments/__request/CraeteTournamentRequest";
 import { usePublicMarqueeText } from "../../helper/usePublicMarqueeText";
+import {
+  isGlobalLeadCellNewlyFilled,
+  isLastWinnerDayCellNewlyFilled,
+  snapshotGerResultTimes,
+  snapshotTotalOwnerPigeons,
+} from "../../helper/tournamentLeadBlink";
 
 const Home = () => {
   const headlineText = usePublicMarqueeText();
@@ -455,53 +461,59 @@ const Home = () => {
     }
   };
 
+  /** First winner = pigeon #1 only (index 0): owner with earliest landing time in that column. */
   const findFirstPigeonHighestTime = () => {
+    const firstCol = 0;
+    const dayCellToMinutes = (t) => {
+      const parts = String(t).trim().split(":");
+      if (parts.length < 2) return null;
+      const h = Number(parts[0]);
+      const m = Number(parts[1]);
+      if (Number.isNaN(h) || Number.isNaN(m)) return null;
+      return h * 60 + m;
+    };
+
     if (showTotal) {
       if (!totalDaysResult?.ownerResults) return null;
-      let highest = 0;
-      let highestOwnerId = null;
+      let best = null;
+      let bestOwnerId = null;
 
       totalDaysResult.ownerResults.forEach((owner) => {
-        // Find the first non-excluded pigeon
-        const firstValidPigeon = owner.pigeons?.find(
-          (pigeon, index) =>
-            !owner.excludedIndices?.includes(index) && pigeon.totalTime
-        );
-
-        if (
-          firstValidPigeon?.totalTime &&
-          firstValidPigeon?.totalTime > highest
-        ) {
-          highest = firstValidPigeon.totalTime;
-          highestOwnerId = owner.ownerId;
+        if (owner.excludedIndices?.includes(firstCol)) return;
+        const t = owner.pigeons?.[firstCol]?.totalTime;
+        if (t == null || t === "" || t === 0) return;
+        const n = Number(t);
+        if (Number.isNaN(n)) return;
+        if (best === null || n < best) {
+          best = n;
+          bestOwnerId = owner.ownerId;
         }
       });
 
-      return highest === 0 ? null : { time: highest, ownerId: highestOwnerId };
-    } else {
-      if (!Array.isArray(gerResult)) return null;
-      let highest = "00:00"; // Set to a low default value for comparison
-      let highestOwnerId = null;
-
-      gerResult.forEach((owner) => {
-        // Find index of first non-excluded time
-        const firstValidIndex = owner.timeList?.findIndex(
-          (time, index) => !owner.excludedIndices?.includes(index) && time
-        );
-
-        if (firstValidIndex !== -1) {
-          const firstValidTime = owner.timeList[firstValidIndex];
-          if (firstValidTime && firstValidTime > highest) {
-            highest = firstValidTime;
-            highestOwnerId = owner.pigeonOwnerId;
-          }
-        }
-      });
-
-      return highest === "00:00"
-        ? null
-        : { time: highest, ownerId: highestOwnerId };
+      return best === null ? null : { time: best, ownerId: bestOwnerId };
     }
+
+    if (!Array.isArray(gerResult)) return null;
+    let bestMins = null;
+    let bestOwnerId = null;
+    let bestTimeStr = null;
+
+    gerResult.forEach((owner) => {
+      if (owner.excludedIndices?.includes(firstCol)) return;
+      const t = owner.timeList?.[firstCol];
+      if (!t || t === "") return;
+      const mins = dayCellToMinutes(t);
+      if (mins == null) return;
+      if (bestMins === null || mins < bestMins) {
+        bestMins = mins;
+        bestOwnerId = owner.pigeonOwnerId;
+        bestTimeStr = t;
+      }
+    });
+
+    return bestOwnerId == null
+      ? null
+      : { time: bestTimeStr, ownerId: bestOwnerId };
   };
 
   const pOwners = owners ?? []; // Ensure owners is an array
@@ -549,12 +561,13 @@ const Home = () => {
       })
     : [];
 
-  const [highestTime, setHighestTime] = useState(() => {
-    return localStorage.getItem("highestTime") || null;
-  });
+  const [highestTime, setHighestTime] = useState(null);
   const [isBlinking, setIsBlinking] = useState(false);
   const leadBlinkTimerRef = useRef(null);
   const leadTournamentIdRef = useRef(null);
+  const prevDaySnapRef = useRef(null);
+  const prevTotalSnapRef = useRef(null);
+  const showTotalRef = useRef(showTotal);
 
   useEffect(() => {
     return () => {
@@ -567,16 +580,49 @@ const Home = () => {
 
   useEffect(() => {
     const tid = currentTournament?._id;
+
+    if (showTotalRef.current !== showTotal) {
+      showTotalRef.current = showTotal;
+      prevDaySnapRef.current = null;
+      prevTotalSnapRef.current = null;
+      setHighestTime(null);
+      setIsBlinking(false);
+    }
+
     if (leadTournamentIdRef.current !== tid) {
       leadTournamentIdRef.current = tid;
+      prevDaySnapRef.current = null;
+      prevTotalSnapRef.current = null;
       setHighestTime(null);
       setIsBlinking(false);
       return;
     }
 
-    const leadPeak = showTotal
-      ? findGlobalHighestTime()
-      : findFirstPigeonHighestTime();
+    const prevDaySnap = prevDaySnapRef.current;
+    const prevTotalSnap = prevTotalSnapRef.current;
+
+    const leadPeak = findGlobalHighestTime();
+
+    const newlyFilled =
+      !!leadPeak &&
+      (showTotal
+        ? prevTotalSnap !== null &&
+          isGlobalLeadCellNewlyFilled(
+            prevTotalSnap,
+            totalDaysResult,
+            leadPeak
+          )
+        : prevDaySnap !== null &&
+          isLastWinnerDayCellNewlyFilled(prevDaySnap, gerResult, leadPeak));
+
+    if (Array.isArray(gerResult)) {
+      prevDaySnapRef.current = snapshotGerResultTimes(gerResult);
+    } else {
+      prevDaySnapRef.current = new Map();
+    }
+    prevTotalSnapRef.current =
+      snapshotTotalOwnerPigeons(totalDaysResult);
+
     if (!leadPeak) return;
 
     const nextVal = leadPeak.time;
@@ -588,21 +634,27 @@ const Home = () => {
 
     const nextStr = String(nextVal);
     const prevStr = highestTime == null ? "" : String(highestTime);
+
+    if (showTotal ? prevTotalSnap === null : prevDaySnap === null) {
+      setHighestTime(nextVal);
+      return;
+    }
+
     if (nextStr === prevStr) return;
 
-    const storageKey = `spLead:${tid || "na"}:${nextStr}`;
-    if (!localStorage.getItem(storageKey)) {
-      if (leadBlinkTimerRef.current) {
-        clearTimeout(leadBlinkTimerRef.current);
-      }
-      setIsBlinking(true);
-      localStorage.setItem(storageKey, "1");
-      localStorage.setItem("highestTime", nextStr);
-      leadBlinkTimerRef.current = window.setTimeout(() => {
-        setIsBlinking(false);
-        leadBlinkTimerRef.current = null;
-      }, 5000);
+    if (!newlyFilled) {
+      setHighestTime(nextVal);
+      return;
     }
+
+    if (leadBlinkTimerRef.current) {
+      clearTimeout(leadBlinkTimerRef.current);
+    }
+    setIsBlinking(true);
+    leadBlinkTimerRef.current = window.setTimeout(() => {
+      setIsBlinking(false);
+      leadBlinkTimerRef.current = null;
+    }, 5000);
 
     setHighestTime(nextVal);
   }, [
@@ -613,9 +665,9 @@ const Home = () => {
     currentTournament?._id,
   ]);
 
-  const firstPigeonLeadDay =
+  const globalLastWinnerDay =
     !showTotal && Array.isArray(gerResult) && gerResult.length > 0
-      ? findFirstPigeonHighestTime()
+      ? findGlobalHighestTime()
       : null;
 
   return (
@@ -796,8 +848,16 @@ const Home = () => {
                         owners?.find((o) => o._id === firstPigeonHighest.ownerId)
                           ?.name || "";
 
-                      const [hours, minutes] =
-                        String(firstPigeonHighest.time).split(":");
+                      const t = firstPigeonHighest.time;
+                      if (typeof t === "number") {
+                        const h = Math.floor(t / 3600);
+                        const m = Math.floor((t % 3600) / 60);
+                        return `${String(h).padStart(2, "0")}:${String(m).padStart(
+                          2,
+                          "0"
+                        )}, ${winnerOwner}`;
+                      }
+                      const [hours, minutes] = String(t).split(":");
                       return `${hours}:${minutes}, ${winnerOwner}`;
                     })()}
                   </span>
@@ -1017,19 +1077,20 @@ const Home = () => {
                           pigeonTime?.length > 0 &&
                           pigeonTime?.split(":").slice(0, 2).join(":");
 
-                        const firstValidIndex = ownerResult?.timeList?.findIndex(
-                          (time, idx) =>
-                            !ownerResult?.excludedIndices?.includes(idx) &&
-                            time
-                        );
+                        const lastIdxGlobal =
+                          globalLastWinnerDay &&
+                          owner._id === globalLastWinnerDay.ownerId &&
+                          ownerResult?.timeList
+                            ? ownerResult.timeList.lastIndexOf(
+                                globalLastWinnerDay.time
+                              )
+                            : -1;
 
                         const isHighestTime =
-                          firstPigeonLeadDay &&
-                          owner._id === firstPigeonLeadDay.ownerId &&
-                          firstValidIndex !== -1 &&
-                          index === firstValidIndex &&
-                          ownerResult?.timeList?.[index] ===
-                            firstPigeonLeadDay.time;
+                          globalLastWinnerDay &&
+                          owner._id === globalLastWinnerDay.ownerId &&
+                          lastIdxGlobal !== -1 &&
+                          index === lastIdxGlobal;
 
                         const isExcluded =
                           ownerResult?.excludedIndices?.includes(index);
