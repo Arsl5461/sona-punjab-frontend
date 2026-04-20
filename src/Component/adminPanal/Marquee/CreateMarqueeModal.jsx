@@ -57,7 +57,7 @@ const CreateMarqueeModal = ({ handleClose, show, getMarquees }) => {
               rows={4}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Shown on the public home and club pages (multiple lines are joined with a bullet)."
+              placeholder="Short message for the scrolling headline on home and club pages."
               maxLength={2000}
             />
             <Form.Text className="text-muted">

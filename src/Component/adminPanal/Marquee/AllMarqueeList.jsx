@@ -3,11 +3,7 @@ import MasterLayout from "../../../masterLayout/MasterLayout";
 import { ScaleLoader } from "react-spinners";
 import { Button, Table } from "react-bootstrap";
 import { FaPen, FaTrash } from "react-icons/fa6";
-import {
-  getAllMarquees,
-  headlineApiPaths,
-  normalizeMarqueeList,
-} from "./__request/MarqueeRequest";
+import { getAllMarquees, normalizeMarqueeList } from "./__request/MarqueeRequest";
 import CreateMarqueeModal from "./CreateMarqueeModal";
 import EditMarqueeModal from "./EditMarqueeModal";
 import DeleteMarqueeModal from "./DeleteMarqueeModal";
@@ -46,13 +42,6 @@ const AllMarqueeList = () => {
             <div className="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
               <div>
                 <h5 className="card-title mb-0">Headlines</h5>
-                <small className="text-muted d-block">
-                  Public home and club pages show these lines (joined with a
-                  bullet). Defaults: GET <code>{headlineApiPaths.list}</code>, POST{" "}
-                  <code>{headlineApiPaths.create}</code>. Override with{" "}
-                  <code>REACT_APP_HEADLINE_*</code> in <code>.env</code> if your API
-                  uses other paths.
-                </small>
               </div>
               <Button variant="primary" onClick={() => setShowCreate(true)}>
                 Add headline

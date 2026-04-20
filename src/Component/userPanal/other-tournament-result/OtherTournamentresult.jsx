@@ -665,6 +665,11 @@ const OtherTournamentresult = () => {
     tournamentId,
   ]);
 
+  const firstPigeonLeadDay =
+    !showTotal && Array.isArray(gerResult) && gerResult.length > 0
+      ? findFirstPigeonHighestTime()
+      : null;
+
   return (
     <div className="sp-public">
       <HomeBanner />
@@ -942,11 +947,6 @@ const OtherTournamentresult = () => {
                   )
                 : null;
 
-              const firstPigeonLead =
-                !showTotal && Array.isArray(gerResult) && gerResult.length > 0
-                  ? findFirstPigeonHighestTime()
-                  : null;
-
               return (
                 <tr
                   key={owner?._id}
@@ -1106,12 +1106,12 @@ const OtherTournamentresult = () => {
                         );
 
                         const isHighestTime =
-                          firstPigeonLead &&
-                          owner._id === firstPigeonLead.ownerId &&
+                          firstPigeonLeadDay &&
+                          owner._id === firstPigeonLeadDay.ownerId &&
                           firstValidIndex !== -1 &&
                           index === firstValidIndex &&
                           ownerResult?.timeList?.[index] ===
-                            firstPigeonLead.time;
+                            firstPigeonLeadDay.time;
 
                         const isExcluded =
                           ownerResult?.excludedIndices?.includes(index);

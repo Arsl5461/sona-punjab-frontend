@@ -18,7 +18,7 @@ const envPath = (key, fallback) => {
 };
 
 export const headlineApiPaths = {
-  list: envPath("REACT_APP_HEADLINE_GET", "/sona-punjab/get-all-headline"),
+  list: envPath("REACT_APP_HEADLINE_GET", "/sona-punjab/get-all-headlines"),
   create: envPath("REACT_APP_HEADLINE_CREATE", "/sona-punjab/create-headline"),
   updatePrefix: envPath(
     "REACT_APP_HEADLINE_UPDATE",
@@ -108,9 +108,17 @@ export const normalizeMarqueeList = (data) => {
   }));
 };
 
+/** Copy-pasted admin help text — never show on public marquee */
+const isHeadlineBoilerplate = (t) =>
+  /Public home and club pages show these lines/i.test(t) ||
+  (/Defaults:\s*GET/i.test(t) && /create-headline/i.test(t));
+
 /** Single string for public strip (joins all non-empty entries) */
 export const buildPublicMarqueeText = (data, separator = "   •   ") => {
   const list = normalizeMarqueeList(data);
-  const parts = list.map((m) => m.text).filter(Boolean);
+  const parts = list
+    .map((m) => m.text)
+    .filter(Boolean)
+    .filter((t) => !isHeadlineBoilerplate(t));
   return parts.length ? parts.join(separator) : "";
 };
