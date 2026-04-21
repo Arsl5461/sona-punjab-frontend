@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Marquee from "react-fast-marquee";
 import {
   getResultByDate,
   getTotalDaysResultReq,
@@ -9,6 +10,7 @@ import HomeBanner from "../Home-Banne/HomeBanner";
 import HomeNavbar from "../Home-Navbar/HomeNavbar";
 import { useParams } from "react-router-dom";
 import { getSingleTournamentReq } from "../__request/HomePagerequests";
+import { usePublicMarqueeText } from "../../../helper/usePublicMarqueeText";
 import "../apna-shauq-home.css";
 import {
   isGlobalLeadCellNewlyFilled,
@@ -21,6 +23,7 @@ const OtherTournamentresult = () => {
   // const currentTournament = useSelector((state) => state.tournamentDataReducer);
 
   const { tournamentId } = useParams();
+  const headlineText = usePublicMarqueeText();
 
   const [currentTournament, setCurrentTournament] = useState();
   const [resultDate, setResultDate] = useState();
@@ -747,16 +750,23 @@ const OtherTournamentresult = () => {
     <div className="sp-public">
       <HomeBanner />
       <HomeNavbar />
-      <div
-        className="w-100 d-flex align-items-center justify-content-start p-1"
-        style={{ backgroundColor: "#1e3d8f" }}
-      >
-        <span className="fw-bold text-white fs-5">
-          Currect Tournament : {currentTournament?.tournamentName}
-        </span>
+      <div className="sp-marquee-wrap">
+        <span className="sp-marquee-label">Headline:</span>
+        <Marquee speed={42} gradient={false} pauseOnHover>
+          {headlineText}
+        </Marquee>
       </div>
 
-      <div className="sp-date-row w-100" style={{ padding: "10px" }}>
+      <div className="sp-tournament-head">
+        <h3 className="sp-tournament-title urdu">
+          {String(currentTournament?.tournamentName ?? "")
+            .replace(/\r\n|\r|\n/g, " ")
+            .replace(/\s+/g, " ")
+            .trim()}
+        </h3>
+      </div>
+
+      <div className="sp-date-row">
         {currentTournament?.dates
           ?.slice()
           .sort((a, b) => a.localeCompare(b))
@@ -841,18 +851,14 @@ const OtherTournamentresult = () => {
       <div className="sp-stats-strip">
         <div className="sp-stats-row">
           <div>
-            <span className="fw-bold" style={{ color: "var(--sp-gold-light)" }}>
-              Lofts:
-            </span>{" "}
-            <span className="text-white">
+            <span className="fw-bold">Lofts:</span>{" "}
+            <span>
               {currentTournament?.participatingLofts?.length}
             </span>
           </div>
           <div>
-            <span className="fw-bold" style={{ color: "var(--sp-gold-light)" }}>
-              Pigeons:
-            </span>{" "}
-            <span className="text-white">
+            <span className="fw-bold">Pigeons:</span>{" "}
+            <span>
               {(currentTournament?.numberOfPigeons +
                 (currentTournament?.helperPigeons || 0)) *
                 currentTournament?.participatingLofts?.length}
@@ -860,10 +866,8 @@ const OtherTournamentresult = () => {
           </div>
 
           <div>
-            <span className="fw-bold" style={{ color: "var(--sp-gold-light)" }}>
-              Landed:
-            </span>{" "}
-            <span className="text-white">
+            <span className="fw-bold">Landed:</span>{" "}
+            <span>
               {showTotal
                 ? totalDaysResult?.ownerResults?.reduce((total, owner) => {
                     return (
@@ -886,10 +890,8 @@ const OtherTournamentresult = () => {
           </div>
 
           <div>
-            <span className="fw-bold" style={{ color: "var(--sp-gold-light)" }}>
-              Pigeons remaining:
-            </span>{" "}
-            <span className="text-white">
+            <span className="fw-bold">Pigeons remaining:</span>{" "}
+            <span>
               {(() => {
                 const totalPigeons =
                   (currentTournament?.numberOfPigeons +
@@ -920,45 +922,29 @@ const OtherTournamentresult = () => {
             </span>
           </div>
         </div>
-
       </div>
 
-      <div className="sp-table-shell table-responsive-app card-body p-0">
-        <table
-          className="table table-sm mb-0 sp-results-table"
-          style={{
-            fontSize: "0.9rem",
-            borderCollapse: "collapse",
-            border: "1px solid #dee2e6",
-            width: "max-content",
-            minWidth: "100%",
-          }}
-        >
+      <div className="sp-table-shell card-body p-0">
+        <table className="table table-sm mb-0 sp-results-table">
           <thead>
-            <tr
-              style={{
-                backgroundColor: "#f8f9fa",
-                borderBottom: "2px solid #dee2e6",
-              }}
-            >
-              <th scope="col" className="text-center p-0 border">
-                #
+            <tr>
+              <th scope="col" className="text-center">
+                Sr #
               </th>
-              <th scope="col" className="text-start p-0 border">
-                Owner
+              <th scope="col" className="text-center">
+                Picture
               </th>
-              <th scope="col" className="text-center p-0 border">
-                Time
+              <th scope="col" className="text-start">
+                Name
+              </th>
+              <th scope="col" className="text-center">
+                Flying time
               </th>
               {showTotal ? (
                 // Show dates as columns when Total is selected
                 <>
                   {currentTournament?.dates?.map((date, index) => (
-                    <th
-                      key={index}
-                      scope="col"
-                      className="text-center p-1 border"
-                    >
+                    <th key={index} scope="col" className="text-center">
                       {date.split("-").reverse().join("-")}
                     </th>
                   ))}
@@ -969,11 +955,7 @@ const OtherTournamentresult = () => {
                   {Array.from(
                     { length: currentTournament?.numberOfPigeons },
                     (_, index) => (
-                      <th
-                        key={index}
-                        scope="col"
-                        className="text-center p-1 border"
-                      >
+                      <th key={index} scope="col" className="text-center">
                         #{index + 1}
                       </th>
                     )
@@ -984,7 +966,7 @@ const OtherTournamentresult = () => {
                       <th
                         key={`helper-${index}`}
                         scope="col"
-                        className="text-center p-1 border"
+                        className="text-center"
                       >
                         #{currentTournament?.numberOfPigeons + index + 1}
                       </th>
@@ -992,7 +974,7 @@ const OtherTournamentresult = () => {
                   )}
                 </>
               )}
-              <th scope="col" className="text-center p-0 border">
+              <th scope="col" className="text-center">
                 Total
               </th>
             </tr>
@@ -1011,42 +993,38 @@ const OtherTournamentresult = () => {
                 : null;
 
               return (
-                <tr
-                  key={owner?._id}
-                  style={{
-                    backgroundColor: idx % 2 === 0 ? "#ffffff" : "#f8f9fa",
-                  }}
-                  className="hover-row"
-                >
-                  <td className="text-center p-1 border fw-bold">{idx + 1}</td>
-                  <td className="text-start p-1 border fw-bold">
-                    <div className="d-flex align-items-center justify-content-start gap-2">
-                      <div
-                        className="overflow-hidden"
-                        style={{
-                          height: "50px",
-                          width: "50px",
-                          borderRadius: "100%",
-                        }}
-                      >
-                        <img
-                          src={
-                            owner?.ownerPicture
-                              ? owner?.ownerPicture
-                              : "/default_avatar.avif"
-                          }
-                          className="rounded-3 h-100 w-100 object-fit-cover"
-                          alt=""
-                        />
-                      </div>
-                      <div className="d-flex flex-column align-items-start justify-content-start fw-bold">
-                        {owner?.name}
-                        <span className="fw-normal">{owner?.address}</span>
-                        <span className="fw-normal">{owner?.phone}</span>
-                      </div>
+                <tr key={owner?._id} className="hover-row">
+                  <td className="text-center">{idx + 1}</td>
+                  <td className="text-center">
+                    <img
+                      src={
+                        owner?.ownerPicture
+                          ? owner?.ownerPicture
+                          : "/default_avatar.avif"
+                      }
+                      className="sp-owner-pic"
+                      alt=""
+                    />
+                  </td>
+                  <td className="text-start">
+                    <div className="d-flex flex-column align-items-start justify-content-start">
+                      <span className="sp-owner-name urdu">{owner?.name}</span>
+                      {owner?.address ? (
+                        <span className="small text-muted urdu">
+                          {owner.address}
+                        </span>
+                      ) : null}
+                      {owner?.phone ? (
+                        <a
+                          href={`tel:${String(owner.phone).replace(/\s/g, "")}`}
+                          className="sp-owner-phone small urdu"
+                        >
+                          {owner.phone}
+                        </a>
+                      ) : null}
                     </div>
                   </td>
-                  <td className="text-center p-1 border fw-bold">
+                  <td className="text-center fw-bold sp-flying-time">
                     {(
                       (gerResult &&
                         gerResult?.length > 0 &&
@@ -1074,12 +1052,10 @@ const OtherTournamentresult = () => {
                           : null;
 
                         return (
-                          <td
-                            key={dateIndex}
-                            className="text-center p-1 border fw-bold"
-                          >
-                            {ownerResult?.formattedTotalTime?.slice(0, 5) ||
-                              "No Result"}
+                          <td key={dateIndex} className="text-center fw-bold">
+                            {ownerResult?.formattedTotalTime?.slice(0, 5)
+                              ? ownerResult.formattedTotalTime.slice(0, 5)
+                              : null}
                           </td>
                         );
                       })}
@@ -1179,8 +1155,6 @@ const OtherTournamentresult = () => {
 
                         const isExcluded =
                           ownerResult?.excludedIndices?.includes(index);
-                        const isHelper =
-                          index >= currentTournament?.numberOfPigeons;
                         const isFirstWinnerCell =
                           !isExcluded &&
                           index === 0 &&
@@ -1190,10 +1164,30 @@ const OtherTournamentresult = () => {
                         const shouldBlink =
                           (isHighestTime || isFirstWinnerCell) && isBlinking;
 
+                        const pigeonCellInner = showTotal
+                          ? pigeonTime
+                            ? (() => {
+                                const hours = Math.floor(pigeonTime / 3600);
+                                const minutes = Math.floor(
+                                  (pigeonTime % 3600) / 60
+                                );
+                                return `${hours}:${minutes}${
+                                  isExcluded ? "" : ""
+                                }`;
+                              })()
+                            : isExcluded
+                            ? "(excluded)"
+                            : null
+                          : pigeonTime
+                          ? `${formattedPigeonTime}${isExcluded ? "" : ""}`
+                          : isExcluded
+                          ? "(excluded)"
+                          : null;
+
                         return (
                           <td
                             key={index}
-                            className={`text-center p-1 border fw-bold ${
+                            className={`text-center fw-bold ${
                               isExcluded ? "text-muted" : ""
                             } ${isHighestTime ? "sp-pigeon-cell--lead" : ""} ${
                               isFirstWinnerCell
@@ -1203,31 +1197,15 @@ const OtherTournamentresult = () => {
                               shouldBlink ? "sp-pigeon-cell--blink" : ""
                             }`}
                           >
-                            {showTotal
-                              ? pigeonTime
-                                ? (() => {
-                                    const hours = Math.floor(pigeonTime / 3600);
-                                    const minutes = Math.floor(
-                                      (pigeonTime % 3600) / 60
-                                    );
-                                    return `${hours}:${minutes}${
-                                      isExcluded ? "" : ""
-                                    }`;
-                                  })()
-                                : isExcluded
-                                ? "(excluded)"
-                                : ""
-                              : pigeonTime
-                              ? `${formattedPigeonTime}${isExcluded ? "" : ""}`
-                              : isExcluded
-                              ? "(excluded)"
-                              : ""}
+                            {pigeonCellInner != null && pigeonCellInner !== ""
+                              ? pigeonCellInner
+                              : null}
                           </td>
                         );
                       })}
                     </>
                   )}
-                  <td className="text-center p-1 border fw-bold">
+                  <td className="text-center fw-bold">
                     {showTotal
                       ? (() => {
                           const ownerDayResults = allDaysResults
@@ -1274,6 +1252,8 @@ const OtherTournamentresult = () => {
               );
             })}
           </tbody>
+        </table>
+      </div>
     </div>
   );
 };
