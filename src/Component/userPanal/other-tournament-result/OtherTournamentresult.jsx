@@ -512,7 +512,7 @@ const OtherTournamentresult = () => {
   //   }
   // };
 
-  /** First winner = pigeon #1 only (index 0): owner with earliest landing time in that column. */
+  /** First winner = pigeon #1 only (index 0): owner with greatest time in that column. */
   const findFirstPigeonHighestTime = () => {
     const firstCol = 0;
     const dayCellToMinutes = (t) => {
@@ -535,7 +535,7 @@ const OtherTournamentresult = () => {
         if (t == null || t === "" || t === 0) return;
         const n = Number(t);
         if (Number.isNaN(n)) return;
-        if (best === null || n < best) {
+        if (best === null || n > best) {
           best = n;
           bestOwnerId = owner.ownerId;
         }
@@ -555,7 +555,7 @@ const OtherTournamentresult = () => {
       if (!t || t === "") return;
       const mins = dayCellToMinutes(t);
       if (mins == null) return;
-      if (bestMins === null || mins < bestMins) {
+      if (bestMins === null || mins > bestMins) {
         bestMins = mins;
         bestOwnerId = owner.pigeonOwnerId;
         bestTimeStr = t;
@@ -687,7 +687,19 @@ const OtherTournamentresult = () => {
     const nextStr = String(nextVal);
     const prevStr = highestTime == null ? "" : String(highestTime);
 
+    const triggerBlinkForFiveSeconds = () => {
+      if (leadBlinkTimerRef.current) {
+        clearTimeout(leadBlinkTimerRef.current);
+      }
+      setIsBlinking(true);
+      leadBlinkTimerRef.current = window.setTimeout(() => {
+        setIsBlinking(false);
+        leadBlinkTimerRef.current = null;
+      }, 5000);
+    };
+
     if (showTotal ? prevTotalSnap === null : prevDaySnap === null) {
+      triggerBlinkForFiveSeconds();
       setHighestTime(nextVal);
       return;
     }
@@ -699,14 +711,7 @@ const OtherTournamentresult = () => {
       return;
     }
 
-    if (leadBlinkTimerRef.current) {
-      clearTimeout(leadBlinkTimerRef.current);
-    }
-    setIsBlinking(true);
-    leadBlinkTimerRef.current = window.setTimeout(() => {
-      setIsBlinking(false);
-      leadBlinkTimerRef.current = null;
-    }, 5000);
+    triggerBlinkForFiveSeconds();
 
     setHighestTime(nextVal);
   }, [
@@ -720,6 +725,13 @@ const OtherTournamentresult = () => {
   const globalLastWinnerDay =
     !showTotal && Array.isArray(gerResult) && gerResult.length > 0
       ? findGlobalHighestTime()
+      : null;
+  const globalFirstWinnerPigeon =
+    (showTotal
+      ? totalDaysResult?.ownerResults?.length
+      : Array.isArray(gerResult) && gerResult.length > 0) &&
+    currentTournament
+      ? findFirstPigeonHighestTime()
       : null;
 
   return (
@@ -769,22 +781,51 @@ const OtherTournamentresult = () => {
       </div>
 
       {!showTotal && (
-        <div className="sp-winner-box">
-          <span className="sp-label">Last winner:</span>{" "}
-          <span>
-            {(() => {
-              const globalHighest = findGlobalHighestTime();
-              if (!globalHighest || !globalHighest.time)
-                return "No results yet";
+        <div className="sp-winner-box sp-winner-box--dual">
+          <div className="sp-winner-item">
+            <span className="sp-label">First winner:</span>{" "}
+            <span>
+              {(() => {
+                const firstPigeonHighest = findFirstPigeonHighestTime();
+                if (!firstPigeonHighest || !firstPigeonHighest.time)
+                  return "No results yet";
 
-              const winnerOwner =
-                owners?.find((o) => o._id === globalHighest.ownerId)?.name ||
-                "";
+                const winnerOwner =
+                  owners?.find((o) => o._id === firstPigeonHighest.ownerId)
+                    ?.name || "";
 
-              const [hours, minutes] = String(globalHighest.time).split(":");
-              return `${hours}:${minutes}, ${winnerOwner}`;
-            })()}
-          </span>
+                const t = firstPigeonHighest.time;
+                if (typeof t === "number") {
+                  const h = Math.floor(t / 3600);
+                  const m = Math.floor((t % 3600) / 60);
+                  return `${String(h).padStart(2, "0")}:${String(m).padStart(
+                    2,
+                    "0"
+                  )}, ${winnerOwner}`;
+                }
+                const [hours, minutes] = String(t).split(":");
+                return `${hours}:${minutes}, ${winnerOwner}`;
+              })()}
+            </span>
+          </div>
+          <div className="sp-winner-item">
+            <span>|</span>{" "}
+            <span className="sp-label">Last winner:</span>{" "}
+            <span>
+              {(() => {
+                const globalHighest = findGlobalHighestTime();
+                if (!globalHighest || !globalHighest.time)
+                  return "No results yet";
+
+                const winnerOwner =
+                  owners?.find((o) => o._id === globalHighest.ownerId)?.name ||
+                  "";
+
+                const [hours, minutes] = String(globalHighest.time).split(":");
+                return `${hours}:${minutes}, ${winnerOwner}`;
+              })()}
+            </span>
+          </div>
         </div>
       )}
 
@@ -871,52 +912,6 @@ const OtherTournamentresult = () => {
           </div>
         </div>
 
-        {showTotal
-          ? totalDaysResult?.ownerResults?.length > 0 && <></>
-          : gerResult?.length > 0 && (
-              <>
-                <div
-                  className="rounded-3 shadow-lg"
-                  style={{
-                    backgroundColor: "#2d55c8",
-                    border: "1px solid white",
-                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Soft shadow
-                    color: "white", // Dark text for better visibility
-                    fontSize: "16px", // Improve readability
-                    fontWeight: "500", // Slightly bold
-                    padding: "5px",
-                  }}
-                >
-                  <span className="fw-bold" style={{ color: "white" }}>
-                    First winner:
-                  </span>{" "}
-                  <span>
-                    {(() => {
-                      const firstPigeonHighest = findFirstPigeonHighestTime();
-                      if (!firstPigeonHighest || !firstPigeonHighest.time)
-                        return "No results yet";
-
-                      const winnerOwner =
-                        owners?.find((o) => o._id === firstPigeonHighest.ownerId)
-                          ?.name || "";
-
-                      const t = firstPigeonHighest.time;
-                      if (typeof t === "number") {
-                        const h = Math.floor(t / 3600);
-                        const m = Math.floor((t % 3600) / 60);
-                        return `${String(h).padStart(2, "0")}:${String(m).padStart(
-                          2,
-                          "0"
-                        )}, ${winnerOwner}`;
-                      }
-                      const [hours, minutes] = String(t).split(":");
-                      return `${hours}:${minutes}, ${winnerOwner}`;
-                    })()}
-                  </span>
-                  <br />
-                </div>
-              </>
-            )}
       </div>
 
       <div className="sp-table-shell table-responsive-app card-body p-0">
@@ -1177,8 +1172,14 @@ const OtherTournamentresult = () => {
                           ownerResult?.excludedIndices?.includes(index);
                         const isHelper =
                           index >= currentTournament?.numberOfPigeons;
+                        const isFirstWinnerCell =
+                          !isExcluded &&
+                          index === 0 &&
+                          globalFirstWinnerPigeon &&
+                          owner._id === globalFirstWinnerPigeon.ownerId;
 
-                        const shouldBlink = isHighestTime && isBlinking;
+                        const shouldBlink =
+                          (isHighestTime || isFirstWinnerCell) && isBlinking;
 
                         return (
                           <td
@@ -1186,6 +1187,10 @@ const OtherTournamentresult = () => {
                             className={`text-center p-1 border fw-bold ${
                               isExcluded ? "text-muted" : ""
                             } ${isHighestTime ? "sp-pigeon-cell--lead" : ""} ${
+                              isFirstWinnerCell
+                                ? "sp-pigeon-cell--first-winner"
+                                : ""
+                            } ${
                               shouldBlink ? "sp-pigeon-cell--blink" : ""
                             }`}
                           >

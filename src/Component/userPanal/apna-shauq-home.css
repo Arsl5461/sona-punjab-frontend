@@ -493,6 +493,21 @@
   color: var(--sp-green-dark);
 }
 
+.sp-winner-box--dual {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.sp-winner-box--dual .sp-winner-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: auto;
+}
+
 /* —— Stats strip —— */
 .sp-stats-strip {
   margin: 0 0.75rem 0.75rem;
@@ -757,10 +772,15 @@
 }
 
 .sp-pigeon-cell--lead {
-  background: #b8860b !important;
-  background: linear-gradient(180deg, #d4a84b 0%, #b8892c 100%) !important;
-  color: #fff !important;
+  background: #d9fdd3 !important;
+  background: linear-gradient(180deg, #ecffe9 0%, #c9f8c2 100%) !important;
+  color: #0f5132 !important;
   font-weight: 700 !important;
+}
+
+.sp-pigeon-cell--first-winner {
+  background: #fff7bf !important;
+  color: #5f4b00 !important;
 }
 
 @keyframes sp-blink {

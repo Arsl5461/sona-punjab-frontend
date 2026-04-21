@@ -338,19 +338,22 @@ const ClubAllTournaments = () => {
                     firstWinnerOwner &&
                     lastWinnerOwner && (
                       <div className="sp-club-winner-callouts mb-2">
-                        <div className="sp-winner-box mb-2">
-                          <span className="sp-label">Last winner:</span>{" "}
-                          <span>
-                            {formatTime(lastWinnerOwner.grandTotal)},{" "}
-                            {lastWinnerOwner.name}
-                          </span>
-                        </div>
-                        <div className="sp-last-winner-bar">
-                          <span className="fw-bold">First winner:</span>{" "}
-                          <span>
-                            {formatTime(firstWinnerOwner.grandTotal)},{" "}
-                            {firstWinnerOwner.name}
-                          </span>
+                        <div className="sp-winner-box sp-winner-box--dual mb-2">
+                          <div className="sp-winner-item">
+                            <span className="sp-label">First winner:</span>{" "}
+                            <span>
+                              {formatTime(firstWinnerOwner.grandTotal)},{" "}
+                              {firstWinnerOwner.name}
+                            </span>
+                          </div>
+                          <div className="sp-winner-item">
+                            <span>|</span>{" "}
+                            <span className="sp-label">Last winner:</span>{" "}
+                            <span>
+                              {formatTime(lastWinnerOwner.grandTotal)},{" "}
+                              {lastWinnerOwner.name}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     )}
