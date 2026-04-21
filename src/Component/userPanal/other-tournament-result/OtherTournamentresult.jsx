@@ -446,19 +446,39 @@ const OtherTournamentresult = () => {
     const outer = scaleWrapRef.current;
     const inner = scaleInnerRef.current;
     if (!outer || !inner) return;
-    const vw = window.innerWidth;
-    const sw = inner.scrollWidth;
+
+    inner.style.transform = "none";
+    inner.style.width = "auto";
+    void inner.offsetHeight;
+
+    const vw =
+      (typeof window !== "undefined" && window.visualViewport?.width) ||
+      document.documentElement?.clientWidth ||
+      window.innerWidth ||
+      0;
+
+    let sw = inner.scrollWidth;
+    const tableEl = inner.querySelector(".sp-results-table");
+    if (tableEl) {
+      sw = Math.max(sw, tableEl.scrollWidth || 0, tableEl.offsetWidth || 0);
+    }
     if (!sw) return;
-    const pad = 8;
+
+    const pad = 4;
     const s = Math.min(1, (vw - pad) / sw);
+
+    inner.style.width = `${sw}px`;
+
     if (s < 1) {
       inner.style.transform = `scale(${s})`;
       inner.style.transformOrigin = "top center";
     } else {
       inner.style.transform = "";
       inner.style.transformOrigin = "";
+      inner.style.width = "";
     }
-    const sh = inner.scrollHeight;
+
+    const sh = inner.offsetHeight;
     outer.style.height = `${sh * s}px`;
   }, []);
 
@@ -479,10 +499,17 @@ const OtherTournamentresult = () => {
         : null;
     if (ro && innerEl) ro.observe(innerEl);
     window.addEventListener("resize", schedule);
+    window.addEventListener("load", schedule);
+    const vv = window.visualViewport;
+    vv?.addEventListener("resize", schedule);
+    vv?.addEventListener("scroll", schedule);
     return () => {
       if (raf) cancelAnimationFrame(raf);
       ro?.disconnect();
       window.removeEventListener("resize", schedule);
+      window.removeEventListener("load", schedule);
+      vv?.removeEventListener("resize", schedule);
+      vv?.removeEventListener("scroll", schedule);
     };
   }, [
     updateTournamentViewFit,
@@ -815,10 +842,10 @@ const OtherTournamentresult = () => {
 
   return (
     <div className="sp-public sp-tournament-view-page">
-      <HomeBanner />
-      <HomeNavbar />
       <div ref={scaleWrapRef} className="sp-tournament-view-scale-outer">
         <div ref={scaleInnerRef} className="sp-tournament-view-scale-inner">
+          <HomeBanner />
+          <HomeNavbar />
       <div
         className="w-100 d-flex align-items-center justify-content-start p-1"
         style={{ backgroundColor: "#1e3d8f" }}

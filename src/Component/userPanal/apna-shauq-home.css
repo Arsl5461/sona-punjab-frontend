@@ -1459,18 +1459,20 @@ body.sp-home-zoom-layout
 body.sp-home-zoom-layout
   .sp-public.sp-tournament-view-page
   .sp-tournament-view-scale-inner {
-  display: inline-block;
-  vertical-align: top;
+  display: block;
+  width: max-content;
+  max-width: none;
+  margin: 0 auto;
   text-align: left;
-  min-width: 100%;
   box-sizing: border-box;
 }
 
 body.sp-home-zoom-layout .sp-public.sp-tournament-view-page .sp-table-shell {
   max-width: none !important;
-  width: 100% !important;
+  width: max-content !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
+  overflow-x: visible !important;
 }
 
 @media (max-width: 1199.98px) {
