@@ -39,6 +39,15 @@ const OtherTournamentresult = () => {
     getCurrentTournament();
   }, [tournamentId]);
 
+  /**
+   * Same as Home: wide minimum canvas + browser pinch-zoom / horizontal pan
+   * on small screens instead of squashing the results table.
+   */
+  useEffect(() => {
+    document.body.classList.add("sp-home-zoom-layout");
+    return () => document.body.classList.remove("sp-home-zoom-layout");
+  }, []);
+
   // const handleDateSelect = (date, index) => {
   //   // Convert "YYYY-MM-DD" to "DD-MM-YYYY"
   //   const [year, month, day] = date.split("-");
