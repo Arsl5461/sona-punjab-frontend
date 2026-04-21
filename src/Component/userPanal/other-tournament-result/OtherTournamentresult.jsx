@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   getResultByDate,
   getTotalDaysResultReq,
@@ -40,12 +46,20 @@ const OtherTournamentresult = () => {
   }, [tournamentId]);
 
   /**
-   * Same as Home: wide minimum canvas + browser pinch-zoom / horizontal pan
-   * on small screens instead of squashing the results table.
+   * Same zoom-mode flag as Home; tournament page overrides min-width in CSS
+   * and fits content to viewport width (see sp-tournament-view-scale-*).
    */
   useEffect(() => {
-    document.body.classList.add("sp-home-zoom-layout");
-    return () => document.body.classList.remove("sp-home-zoom-layout");
+    document.body.classList.add(
+      "sp-home-zoom-layout",
+      "sp-tournament-view-page"
+    );
+    return () => {
+      document.body.classList.remove(
+        "sp-home-zoom-layout",
+        "sp-tournament-view-page"
+      );
+    };
   }, []);
 
   // const handleDateSelect = (date, index) => {
@@ -425,6 +439,62 @@ const OtherTournamentresult = () => {
     }
   }, [currentTournament]);
 
+  const scaleWrapRef = useRef(null);
+  const scaleInnerRef = useRef(null);
+
+  const updateTournamentViewFit = useCallback(() => {
+    const outer = scaleWrapRef.current;
+    const inner = scaleInnerRef.current;
+    if (!outer || !inner) return;
+    const vw = window.innerWidth;
+    const sw = inner.scrollWidth;
+    if (!sw) return;
+    const pad = 8;
+    const s = Math.min(1, (vw - pad) / sw);
+    if (s < 1) {
+      inner.style.transform = `scale(${s})`;
+      inner.style.transformOrigin = "top center";
+    } else {
+      inner.style.transform = "";
+      inner.style.transformOrigin = "";
+    }
+    const sh = inner.scrollHeight;
+    outer.style.height = `${sh * s}px`;
+  }, []);
+
+  useLayoutEffect(() => {
+    let raf = 0;
+    const schedule = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        updateTournamentViewFit();
+      });
+    };
+    schedule();
+    const innerEl = scaleInnerRef.current;
+    const ro =
+      typeof ResizeObserver !== "undefined" && innerEl
+        ? new ResizeObserver(schedule)
+        : null;
+    if (ro && innerEl) ro.observe(innerEl);
+    window.addEventListener("resize", schedule);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      ro?.disconnect();
+      window.removeEventListener("resize", schedule);
+    };
+  }, [
+    updateTournamentViewFit,
+    currentTournament,
+    gerResult,
+    totalDaysResult,
+    allDaysResults,
+    showTotal,
+    selectedDateIndex,
+    owners,
+  ]);
+
   // Find global highest time across all owners and pigeons
   const findGlobalHighestTime = () => {
     if (showTotal) {
@@ -744,9 +814,11 @@ const OtherTournamentresult = () => {
       : null;
 
   return (
-    <div className="sp-public">
+    <div className="sp-public sp-tournament-view-page">
       <HomeBanner />
       <HomeNavbar />
+      <div ref={scaleWrapRef} className="sp-tournament-view-scale-outer">
+        <div ref={scaleInnerRef} className="sp-tournament-view-scale-inner">
       <div
         className="w-100 d-flex align-items-center justify-content-start p-1"
         style={{ backgroundColor: "#1e3d8f" }}
@@ -1275,6 +1347,8 @@ const OtherTournamentresult = () => {
             })}
           </tbody>
         </table>
+      </div>
+        </div>
       </div>
     </div>
   );

@@ -1408,10 +1408,69 @@ body.sp-home-zoom-layout {
   overflow-x: auto;
 }
 
+/* Tournament view: lock page to viewport width (no horizontal page scroll on iOS) */
+html:has(body.sp-home-zoom-layout.sp-tournament-view-page) {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+body.sp-home-zoom-layout.sp-tournament-view-page {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  overscroll-behavior-x: none;
+}
+
+body.sp-home-zoom-layout.sp-tournament-view-page #root {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
 body.sp-home-zoom-layout .sp-public {
   min-width: 1024px;
   max-width: none;
   box-sizing: border-box;
+}
+
+/* Tournament view (/tournament-view/*): fit content to viewport width once */
+body.sp-home-zoom-layout .sp-public.sp-tournament-view-page {
+  min-width: 0 !important;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+body.sp-home-zoom-layout
+  .sp-public.sp-tournament-view-page
+  .sp-tournament-view-scale-outer {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: hidden;
+  overflow-y: visible;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+body.sp-home-zoom-layout
+  .sp-public.sp-tournament-view-page
+  .sp-tournament-view-scale-inner {
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+body.sp-home-zoom-layout .sp-public.sp-tournament-view-page .sp-table-shell {
+  max-width: none !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 @media (max-width: 1199.98px) {
