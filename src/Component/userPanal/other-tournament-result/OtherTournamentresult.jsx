@@ -31,8 +31,8 @@ const OtherTournamentresult = () => {
 
   const getCurrentTournament = async () => {
     try {
-      const response = await getSingleTournamentReq(tournamentId);
-      setCurrentTournament(response?.[0]);
+      const tournament = await getSingleTournamentReq(tournamentId);
+      setCurrentTournament(tournament ?? null);
     } catch (err) {
       console.error("Error in fetching current Tournament");
     }

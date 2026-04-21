@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
 import HomeBanner from "./Home-Banne/HomeBanner";
 import HomeNavbar from "./Home-Navbar/HomeNavbar";
@@ -25,8 +25,8 @@ const Home = () => {
 
   const getCurrentTournament = async () => {
     try {
-      const response = await getCurrentTournamentsReq();
-      setCurrentTournament(response?.data);
+      const tournament = await getCurrentTournamentsReq();
+      setCurrentTournament(tournament ?? null);
     } catch (err) {
       console.error("Error in fetching current Tournament");
     }
@@ -298,8 +298,9 @@ const Home = () => {
     }
   };
 
-  // Run on mount or when currentTournament changes
-  useEffect(() => {
+  // Run on mount or when currentTournament changes. Layout effect so `resultDate`
+  // updates before other effects (e.g. resultByDate) run with a stale date + new id.
+  useLayoutEffect(() => {
     selectDefaultDate();
   }, [currentTournament]);
 
@@ -355,9 +356,13 @@ const Home = () => {
 
   const resultByDate = async () => {
     try {
+      if (!currentTournament?._id || !resultDate?.date) {
+        setGetResult([]);
+        return;
+      }
       const response = await getResultByDate(
-        currentTournament?._id,
-        resultDate?.date
+        currentTournament._id,
+        resultDate.date
       );
       setGetResult(response);
     } catch (err) {
@@ -367,7 +372,7 @@ const Home = () => {
 
   useEffect(() => {
     resultByDate();
-  }, [resultDate]);
+  }, [resultDate?.date, currentTournament?._id]);
 
   const [totalDaysResult, setTotalDaysResult] = useState([]);
 
@@ -381,14 +386,23 @@ const Home = () => {
   };
 
   useEffect(() => {
+    if (!currentTournament?._id) {
+      setTotalDaysResult([]);
+      return;
+    }
     getTotalDaysResult();
-  }, [currentTournament]);
+  }, [currentTournament?._id]);
 
   // Add a new state for tracking if total view is selected
   const [showTotal, setShowTotal] = useState(false);
 
   // Add this new state to store all days' results
   const [allDaysResults, setAllDaysResults] = useState([]);
+
+  useEffect(() => {
+    setShowTotal(false);
+    setAllDaysResults([]);
+  }, [currentTournament?._id]);
 
   // Add this new function to fetch all days' results
   const getAllDaysResults = async () => {
