@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   getResultByDate,
   getTotalDaysResultReq,
@@ -46,20 +40,12 @@ const OtherTournamentresult = () => {
   }, [tournamentId]);
 
   /**
-   * Same zoom-mode flag as Home; tournament page overrides min-width in CSS
-   * and fits content to viewport width (see sp-tournament-view-scale-*).
+   * Match Home page behavior: wide minimum canvas with browser pinch-zoom / pan
+   * instead of responsive reflow on narrow screens.
    */
   useEffect(() => {
-    document.body.classList.add(
-      "sp-home-zoom-layout",
-      "sp-tournament-view-page"
-    );
-    return () => {
-      document.body.classList.remove(
-        "sp-home-zoom-layout",
-        "sp-tournament-view-page"
-      );
-    };
+    document.body.classList.add("sp-home-zoom-layout");
+    return () => document.body.classList.remove("sp-home-zoom-layout");
   }, []);
 
   // const handleDateSelect = (date, index) => {
@@ -439,89 +425,6 @@ const OtherTournamentresult = () => {
     }
   }, [currentTournament]);
 
-  const scaleWrapRef = useRef(null);
-  const scaleInnerRef = useRef(null);
-
-  const updateTournamentViewFit = useCallback(() => {
-    const outer = scaleWrapRef.current;
-    const inner = scaleInnerRef.current;
-    if (!outer || !inner) return;
-
-    inner.style.transform = "none";
-    inner.style.width = "auto";
-    void inner.offsetHeight;
-
-    const vw =
-      (typeof window !== "undefined" && window.visualViewport?.width) ||
-      document.documentElement?.clientWidth ||
-      window.innerWidth ||
-      0;
-
-    let sw = inner.scrollWidth;
-    const tableEl = inner.querySelector(".sp-results-table");
-    if (tableEl) {
-      sw = Math.max(sw, tableEl.scrollWidth || 0, tableEl.offsetWidth || 0);
-    }
-    if (!sw) return;
-
-    const pad = 4;
-    const s = Math.min(1, (vw - pad) / sw);
-
-    inner.style.width = `${sw}px`;
-
-    if (s < 1) {
-      inner.style.transform = `scale(${s})`;
-      inner.style.transformOrigin = "top center";
-    } else {
-      inner.style.transform = "";
-      inner.style.transformOrigin = "";
-      inner.style.width = "";
-    }
-
-    const sh = inner.offsetHeight;
-    outer.style.height = `${sh * s}px`;
-  }, []);
-
-  useLayoutEffect(() => {
-    let raf = 0;
-    const schedule = () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        updateTournamentViewFit();
-      });
-    };
-    schedule();
-    const innerEl = scaleInnerRef.current;
-    const ro =
-      typeof ResizeObserver !== "undefined" && innerEl
-        ? new ResizeObserver(schedule)
-        : null;
-    if (ro && innerEl) ro.observe(innerEl);
-    window.addEventListener("resize", schedule);
-    window.addEventListener("load", schedule);
-    const vv = window.visualViewport;
-    vv?.addEventListener("resize", schedule);
-    vv?.addEventListener("scroll", schedule);
-    return () => {
-      if (raf) cancelAnimationFrame(raf);
-      ro?.disconnect();
-      window.removeEventListener("resize", schedule);
-      window.removeEventListener("load", schedule);
-      vv?.removeEventListener("resize", schedule);
-      vv?.removeEventListener("scroll", schedule);
-    };
-  }, [
-    updateTournamentViewFit,
-    currentTournament,
-    gerResult,
-    totalDaysResult,
-    allDaysResults,
-    showTotal,
-    selectedDateIndex,
-    owners,
-  ]);
-
   // Find global highest time across all owners and pigeons
   const findGlobalHighestTime = () => {
     if (showTotal) {
@@ -841,11 +744,9 @@ const OtherTournamentresult = () => {
       : null;
 
   return (
-    <div className="sp-public sp-tournament-view-page">
-      <div ref={scaleWrapRef} className="sp-tournament-view-scale-outer">
-        <div ref={scaleInnerRef} className="sp-tournament-view-scale-inner">
-          <HomeBanner />
-          <HomeNavbar />
+    <div className="sp-public">
+      <HomeBanner />
+      <HomeNavbar />
       <div
         className="w-100 d-flex align-items-center justify-content-start p-1"
         style={{ backgroundColor: "#1e3d8f" }}
@@ -1373,10 +1274,6 @@ const OtherTournamentresult = () => {
               );
             })}
           </tbody>
-        </table>
-      </div>
-        </div>
-      </div>
     </div>
   );
 };
