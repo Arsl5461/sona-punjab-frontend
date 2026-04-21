@@ -1,5 +1,27 @@
 import axiosInstance from "../../../helper/AxiosConfig";
 
+/** Matches admin "On Screen" / Show on screen (CreateTournaments & EditTournamentModal). */
+const isHomeScreenTournament = (t) => {
+  if (!t || typeof t !== "object") return false;
+  if (typeof t.status === "string" && t.status.toLowerCase() === "active") return true;
+  if (t.screenOn === true || t.isScreenOn === true || t.displayOnHome === true)
+    return true;
+  return false;
+};
+
+/**
+ * When the API returns several tournaments (or the wrong one first), prefer the
+ * row flagged for the public home screen instead of blindly using index 0.
+ */
+const pickTournamentFromList = (list) => {
+  if (!Array.isArray(list) || list.length === 0) return null;
+  const candidates = list.filter((x) => x && typeof x === "object");
+  if (!candidates.length) return null;
+  const onScreen = candidates.find(isHomeScreenTournament);
+  if (onScreen) return onScreen;
+  return candidates[0];
+};
+
 /**
  * Backend responses vary by route/version: sometimes the tournament is the
  * JSON root, sometimes `{ data: doc }`, `{ data: [doc] }`, or `{ tournaments: [...] }`.
@@ -7,19 +29,27 @@ import axiosInstance from "../../../helper/AxiosConfig";
  */
 export const unwrapTournamentPayload = (body) => {
   if (body == null) return null;
-  if (Array.isArray(body)) return body[0] ?? null;
+  if (Array.isArray(body)) return pickTournamentFromList(body);
   if (typeof body !== "object") return null;
 
   if (body.data != null) {
     const inner = body.data;
-    if (Array.isArray(inner)) return inner[0] ?? null;
+    if (Array.isArray(inner)) return pickTournamentFromList(inner);
     if (typeof inner === "object") return inner;
+  }
+
+  const singleKeys = ["activeTournament", "screenTournament", "currentTournament"];
+  for (const key of singleKeys) {
+    const v = body[key];
+    if (v && typeof v === "object" && !Array.isArray(v) && (v._id || v.tournamentName))
+      return v;
   }
 
   const listKeys = ["tournaments", "tournament", "tournamentList", "result"];
   for (const key of listKeys) {
     const v = body[key];
-    if (Array.isArray(v) && v.length && typeof v[0] === "object") return v[0];
+    if (Array.isArray(v) && v.length && typeof v[0] === "object")
+      return pickTournamentFromList(v);
     if (v && typeof v === "object" && !Array.isArray(v) && (v._id || v.tournamentName))
       return v;
   }
