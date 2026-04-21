@@ -1427,3 +1427,17 @@ body.sp-home-zoom-layout .sp-banner-placeholder {
   font-size: 0.9rem;
 }
 
+/* Table shell must follow the fixed canvas width, not the device viewport (100vw),
+   or the grid stays narrow with empty space beside it on phones. */
+body.sp-home-zoom-layout .sp-table-shell {
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* At least full shell width; grow past it when there are many pigeon columns (shell scrolls). */
+body.sp-home-zoom-layout .sp-results-table {
+  width: 100%;
+  min-width: max(100%, max-content);
+}
+
