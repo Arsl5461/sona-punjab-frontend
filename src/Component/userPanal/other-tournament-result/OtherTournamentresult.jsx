@@ -43,8 +43,8 @@ const OtherTournamentresult = () => {
   }, [tournamentId]);
 
   /**
-   * Match Home page behavior: wide minimum canvas with browser pinch-zoom / pan
-   * instead of responsive reflow on narrow screens.
+   * Match Home: `body.sp-home-zoom-layout` fixed canvas; viewport breakpoint CSS
+   * is gated off so the page does not reflow — users zoom the browser view.
    */
   useEffect(() => {
     document.body.classList.add("sp-home-zoom-layout");

@@ -37,10 +37,10 @@ const Home = () => {
   }, []);
 
   /**
-   * Home uses a wide minimum canvas + browser pinch-zoom / horizontal pan
-   * instead of shrinking the layout for narrow viewports (see apna-shauq-home.css
-   * body.sp-home-zoom-layout). Removed on unmount so other public pages keep
-   * responsive behavior.
+   * Home uses a fixed minimum canvas (see apna-shauq-home.css
+   * `body.sp-home-zoom-layout`). Viewport breakpoint rules are disabled for this
+   * body class so layout does not reflow on small screens — users zoom the page
+   * (see public/index.html viewport). Class removed on unmount.
    */
   useEffect(() => {
     document.body.classList.add("sp-home-zoom-layout");

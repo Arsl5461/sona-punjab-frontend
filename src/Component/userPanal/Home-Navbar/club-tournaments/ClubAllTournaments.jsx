@@ -260,8 +260,8 @@ const ClubAllTournaments = () => {
   }, [clubAllTournaments]);
 
   /**
-   * Match Home page behavior: wide fixed canvas with browser zoom/pan
-   * instead of responsive reflow for narrow screens.
+   * Match Home: `body.sp-home-zoom-layout` fixed canvas; breakpoint rules that
+   * shrink public UI are disabled while this class is on — use browser zoom.
    */
   useEffect(() => {
     document.body.classList.add("sp-home-zoom-layout");
@@ -341,7 +341,7 @@ const ClubAllTournaments = () => {
                 </div>
                 <div className="card-body pt-2 px-2 px-md-3">
                   <div className="sp-club-table-wrap">
-                    <div className="table-responsive table-responsive-app">
+                    <div className="table-responsive-app">
                         <table className="table table-sm mb-0 sp-results-table sp-club-results-table">
                           <thead>
                             <tr>

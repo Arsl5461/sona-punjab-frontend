@@ -53,14 +53,14 @@
   max-width: 100%;
 }
 
-/* Dashboard: shrink poster column on narrow screens */
+/* Dashboard: shrink poster column on narrow screens (not on public zoom-canvas pages). */
 @media (max-width: 767.98px) {
-  .table-responsive-app .tournament-poster-cell .rounded-2.overflow-hidden.bg-secondary {
+  body:not(.sp-home-zoom-layout) .table-responsive-app .tournament-poster-cell .rounded-2.overflow-hidden.bg-secondary {
     height: 100px !important;
     width: 72px !important;
   }
 
-  .table-responsive-app .tournament-poster-cell img {
+  body:not(.sp-home-zoom-layout) .table-responsive-app .tournament-poster-cell img {
     max-height: 100px !important;
     object-fit: cover;
   }

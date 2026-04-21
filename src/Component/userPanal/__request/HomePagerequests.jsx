@@ -1,9 +1,24 @@
 import axiosInstance from "../../../helper/AxiosConfig";
 
-/** Matches admin "On Screen" / Show on screen (CreateTournaments & EditTournamentModal). */
+const normalizeScreenStatus = (value) => {
+  if (typeof value !== "string") return "";
+  return value.trim().toLowerCase().replace(/\s+/g, "");
+};
+
+/**
+ * True when this row is the one meant for the public home screen.
+ * Backend sends `status: "Active"` (Create/Edit tournament → "On Screen").
+ */
 const isHomeScreenTournament = (t) => {
   if (!t || typeof t !== "object") return false;
-  if (typeof t.status === "string" && t.status.toLowerCase() === "active") return true;
+  const raw = t.status ?? t.Status ?? t.tournamentStatus;
+  if (typeof raw === "string") {
+    const n = normalizeScreenStatus(raw);
+    if (n === "active" || n === "onscreen" || n === "on") return true;
+    if (n === "non-active" || n === "inactive" || n === "off" || n === "offscreen")
+      return false;
+  }
+  if (raw === true) return true;
   if (t.screenOn === true || t.isScreenOn === true || t.displayOnHome === true)
     return true;
   return false;
