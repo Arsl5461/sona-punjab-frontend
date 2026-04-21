@@ -309,8 +309,6 @@ const ClubAllTournaments = () => {
               rankedWithResultsCount,
               allOwnersCount,
               showTournamentOnly,
-              firstWinnerOwner,
-              lastWinnerOwner,
             } = getSortedOwners(tournament._id, tournament);
             return (
               <div key={tournament._id} className="card mb-4 sp-club-tournament-card">
@@ -333,30 +331,6 @@ const ClubAllTournaments = () => {
                   </p>
                 </div>
                 <div className="card-body pt-2 px-2 px-md-3">
-                  {!showTournamentOnly &&
-                    rankedWithResultsCount > 0 &&
-                    firstWinnerOwner &&
-                    lastWinnerOwner && (
-                      <div className="sp-club-winner-callouts mb-2">
-                        <div className="sp-winner-box sp-winner-box--dual mb-2">
-                          <div className="sp-winner-item">
-                            <span className="sp-label">First winner:</span>{" "}
-                            <span>
-                              {formatTime(firstWinnerOwner.grandTotal)},{" "}
-                              {firstWinnerOwner.name}
-                            </span>
-                          </div>
-                          <div className="sp-winner-item">
-                            <span>|</span>{" "}
-                            <span className="sp-label">Last winner:</span>{" "}
-                            <span>
-                              {formatTime(lastWinnerOwner.grandTotal)},{" "}
-                              {lastWinnerOwner.name}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   <div className="sp-club-table-wrap">
                     <div className="table-responsive table-responsive-app">
                         <table className="table table-sm mb-0 sp-results-table sp-club-results-table">
@@ -410,7 +384,7 @@ const ClubAllTournaments = () => {
                             {allOwnersCount === 0 ? (
                               <tr>
                                 <td className="text-center p-1 border text-muted sp-club-col-idx">
-                                  —
+                                  1
                                 </td>
                                 <td className="text-center p-1 border align-middle sp-club-poster-cell sp-club-col-tournament">
                                   <TournamentTablePoster tournament={tournament} />
@@ -429,7 +403,7 @@ const ClubAllTournaments = () => {
                             ) : showTournamentOnly ? (
                               <tr>
                                 <td className="text-center p-1 border text-muted sp-club-col-idx">
-                                  —
+                                  1
                                 </td>
                                 <td className="text-center p-1 border align-middle sp-club-poster-cell sp-club-col-tournament">
                                   <TournamentTablePoster tournament={tournament} />
@@ -465,40 +439,31 @@ const ClubAllTournaments = () => {
                                       />
                                     </td>
                                   ) : null}
-                                  <td
-                                    colSpan={3}
-                                    className="p-2 border fw-bold sp-club-results-cluster"
-                                  >
-                                    <div className="sp-club-results-cluster-inner">
-                                      <div className="sp-club-cluster-col sp-club-cluster-name">
-                                        <div className="sp-club-cluster-name-inner">
-                                          <img
-                                            src={
-                                              owner?.ownerPicture
-                                                ? owner?.ownerPicture
-                                                : "/default_avatar.avif"
-                                            }
-                                            alt=""
-                                            className="rounded-circle sp-club-cluster-avatar"
-                                          />
-                                          <span className="fw-bold urdu">
-                                            {owner?.name}
-                                          </span>
-                                        </div>
-                                      </div>
-                                      <div className="sp-club-cluster-col sp-club-cluster-time">
-                                        {formatTime(owner?.grandTotal)}
-                                      </div>
-                                      <div className="sp-club-cluster-col sp-club-cluster-prize">
-                                        {owner?.hasResult && owner?.prize ? (
-                                          <span className="fw-bold">
-                                            {owner?.prize}
-                                          </span>
-                                        ) : (
-                                          "-"
-                                        )}
-                                      </div>
+                                  <td className="p-2 border fw-bold sp-club-col-owner">
+                                    <div className="sp-club-cluster-name-inner">
+                                      <img
+                                        src={
+                                          owner?.ownerPicture
+                                            ? owner?.ownerPicture
+                                            : "/default_avatar.avif"
+                                        }
+                                        alt=""
+                                        className="rounded-circle sp-club-cluster-avatar"
+                                      />
+                                      <span className="fw-bold urdu sp-club-owner-name-text">
+                                        {owner?.name}
+                                      </span>
                                     </div>
+                                  </td>
+                                  <td className="text-center p-2 border fw-bold sp-club-col-time">
+                                    {formatTime(owner?.grandTotal)}
+                                  </td>
+                                  <td className="text-center p-2 border fw-bold sp-club-col-prize">
+                                    {owner?.hasResult && owner?.prize ? (
+                                      <span className="fw-bold">{owner?.prize}</span>
+                                    ) : (
+                                      "-"
+                                    )}
                                   </td>
                                 </tr>
                               );

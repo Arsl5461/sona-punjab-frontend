@@ -177,9 +177,9 @@
 }
 
 .sp-club-poster-img--table {
-  max-height: 320px;
-  max-width: 200px;
-  width: auto;
+  max-height: 230px;
+  max-width: 100%;
+  width: 100%;
   height: auto;
   object-fit: contain;
   display: block;
@@ -198,9 +198,9 @@
 }
 
 .sp-club-poster-fallback--table {
-  min-height: 160px;
+  min-height: 120px;
   min-width: 120px;
-  max-width: 200px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 0.35rem 0.25rem;
   font-size: 0.75rem;
@@ -209,7 +209,7 @@
 .sp-club-poster-cell {
   vertical-align: middle;
   background: rgba(255, 255, 255, 0.65);
-  overflow: visible;
+  overflow: hidden;
 }
 
 /* Club results: headers line up with body columns */
@@ -223,8 +223,8 @@
 }
 
 .sp-club-tournament-card .sp-club-col-tournament {
-  width: 11.75rem;
-  min-width: 10rem;
+  width: 13.5rem;
+  min-width: 13.5rem;
   vertical-align: middle;
 }
 
@@ -237,11 +237,13 @@
 
 .sp-club-tournament-card .sp-club-col-time,
 .sp-club-tournament-card .sp-club-col-prize {
-  width: 5.25rem;
+  width: 6.25rem;
+  min-width: 6.25rem;
 }
 
 .sp-club-tournament-card .sp-club-col-owner {
   width: auto;
+  min-width: 16rem;
 }
 
 .sp-club-tournament-card .sp-club-th-results-heading {
@@ -290,9 +292,20 @@
 .sp-club-tournament-card .sp-club-cluster-name-inner {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: 100%;
+  min-width: 0;
+}
+
+.sp-club-tournament-card .sp-club-owner-name-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: 100%;
+  display: inline-block;
 }
 
 .sp-club-tournament-card .sp-club-cluster-avatar {
@@ -364,8 +377,11 @@
 }
 
 .sp-club-tournament-card .table-responsive-app {
-  display: flex;
-  justify-content: center;
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 .sp-club-tournament-card .table-responsive-app > .table {
@@ -376,7 +392,7 @@
 /* Club table: fill wide card */
 .sp-club-tournament-card .sp-club-table-wrap .sp-results-table {
   width: 100%;
-  min-width: 100%;
+  min-width: 44rem;
   max-width: 100%;
   font-size: 0.9rem;
 }
@@ -387,7 +403,7 @@
 
 .sp-club-tournament-card .sp-club-table-wrap .sp-results-table thead th,
 .sp-club-tournament-card .sp-club-table-wrap .sp-results-table tbody td {
-  padding: 0.5rem 0.65rem !important;
+  padding: 0.35rem 0.5rem !important;
 }
 
 .sp-club-tournament-card .mt-3.text-muted {
@@ -1049,13 +1065,18 @@
 /* Tablets — club table: wider poster column (576px+; phones use tighter rules below) */
 @media (max-width: 991.98px) and (min-width: 576px) {
   .sp-club-tournament-card .sp-club-col-tournament {
-    width: 10.75rem;
-    min-width: 9.5rem;
+    width: 12rem;
+    min-width: 12rem;
   }
 
   .sp-club-tournament-card .sp-club-col-time,
   .sp-club-tournament-card .sp-club-col-prize {
-    width: 4.75rem;
+    width: 5.25rem;
+    min-width: 5.25rem;
+  }
+
+  .sp-club-tournament-card .sp-club-col-owner {
+    min-width: 13rem;
   }
 }
 
@@ -1238,8 +1259,8 @@
   }
 
   .sp-club-tournament-card .sp-club-col-tournament {
-    width: 10.5rem;
-    min-width: 9.75rem;
+    width: 11.5rem;
+    min-width: 11.5rem;
   }
 
   .sp-club-tournament-card .sp-club-results-table thead .sp-club-col-tournament {
@@ -1258,7 +1279,7 @@
     width: 100%;
     max-width: 100%;
     height: auto;
-    max-height: min(58vh, 340px);
+    max-height: min(44vh, 240px);
     object-fit: contain;
     display: block;
     margin-left: auto;
@@ -1277,8 +1298,12 @@
 
   .sp-club-tournament-card .sp-club-col-time,
   .sp-club-tournament-card .sp-club-col-prize {
-    width: 3.35rem;
-    min-width: 2.85rem;
+    width: 4.3rem;
+    min-width: 4.3rem;
+  }
+
+  .sp-club-tournament-card .sp-club-col-owner {
+    min-width: 9.5rem;
   }
 
   .sp-club-tournament-card .sp-club-th-results-heading {
@@ -1294,23 +1319,9 @@
     padding-right: 0.18rem !important;
   }
 
-  .sp-club-tournament-card .sp-club-results-cluster-inner {
-    grid-template-columns: 1fr;
-    gap: 0.45rem;
-    max-width: none;
-    margin-left: 0;
-    margin-right: 0;
-    padding: 0.15rem 0;
-  }
-
   .sp-club-tournament-card .sp-club-cluster-avatar {
     width: 32px;
     height: 32px;
-  }
-
-  .sp-club-tournament-card .sp-club-cluster-time,
-  .sp-club-tournament-card .sp-club-cluster-prize {
-    font-size: 0.88rem;
   }
 
   .sp-club-tournament-card .sp-club-empty-message-inner {
