@@ -259,6 +259,15 @@ const ClubAllTournaments = () => {
     }
   }, [clubAllTournaments]);
 
+  /**
+   * Match Home page behavior: wide fixed canvas with browser zoom/pan
+   * instead of responsive reflow for narrow screens.
+   */
+  useEffect(() => {
+    document.body.classList.add("sp-home-zoom-layout");
+    return () => document.body.classList.remove("sp-home-zoom-layout");
+  }, []);
+
   return (
     <div className="sp-public">
       <HomeBanner />
