@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSimpleUiZoom } from "../../../../helper/useSimpleUiZoom";
 import { SimpleZoomToolbar } from "../../SimpleZoomToolbar";
 import Marquee from "react-fast-marquee";
@@ -261,12 +261,13 @@ const ClubAllTournaments = () => {
     }
   }, [clubAllTournaments]);
 
-  const { zoomIn, zoomOut, resetZoom, zoomStyle, zoomPercent } =
-    useSimpleUiZoom();
+  const spPublicRef = useRef(null);
+  const { zoomIn, zoomOut, resetZoom, fitToScreen, zoomStyle, zoomPercent } =
+    useSimpleUiZoom(spPublicRef);
 
   return (
     <>
-      <div className="sp-public" style={zoomStyle}>
+      <div ref={spPublicRef} className="sp-public" style={zoomStyle}>
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
@@ -521,6 +522,7 @@ const ClubAllTournaments = () => {
         zoomPercent={zoomPercent}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
+        onFit={fitToScreen}
         onReset={resetZoom}
       />
     </>

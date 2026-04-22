@@ -702,12 +702,13 @@ const Home = () => {
     currentTournament?.helperPigeons,
   ]);
 
-  const { zoomIn, zoomOut, resetZoom, zoomStyle, zoomPercent } =
-    useSimpleUiZoom();
+  const spPublicRef = useRef(null);
+  const { zoomIn, zoomOut, resetZoom, fitToScreen, zoomStyle, zoomPercent } =
+    useSimpleUiZoom(spPublicRef);
 
   return (
     <>
-      <div className="sp-public" style={zoomStyle}>
+      <div ref={spPublicRef} className="sp-public" style={zoomStyle}>
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
@@ -1219,10 +1220,11 @@ const Home = () => {
       )}
       </div>
       <SimpleZoomToolbar
-        show={!!currentTournament?._id}
+        show
         zoomPercent={zoomPercent}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
+        onFit={fitToScreen}
         onReset={resetZoom}
       />
     </>
