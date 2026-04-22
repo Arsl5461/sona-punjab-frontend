@@ -869,29 +869,47 @@
 }
 
 @media (max-width: 575.98px) {
-  body:not(.sp-home-zoom-layout) .sp-results-table {
+  .sp-results-table {
     font-size: 0.72rem;
   }
 
-  body:not(.sp-home-zoom-layout) .sp-results-table thead th,
-  body:not(.sp-home-zoom-layout) .sp-results-table tbody td {
+  .sp-results-table thead th,
+  .sp-results-table tbody td {
     padding: 0.3rem 0.28rem !important;
   }
 
   body:not(.sp-home-zoom-layout) .sp-winner-box--dual {
     flex-direction: column;
   }
+
+  /* Tighter still on public pinch-canvas routes (same breakpoint as usePublicZoomLayout). */
+  body.sp-home-zoom-layout .sp-results-table {
+    font-size: 0.68rem;
+  }
+
+  body.sp-home-zoom-layout .sp-results-table thead th,
+  body.sp-home-zoom-layout .sp-results-table tbody td {
+    padding: 0.26rem 0.22rem !important;
+  }
+
+  body.sp-home-zoom-layout .sp-results-table .sp-owner-pic {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 /* =====================================================================
- * Wide canvas + viewport pinch-zoom (`usePublicZoomLayout` on Home / tournament / club).
- * Layout stays “desktop wide”; pinch out on iPhone to shrink the whole page like your screenshot.
+ * Mobile public pages — same idea as alsadatdhunni.com:
+ * desktop-wide min width + browser pinch-zoom, plus horizontal scroll on the
+ * results table wrapper (Bootstrap .table-responsive pattern).
+ * Active only when `body.sp-home-zoom-layout` (narrow viewport — see usePublicZoomLayout).
  * ===================================================================== */
 html:has(body.sp-home-zoom-layout) {
   overflow-x: visible;
 }
 
 body.sp-home-zoom-layout {
+  min-width: 1050px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -916,10 +934,13 @@ html.sp-ios-chrome body.sp-home-zoom-layout {
   overflow-x: scroll;
 }
 
+/* Do not use width:max-content here — it makes the *entire* page as wide as the
+   results grid. Keep a fixed “desktop canvas” width; wide tables scroll inside
+   `.sp-table-shell` only. */
 body.sp-home-zoom-layout .sp-public {
-  min-width: 1024px;
+  min-width: 1050px;
+  width: 100%;
   max-width: none;
-  width: max-content;
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
@@ -965,22 +986,36 @@ body.sp-home-zoom-layout .sp-marquee-wrap .rfm-marquee-container {
   min-width: auto;
 }
 
-body.sp-home-zoom-layout .sp-banner-slide-img {
-  max-height: 640px !important;
-}
+/* Banner height follows HomeBanner.css breakpoints (do not force 640px here). */
 
 body.sp-home-zoom-layout .sp-banner-placeholder {
   min-height: 180px;
   font-size: 0.9rem;
 }
 
+@media (max-width: 767.98px) {
+  body.sp-home-zoom-layout .sp-banner-placeholder {
+    min-height: 140px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  body.sp-home-zoom-layout .sp-banner-placeholder {
+    min-height: 120px;
+    font-size: 0.8rem;
+  }
+}
+
 body.sp-home-zoom-layout .sp-table-shell {
+  display: block;
   max-width: none;
   width: 100%;
   box-sizing: border-box;
-  overflow-x: visible;
-  -webkit-overflow-scrolling: auto;
-  overscroll-behavior-x: auto;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 body.sp-home-zoom-layout .sp-results-table {
@@ -989,16 +1024,24 @@ body.sp-home-zoom-layout .sp-results-table {
   max-width: none;
 }
 
-/* Nested scrollers steal pinch-zoom on iOS; keep overflow visible on the canvas. */
+/* Match Bootstrap .table-responsive — scroll wide grids inside the card. */
 body.sp-home-zoom-layout .sp-public .table-responsive-app,
 body.sp-home-zoom-layout .sp-public .table-responsive {
-  overflow-x: visible;
+  display: block;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 body.sp-home-zoom-layout .sp-public .card-body:has(> table) {
-  overflow-x: visible;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 body.sp-home-zoom-layout .sp-club-tournament-card .table-responsive-app {
-  overflow-x: visible;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }

@@ -35,11 +35,12 @@ function applyZoomLayout(html) {
 }
 
 /**
- * On **narrow viewports only** (≤992px): `body.sp-home-zoom-layout` keeps a
- * desktop-wide canvas so users can **pinch-zoom** the whole page on phones.
+ * On **narrow viewports only** (≤992px): `body.sp-home-zoom-layout` matches the
+ * alsadatdhunni.com pattern — ~1050px-wide canvas + native pinch-zoom, with
+ * horizontal scroll on table wrappers (see `apna-shauq-home.css`).
  *
- * On **laptops and wide browsers**: the class is **not** applied — normal fluid
- * layout (`width: 100%`, no forced `min-width: 1024px`) so nothing looks zoomed-in.
+ * On **laptops / wide browsers**: the class is **not** applied — fluid layout
+ * without forced min-width.
  */
 export function usePublicZoomLayout() {
   useEffect(() => {
