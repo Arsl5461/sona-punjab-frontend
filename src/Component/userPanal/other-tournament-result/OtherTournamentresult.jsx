@@ -938,13 +938,13 @@ const OtherTournamentresult = () => {
               <th scope="col" className="text-center">
                 Sr #
               </th>
-              <th scope="col" className="text-center">
+              <th scope="col" className="text-center sp-col-picture">
                 Picture
               </th>
               <th scope="col" className="text-start">
                 Name
               </th>
-              <th scope="col" className="text-center">
+              <th scope="col" className="text-center sp-col-flying">
                 Flying time
               </th>
               {showTotal ? (
@@ -996,7 +996,7 @@ const OtherTournamentresult = () => {
               return (
                 <tr key={owner?._id} className="hover-row">
                   <td className="text-center">{idx + 1}</td>
-                  <td className="text-center">
+                  <td className="text-center sp-col-picture">
                     <img
                       src={
                         owner?.ownerPicture

@@ -902,13 +902,13 @@ const Home = () => {
               <th scope="col" className="text-center">
                 Sr #
               </th>
-              <th scope="col" className="text-center">
+              <th scope="col" className="text-center sp-col-picture">
                 Picture
               </th>
               <th scope="col" className="text-start">
                 Name
               </th>
-              <th scope="col" className="text-center">
+              <th scope="col" className="text-center sp-col-flying">
                 Flying time
               </th>
               {showTotal ? (
@@ -955,8 +955,8 @@ const Home = () => {
 
               return (
                 <tr key={owner?._id} className="hover-row">
-                  <td className="text-center">{idx + 1}</td>
-                  <td className="text-center">
+                  <td className="text-center sp-flying-time">{idx + 1}</td>
+                  <td className="text-center sp-col-picture">
                     <img
                       src={
                         owner?.ownerPicture
@@ -967,7 +967,7 @@ const Home = () => {
                       alt=""
                     />
                   </td>
-                  <td className="text-start">
+                  <td className="text-start sp-flying-time">
                     <div className="d-flex flex-column align-items-start justify-content-start">
                       <span className="sp-owner-name urdu">{owner?.name}</span>
                       {owner?.address ? (

@@ -647,6 +647,30 @@
   text-decoration-color: #adb5bd;
 }
 
+/* Flying time column: width follows content (not club listing tables). */
+.sp-results-table:not(.sp-club-results-table) thead th.sp-col-flying,
+.sp-results-table:not(.sp-club-results-table) tbody td.sp-flying-time {
+  width: 1%;
+  white-space: nowrap;
+  padding: 0.32rem 0.42rem !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Picture column: hug the circular avatar only. */
+.sp-results-table:not(.sp-club-results-table) thead th.sp-col-picture,
+.sp-results-table:not(.sp-club-results-table) tbody td.sp-col-picture {
+  width: 1%;
+  white-space: nowrap;
+  padding: 0.25rem 0.35rem !important;
+  vertical-align: middle !important;
+  line-height: 0;
+}
+
+.sp-results-table:not(.sp-club-results-table) tbody td.sp-col-picture .sp-owner-pic {
+  display: block;
+  margin: 0 auto;
+}
+
 /* Vacant pigeon slot */
 .sp-results-table .sp-pigeon-empty {
   color: #c1121f;
