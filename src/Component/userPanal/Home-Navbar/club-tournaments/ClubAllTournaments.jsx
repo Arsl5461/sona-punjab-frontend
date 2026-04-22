@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useSimpleUiZoom } from "../../../../helper/useSimpleUiZoom";
-import { SimpleZoomToolbar } from "../../SimpleZoomToolbar";
+import React, { useEffect, useState } from "react";
+import { usePublicZoomLayout } from "../../../../helper/usePublicZoomLayout";
 import Marquee from "react-fast-marquee";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -54,6 +53,8 @@ function TournamentTablePoster({ tournament }) {
 }
 
 const ClubAllTournaments = () => {
+  usePublicZoomLayout();
+
   const headlineText = usePublicMarqueeText({
     fallback:
       "خوش آمدید — Sona Punjab | Club tournaments and archives.",
@@ -261,13 +262,8 @@ const ClubAllTournaments = () => {
     }
   }, [clubAllTournaments]);
 
-  const spPublicRef = useRef(null);
-  const { zoomIn, zoomOut, resetZoom, fitToScreen, zoomStyle, zoomPercent } =
-    useSimpleUiZoom(spPublicRef);
-
   return (
-    <>
-      <div ref={spPublicRef} className="sp-public" style={zoomStyle}>
+    <div className="sp-public">
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
@@ -516,16 +512,7 @@ const ClubAllTournaments = () => {
           })
         )}
       </div>
-      </div>
-      <SimpleZoomToolbar
-        show={Boolean(clubName)}
-        zoomPercent={zoomPercent}
-        onZoomIn={zoomIn}
-        onZoomOut={zoomOut}
-        onFit={fitToScreen}
-        onReset={resetZoom}
-      />
-    </>
+    </div>
   );
 };
 

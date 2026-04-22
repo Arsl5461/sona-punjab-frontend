@@ -1,6 +1,5 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { useSimpleUiZoom } from "../../helper/useSimpleUiZoom";
-import { SimpleZoomToolbar } from "./SimpleZoomToolbar";
+import { usePublicZoomLayout } from "../../helper/usePublicZoomLayout";
 import Marquee from "react-fast-marquee";
 import HomeBanner from "./Home-Banne/HomeBanner";
 import HomeNavbar from "./Home-Navbar/HomeNavbar";
@@ -20,6 +19,9 @@ import {
 } from "../../helper/tournamentLeadBlink";
 
 const Home = () => {
+  /** Wide canvas + Safari/Chrome pinch-zoom on the viewport (see `apna-shauq-home.css`). */
+  usePublicZoomLayout();
+
   const headlineText = usePublicMarqueeText();
   const [currentTournament, setCurrentTournament] = useState();
   const [resultDate, setResultDate] = useState();
@@ -702,13 +704,8 @@ const Home = () => {
     currentTournament?.helperPigeons,
   ]);
 
-  const spPublicRef = useRef(null);
-  const { zoomIn, zoomOut, resetZoom, fitToScreen, zoomStyle, zoomPercent } =
-    useSimpleUiZoom(spPublicRef);
-
   return (
-    <>
-      <div ref={spPublicRef} className="sp-public" style={zoomStyle}>
+    <div className="sp-public">
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
@@ -1218,16 +1215,7 @@ const Home = () => {
       </div>
         </>
       )}
-      </div>
-      <SimpleZoomToolbar
-        show
-        zoomPercent={zoomPercent}
-        onZoomIn={zoomIn}
-        onZoomOut={zoomOut}
-        onFit={fitToScreen}
-        onReset={resetZoom}
-      />
-    </>
+    </div>
   );
 };
 

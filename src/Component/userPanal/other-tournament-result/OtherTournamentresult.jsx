@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useSimpleUiZoom } from "../../../helper/useSimpleUiZoom";
-import { SimpleZoomToolbar } from "../SimpleZoomToolbar";
+import { usePublicZoomLayout } from "../../../helper/usePublicZoomLayout";
 import Marquee from "react-fast-marquee";
 import {
   getResultByDate,
@@ -23,6 +22,8 @@ import {
 
 const OtherTournamentresult = () => {
   // const currentTournament = useSelector((state) => state.tournamentDataReducer);
+
+  usePublicZoomLayout();
 
   const { tournamentId } = useParams();
   const headlineText = usePublicMarqueeText();
@@ -754,13 +755,8 @@ const OtherTournamentresult = () => {
     currentTournament?.helperPigeons,
   ]);
 
-  const spPublicRef = useRef(null);
-  const { zoomIn, zoomOut, resetZoom, fitToScreen, zoomStyle, zoomPercent } =
-    useSimpleUiZoom(spPublicRef);
-
   return (
-    <>
-      <div ref={spPublicRef} className="sp-public" style={zoomStyle}>
+    <div className="sp-public">
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
@@ -1257,16 +1253,7 @@ const OtherTournamentresult = () => {
           </tbody>
         </table>
       </div>
-      </div>
-      <SimpleZoomToolbar
-        show={!!currentTournament?._id}
-        zoomPercent={zoomPercent}
-        onZoomIn={zoomIn}
-        onZoomOut={zoomOut}
-        onFit={fitToScreen}
-        onReset={resetZoom}
-      />
-    </>
+    </div>
   );
 };
 
