@@ -44,12 +44,16 @@ const CreateTournaments = () => {
   });
 
   useEffect(() => {
-    // Check if the logged-in user is a subadmin and set allowedAdmins if true
-    if (loginUser.role === "subadmin" && loginUser._id) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        allowedAdmins: [...prevFormData.allowedAdmins, loginUser._id],
-      }));
+    if (loginUser?.role === "subadmin" && loginUser?._id) {
+      const id = String(loginUser._id);
+      setFormData((prevFormData) => {
+        const existing = prevFormData.allowedAdmins.map(String);
+        if (existing.includes(id)) return prevFormData;
+        return {
+          ...prevFormData,
+          allowedAdmins: [...prevFormData.allowedAdmins, id],
+        };
+      });
     }
   }, [loginUser]);
 
@@ -307,7 +311,34 @@ const CreateTournaments = () => {
     }
   };
 
-  // Update handleSubmit
+  const buildCreateTournamentFormData = () => {
+    const fd = new FormData();
+    const allowedIds = [
+      ...new Set(formData.allowedAdmins.map((x) => String(x))),
+    ];
+    fd.append("allowedAdmins", JSON.stringify(allowedIds));
+    fd.append("participatingLofts", JSON.stringify(formData.participatingLofts));
+    fd.append("dates", JSON.stringify(formData.dates));
+    fd.append("prizes", JSON.stringify(formData.prizes));
+    fd.append("tournamentPicture", formData.tournamentPicture);
+    fd.append("tournamentName", formData.tournamentName);
+    fd.append("club", formData.club);
+    fd.append("startTime", formData.startTime);
+    fd.append("numberOfDays", String(formData.numberOfDays));
+    fd.append("numberOfPigeons", String(formData.numberOfPigeons));
+    fd.append("helperPigeons", String(formData.helperPigeons ?? 0));
+    fd.append("continueDays", String(formData.continueDays));
+    fd.append("numberOfPrizes", String(formData.numberOfPrizes ?? ""));
+    fd.append(
+      "noteTimeForPigeons",
+      String(formData.noteTimeForPigeons ?? "")
+    );
+    fd.append("status", formData.status);
+    fd.append("tournamentInfo", "");
+    fd.append("category", "");
+    return fd;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -317,14 +348,25 @@ const CreateTournaments = () => {
 
     try {
       setLoading(true);
-      const response = await CraeteTournamentRequest(formData);
-      if (response) {
+      const payload = buildCreateTournamentFormData();
+      const response = await CraeteTournamentRequest(payload);
+      if (response?._id) {
         toast.success("Tournament created successfully!");
         navigate("/all-tournaments", { state: { refresh: true } });
+      } else {
+        toast.error(
+          response?.message ||
+            response?.error ||
+            "Failed to create tournament"
+        );
       }
     } catch (err) {
       console.error("Error in creating tournament", err);
-      toast.error("Failed to create tournament");
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message;
+      toast.error(msg || "Failed to create tournament");
     } finally {
       setLoading(false);
     }

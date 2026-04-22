@@ -1,16 +1,8 @@
 import axiosInstance from "../../../../helper/AxiosConfig";
 
 export const CraeteTournamentRequest = async (formData) => {
-  try {
-    const response = await axiosInstance.post(
-      `/sona-punjab/tournaments`,
-      formData
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error in fetching Users List", error.message);
-    return { data: null, error: "Error in creating Tournaments" };
-  }
+  const response = await axiosInstance.post(`/sona-punjab/tournaments`, formData);
+  return response.data;
 };
 
 export const getAllTournaments = async () => {
@@ -30,8 +22,8 @@ export const getAllAllowedTournaments = async (subadminId) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error in fetching Users List", error.message);
-    return { data: null, error: "Error in fetching Tournaments list" };
+    console.error("Error in fetching allowed tournaments", error.message);
+    return [];
   }
 };
 

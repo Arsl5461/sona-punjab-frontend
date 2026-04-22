@@ -51,8 +51,10 @@ const AllTournaments = () => {
   };
 
   useEffect(() => {
-    getTournaments();
-  }, []);
+    if (loginUser?._id != null || loginUser?.role === "admin") {
+      getTournaments();
+    }
+  }, [loginUser?._id, loginUser?.role]);
 
   const handleDeleteClick = (tournament) => {
     setTournamentToDelete(tournament);

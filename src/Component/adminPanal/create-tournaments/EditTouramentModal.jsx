@@ -36,69 +36,96 @@ const EditTournamentModal = ({ show, handleClose, tournamentId, onSubmit }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOwners, setSelectedOwners] = useState([]);
   const [pigeonOwners, setPigeonOwners] = useState([]);
+  const [subAdmins, setSubAdmins] = useState([]);
   const loginUser = useSelector((state) => state.userDataReducer);
+
+  const handleSubAdmin = async () => {
+    try {
+      const response = await getAllUsersRequest();
+      if (response.admins) {
+        const filteredSubAdmins = response?.admins?.filter(
+          (user) => user?.role === "subadmin"
+        );
+        setSubAdmins(filteredSubAdmins);
+      }
+    } catch (error) {
+      console.error("Error in getting subadmin list", error);
+    }
+  };
+
+  useEffect(() => {
+    handleSubAdmin();
+  }, []);
 
   useEffect(() => {
     const fetchTournamentData = async () => {
-      if (tournamentId && show) {
-        try {
-          const response = await getTournamentById(tournamentId);
-          if (response && response.length > 0) {
-            const tournamentData = response[0];
-            setSelectedOwners(tournamentData?.participatingLofts);
+      if (!tournamentId || !show) return;
+      try {
+        const response = await getTournamentById(tournamentId);
+        if (!Array.isArray(response) || response.length === 0) return;
 
-            // Format the dates array
-            const formattedDates = tournamentData.dates.map(
-              (date) => new Date(date).toISOString().split("T")[0]
-            );
+        const tournamentData = response[0];
+        setSelectedOwners(tournamentData?.participatingLofts);
 
-            const updatedAllowedAdmins = tournamentData.allowedAdmins
-              .map((id) => {
-                const subAdmin = subAdmins.find((admin) => admin._id === id);
-                return subAdmin ? { _id: id, name: subAdmin.name } : null;
-              })
-              .filter((admin) => admin !== null);
-
-            // Update formData with all available fields
-            setFormData({
-              tournamentPicture: tournamentData.tournamentPicture || "",
-              tournamentName: tournamentData.tournamentName || "",
-              startDate: formattedDates[0] || "",
-              startTime: tournamentData.startTime || "",
-              numberOfDays: tournamentData.numberOfDays || "",
-              numberOfPigeons: tournamentData.numberOfPigeons || "",
-              helperPigeons: tournamentData.helperPigeons || "",
-              continueDays: tournamentData.continueDays || "",
-              status: tournamentData.status || "",
-              participatingLofts: tournamentData.participatingLofts || [],
-              numberOfPrizes: tournamentData.numberOfPrizes || "",
-              dates: formattedDates,
-              prizes: tournamentData.prizes || [],
-              allowedAdmins: updatedAllowedAdmins,
-            });
-
-            // Update image source
-            if (tournamentData.tournamentPicture) {
-              setImageSrc(tournamentData.tournamentPicture);
-            }
-
-            // Update date fields
-            if (tournamentData.numberOfDays) {
-              const newDateFields = Array.from(
-                { length: tournamentData.numberOfDays },
-                (_, index) => index + 1
-              );
-              setDateFields(newDateFields);
-            }
+        const rawDates = Array.isArray(tournamentData.dates)
+          ? tournamentData.dates
+          : [];
+        const formattedDates = rawDates.map((date) => {
+          try {
+            return new Date(date).toISOString().split("T")[0];
+          } catch {
+            return String(date);
           }
-        } catch (error) {
-          console.error("Error fetching tournament data:", error);
+        });
+
+        const adminIds = Array.isArray(tournamentData.allowedAdmins)
+          ? tournamentData.allowedAdmins.map((id) => String(id))
+          : [];
+        const updatedAllowedAdmins = adminIds.map((id) => {
+          const subAdmin = subAdmins.find(
+            (admin) => String(admin._id) === String(id)
+          );
+          return {
+            _id: id,
+            name: subAdmin?.name || "Sub-admin",
+          };
+        });
+
+        setFormData({
+          tournamentPicture: tournamentData.tournamentPicture || "",
+          tournamentName: tournamentData.tournamentName || "",
+          startDate: formattedDates[0] || "",
+          startTime: tournamentData.startTime || "",
+          numberOfDays: tournamentData.numberOfDays || "",
+          numberOfPigeons: tournamentData.numberOfPigeons || "",
+          helperPigeons: tournamentData.helperPigeons || "",
+          continueDays: tournamentData.continueDays || "",
+          status: tournamentData.status || "",
+          participatingLofts: tournamentData.participatingLofts || [],
+          numberOfPrizes: tournamentData.numberOfPrizes || "",
+          dates: formattedDates,
+          prizes: tournamentData.prizes || [],
+          allowedAdmins: updatedAllowedAdmins,
+        });
+
+        if (tournamentData.tournamentPicture) {
+          setImageSrc(tournamentData.tournamentPicture);
         }
+
+        if (tournamentData.numberOfDays) {
+          const newDateFields = Array.from(
+            { length: tournamentData.numberOfDays },
+            (_, index) => index + 1
+          );
+          setDateFields(newDateFields);
+        }
+      } catch (error) {
+        console.error("Error fetching tournament data:", error);
       }
     };
 
     fetchTournamentData();
-  }, [tournamentId, show]);
+  }, [tournamentId, show, subAdmins]);
 
   useEffect(() => {
     const getPigeonOwners = async () => {
@@ -194,17 +221,21 @@ const EditTournamentModal = ({ show, handleClose, tournamentId, onSubmit }) => {
     const submitFormData = new FormData();
 
     // Process the allowedAdmins array to only send _id values
-    const allowedAdminsIds = formData.allowedAdmins.map((admin) => admin._id);
+    const allowedAdminsIds = formData.allowedAdmins.map((admin) =>
+      String(admin._id)
+    );
 
     // Append all form fields
     Object.keys(formData).forEach((key) => {
+      if (key === "action" || key === "startDate") return;
       if (key === "participatingLofts") {
-        // Handle participatingLofts array
         submitFormData.append(
           "participatingLofts",
           JSON.stringify(formData.participatingLofts)
         );
-        submitFormData.append("action", formData.action);
+        if (formData.action) {
+          submitFormData.append("action", formData.action);
+        }
       } else if (key === "dates") {
         // Handle dates array - send as a JSON string
         submitFormData.append("dates", JSON.stringify(formData.dates));
@@ -231,36 +262,16 @@ const EditTournamentModal = ({ show, handleClose, tournamentId, onSubmit }) => {
         tournamentId,
         submitFormData
       );
-      if (response) {
-        onSubmit(response?.data); // Make sure response.data contains the complete updated tournament object
+      if (response?.success && response?.data) {
+        onSubmit(response.data);
         handleClose();
       } else {
-        console.error("Error updating tournament:", response.error);
+        console.error("Error updating tournament:", response?.error || response);
       }
     } catch (error) {
       console.error("Error in update request:", error);
     }
   };
-
-  const [subAdmins, setSubAdmins] = useState([]);
-
-  const handleSubAdmin = async () => {
-    try {
-      const response = await getAllUsersRequest();
-      if (response.admins) {
-        const filteredSubAdmins = response?.admins?.filter(
-          (user) => user?.role === "subadmin"
-        );
-        setSubAdmins(filteredSubAdmins);
-      }
-    } catch (error) {
-      console.error("Error in getting subadmin list", error);
-    }
-  };
-
-  useEffect(() => {
-    handleSubAdmin();
-  }, []);
 
   const handleSelectChange = (selectedOptions) => {
     const selectedAdmins = selectedOptions
