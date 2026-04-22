@@ -780,19 +780,20 @@ const OtherTournamentresult = () => {
 
   const {
     contentRef,
-    needsScaleBridge,
+    scaledLayoutActive,
     bridgeStyle,
     scaledStyle,
     setFitAuto,
     setFitNatural,
     mode,
     fitScale,
+    isMobileFit,
   } = useHomeFitToScreen(publicFitLayoutKey);
 
   return (
     <>
       <PublicPageFitShell
-        needsScaleBridge={needsScaleBridge}
+        scaledLayoutActive={scaledLayoutActive}
         bridgeStyle={bridgeStyle}
         scaledStyle={scaledStyle}
         contentRef={contentRef}
@@ -1300,6 +1301,7 @@ const OtherTournamentresult = () => {
         onReset={setFitNatural}
         mode={mode}
         fitScale={fitScale}
+        isMobileFit={isMobileFit}
       />
     </>
   );

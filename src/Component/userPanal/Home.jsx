@@ -721,19 +721,20 @@ const Home = () => {
 
   const {
     contentRef,
-    needsScaleBridge,
+    scaledLayoutActive,
     bridgeStyle,
     scaledStyle,
     setFitAuto,
     setFitNatural,
     mode,
     fitScale,
+    isMobileFit,
   } = useHomeFitToScreen(homeFitLayoutKey);
 
   return (
     <>
       <PublicPageFitShell
-        needsScaleBridge={needsScaleBridge}
+        scaledLayoutActive={scaledLayoutActive}
         bridgeStyle={bridgeStyle}
         scaledStyle={scaledStyle}
         contentRef={contentRef}
@@ -1254,6 +1255,7 @@ const Home = () => {
         onReset={setFitNatural}
         mode={mode}
         fitScale={fitScale}
+        isMobileFit={isMobileFit}
       />
     </>
   );

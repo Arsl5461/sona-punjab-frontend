@@ -1529,6 +1529,13 @@ body.sp-home-zoom-layout .sp-home-fit-bridge {
   max-width: 100%;
 }
 
+/* Before first measure: same wrapper tree, normal flow (no remount of `.sp-public`). */
+body.sp-home-zoom-layout .sp-home-fit-bridge--flow {
+  overflow: visible;
+  width: 100%;
+  max-width: 100%;
+}
+
 body.sp-home-zoom-layout.sp-home-fitted-scale {
   overflow-x: hidden;
 }

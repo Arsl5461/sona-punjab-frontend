@@ -291,19 +291,20 @@ const ClubAllTournaments = () => {
 
   const {
     contentRef,
-    needsScaleBridge,
+    scaledLayoutActive,
     bridgeStyle,
     scaledStyle,
     setFitAuto,
     setFitNatural,
     mode,
     fitScale,
+    isMobileFit,
   } = useHomeFitToScreen(clubFitLayoutKey);
 
   return (
     <>
       <PublicPageFitShell
-        needsScaleBridge={needsScaleBridge}
+        scaledLayoutActive={scaledLayoutActive}
         bridgeStyle={bridgeStyle}
         scaledStyle={scaledStyle}
         contentRef={contentRef}
@@ -563,6 +564,7 @@ const ClubAllTournaments = () => {
         onReset={setFitNatural}
         mode={mode}
         fitScale={fitScale}
+        isMobileFit={isMobileFit}
       />
     </>
   );
