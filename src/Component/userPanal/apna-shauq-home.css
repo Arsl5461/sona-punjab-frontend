@@ -104,7 +104,7 @@
 
 /* Compact title — Nastaliq reads large at equal font-size */
 .sp-tournament-head:not(.sp-club-head) .sp-tournament-title {
-  font-size: clamp(0.72rem, 1.65vw, 0.88rem);
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--sp-green-dark);
   margin: 0 0 0.2rem;
@@ -131,14 +131,14 @@
 }
 
 .sp-club-head .sp-tournament-title {
-  font-size: clamp(0.7rem, 1.5vw, 0.82rem);
+  font-size: 0.82rem;
   font-weight: 700;
   line-height: 1.25;
 }
 
 /* Club tournament cards: wider table area */
 .sp-club-tournament-card {
-  max-width: min(100%, 1180px);
+  max-width: 1180px;
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
@@ -356,7 +356,7 @@
 
 /* Tournament title above table (h6 + class) */
 .sp-club-tournament-card .card-header h6.sp-club-card-title {
-  font-size: clamp(0.95rem, 2.1vw, 1.1rem);
+  font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.35;
   margin-bottom: 0.2rem;
@@ -602,112 +602,12 @@
   overscroll-behavior-x: contain;
 }
 
-@media (max-width: 575.98px) {
-  body:not(.sp-home-zoom-layout) .sp-table-shell {
-    margin-left: 0.25rem;
-    margin-right: 0.25rem;
-    max-width: calc(100vw - 0.5rem);
-    border-radius: 4px;
-  }
-}
-
 .sp-results-table {
   font-size: 0.82rem;
   border-collapse: collapse;
   width: max-content;
   min-width: 100%;
   margin: 0 !important;
-}
-
-@media (max-width: 1199.98px) {
-  body:not(.sp-home-zoom-layout) .sp-results-table {
-    font-size: 0.74rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table .sp-owner-pic {
-    width: 36px;
-    height: 36px;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table thead th,
-  body:not(.sp-home-zoom-layout) .sp-results-table tbody td {
-    padding: 0.28rem 0.22rem !important;
-  }
-
-  /* Sticky serial + picture + name while scrolling many pigeon columns */
-  body:not(.sp-home-zoom-layout) .sp-results-table th:nth-child(1),
-  body:not(.sp-home-zoom-layout) .sp-results-table td:nth-child(1) {
-    position: sticky;
-    left: 0;
-    z-index: 2;
-    min-width: 2.5rem;
-    max-width: 3rem;
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.06);
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table th:nth-child(2),
-  body:not(.sp-home-zoom-layout) .sp-results-table td:nth-child(2) {
-    position: sticky;
-    left: 2.5rem;
-    z-index: 2;
-    min-width: 3.25rem;
-    max-width: 3.5rem;
-    box-shadow: 4px 0 6px -2px rgba(0, 0, 0, 0.08);
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table th:nth-child(3),
-  body:not(.sp-home-zoom-layout) .sp-results-table td:nth-child(3) {
-    position: sticky;
-    left: 6rem;
-    z-index: 2;
-    min-width: 5.5rem;
-    max-width: 9.5rem;
-    box-shadow: 4px 0 6px -2px rgba(0, 0, 0, 0.1);
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table tbody td:nth-child(1),
-  body:not(.sp-home-zoom-layout) .sp-results-table tbody td:nth-child(2),
-  body:not(.sp-home-zoom-layout) .sp-results-table tbody td:nth-child(3) {
-    background: #fff;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table tbody tr:nth-child(even) td:nth-child(1),
-  body:not(.sp-home-zoom-layout) .sp-results-table tbody tr:nth-child(even) td:nth-child(2),
-  body:not(.sp-home-zoom-layout) .sp-results-table tbody tr:nth-child(even) td:nth-child(3) {
-    background: #f8f9fb;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table thead th:nth-child(1),
-  body:not(.sp-home-zoom-layout) .sp-results-table thead th:nth-child(2),
-  body:not(.sp-home-zoom-layout) .sp-results-table thead th:nth-child(3) {
-    z-index: 4;
-  }
-}
-
-@media (max-width: 575.98px) {
-  body:not(.sp-home-zoom-layout) .sp-results-table {
-    font-size: 0.68rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table th:nth-child(1),
-  body:not(.sp-home-zoom-layout) .sp-results-table td:nth-child(1) {
-    min-width: 2.15rem;
-    max-width: 2.35rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table th:nth-child(2),
-  body:not(.sp-home-zoom-layout) .sp-results-table td:nth-child(2) {
-    left: 2.15rem;
-    min-width: 2.85rem;
-    max-width: 3.1rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table th:nth-child(3),
-  body:not(.sp-home-zoom-layout) .sp-results-table td:nth-child(3) {
-    left: 5rem;
-    min-width: 4.75rem;
-    max-width: 7.5rem;
-  }
 }
 
 /* Listing style: grey header band, dark labels (client mockup) */
@@ -968,436 +868,9 @@
   padding: 0.24rem 0.48rem;
 }
 
-/* ========== Public pages — responsive breakpoints ========== */
-
-/* Large tablets / small laptops */
-@media (max-width: 1199.98px) {
-  body:not(.sp-home-zoom-layout) .sp-topnav-row {
-    max-width: 100%;
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-marquee-wrap {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    font-size: 0.85rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-date-tab {
-    min-width: 6.5rem;
-    padding: 0.4rem 0.75rem;
-    font-size: 0.82rem;
-  }
-}
-
-/* Tablets — date tabs: one row, horizontal scroll */
-@media (max-width: 991.98px) {
-  body:not(.sp-home-zoom-layout) .sp-tournament-head:not(.sp-club-head) .sp-tournament-title {
-    font-size: clamp(0.78rem, 2.4vw, 0.95rem);
-    padding: 0 0.25rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-date-row {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    padding: 0.6rem max(0.5rem, env(safe-area-inset-right, 0))
-      0.6rem max(0.5rem, env(safe-area-inset-left, 0));
-    gap: 0.45rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--sp-green-light) rgba(0, 0, 0, 0.06);
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-date-row::-webkit-scrollbar {
-    height: 5px;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-date-row::-webkit-scrollbar-thumb {
-    background: var(--sp-green-light);
-    border-radius: 4px;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-date-tab {
-    flex: 0 0 auto;
-    min-width: 5.5rem;
-    max-width: none;
-    padding: 0.38rem 0.75rem;
-    font-size: 0.8rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-winner-box {
-    margin: 0.5rem;
-    padding: 0.55rem 0.75rem;
-    font-size: 0.88rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-stats-strip {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-    font-size: 0.82rem;
-    padding-left: max(0.65rem, env(safe-area-inset-left, 0));
-    padding-right: max(0.65rem, env(safe-area-inset-right, 0));
-  }
-
-  /* Stats: tighter gap + pill chips (scroll comes from base .sp-stats-row) */
-
-  body:not(.sp-home-zoom-layout) .sp-stats-row {
-    gap: 0.5rem;
-    margin-left: -0.15rem;
-    margin-right: -0.15rem;
-    padding-left: 0.15rem;
-    padding-right: 0.15rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-stats-row > div {
-    white-space: nowrap;
-    padding: 0.4rem 0.75rem;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-  }
-}
-
-/* Tablets — club table: wider poster column (576px+; phones use tighter rules below) */
-@media (max-width: 991.98px) and (min-width: 576px) {
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-col-tournament {
-    width: 12rem;
-    min-width: 12rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-col-time,
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-col-prize {
-    width: 5.25rem;
-    min-width: 5.25rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-col-owner {
-    min-width: 13rem;
-  }
-}
-
-/* Nav: clubs on full-width row below Home + actions */
-@media (max-width: 767.98px) {
-  body:not(.sp-home-zoom-layout) .sp-topnav-row {
-    flex-wrap: wrap;
-    align-items: center;
-    min-height: 0;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-topnav-brand {
-    order: 1;
-    border-right: none;
-    padding: 0.35rem 0.55rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-topnav-brand .sp-nav-home {
-    font-size: 0.92rem;
-    padding: 0.26rem 0.5rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-topnav-side {
-    order: 2;
-    margin-left: auto;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 0.35rem;
-    border-left: none;
-    padding: 0.35rem 0.5rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-topnav-scroll {
-    order: 3;
-    flex: 1 1 100%;
-    width: 100%;
-    min-width: 0;
-    padding: 0.45rem 0.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    -webkit-overflow-scrolling: touch;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-link {
-    max-width: none;
-    font-size: 0.76rem;
-    padding: 0.35rem 0.45rem;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-nav-pill {
-    min-height: 40px;
-    padding: 0.3rem 0.55rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-nav-pill--brand {
-    min-height: 34px;
-    font-size: 0.65rem;
-    padding: 0.22rem 0.45rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-marquee-wrap {
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    padding: 0.35rem 0.5rem;
-    font-size: 0.8rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-marquee-label {
-    font-size: 0.72rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-banner-placeholder {
-    min-height: 140px;
-    font-size: 0.82rem;
-    padding: 0.75rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-winner-box {
-    margin: 0.45rem 0.35rem;
-    font-size: 0.84rem;
-    line-height: 1.45;
-    word-break: break-word;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-stats-strip {
-    margin-left: 0.35rem;
-    margin-right: 0.35rem;
-    margin-bottom: 0.55rem;
-    padding: 0.55rem 0.65rem;
-    font-size: 0.78rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-last-winner-bar {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.5rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-table-shell {
-    margin-left: 0.2rem;
-    margin-right: 0.2rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-empty-tournament {
-    margin: 1.25rem 0.65rem;
-    padding: 1.1rem;
-    font-size: 0.9rem;
-  }
-}
-
-/* Phones */
-@media (max-width: 575.98px) {
-  body:not(.sp-home-zoom-layout) .sp-tournament-head:not(.sp-club-head) .sp-tournament-title {
-    font-size: clamp(0.8rem, 3.5vw, 0.95rem);
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-date-row {
-    padding: 0.5rem max(0.35rem, env(safe-area-inset-right, 0)) 0.5rem
-      max(0.35rem, env(safe-area-inset-left, 0));
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-date-tab {
-    min-width: 4.85rem;
-    padding: 0.4rem 0.55rem;
-    font-size: 0.74rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-winner-box {
-    margin: 0.4rem 0.25rem;
-    padding: 0.5rem 0.6rem;
-    font-size: 0.8rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-stats-strip {
-    margin-left: 0.25rem;
-    margin-right: 0.25rem;
-    padding: 0.5rem 0.55rem;
-    font-size: 0.72rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-stats-row > div {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.72rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-last-winner-bar {
-    text-align: center;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-link {
-    max-width: none;
-    font-size: 0.72rem;
-  }
-
-  /* Club cards — phones: readable “Tournament” header, scroll if needed, stacked results */
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card {
-    overflow-x: visible;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-table-wrap {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    margin-left: -0.15rem;
-    margin-right: -0.15rem;
-    padding-left: 0.15rem;
-    padding-right: 0.15rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-col-idx {
-    width: 2rem;
-    min-width: 2rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-col-tournament {
-    width: 11.5rem;
-    min-width: 11.5rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-results-table thead .sp-club-col-tournament {
-    font-size: 0.62rem;
-    font-weight: 700;
-    line-height: 1.15;
-    white-space: normal;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    hyphens: none;
-    padding-left: 0.22rem !important;
-    padding-right: 0.22rem !important;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-poster-img--table {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    max-height: min(44vh, 240px);
-    object-fit: contain;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-poster-fallback--table {
-    width: 100%;
-    max-width: 10.5rem;
-    min-width: 7.5rem;
-    min-height: 150px;
-    font-size: 0.62rem;
-    padding: 0.28rem 0.18rem;
-    box-sizing: border-box;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-col-time,
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-col-prize {
-    width: 4.3rem;
-    min-width: 4.3rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-col-owner {
-    min-width: 9.5rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-th-results-heading {
-    font-size: 0.78rem;
-    padding-top: 0.3rem !important;
-    padding-bottom: 0.3rem !important;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-th-sub {
-    font-size: 0.58rem;
-    letter-spacing: 0.02em;
-    padding-left: 0.18rem !important;
-    padding-right: 0.18rem !important;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-cluster-avatar {
-    width: 32px;
-    height: 32px;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-empty-message-inner {
-    min-height: 4.75rem;
-    padding: 0.3rem 0.35rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-empty-message-inner p {
-    font-size: 0.82rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-winner-callouts .sp-winner-box,
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-winner-callouts .sp-last-winner-bar {
-    font-size: 0.78rem;
-    padding: 0.42rem 0.5rem;
-    margin-left: 0.25rem;
-    margin-right: 0.25rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-table-wrap .sp-results-table {
-    font-size: 0.88rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-table-wrap .sp-results-table thead th,
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .sp-club-table-wrap .sp-results-table tbody td {
-    padding: 0.32rem 0.26rem !important;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-club-tournament-card .mt-3.text-muted small {
-    font-size: 0.72rem;
-    line-height: 1.4;
-    display: inline-block;
-    padding: 0 0.25rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-public .container {
-    padding-left: max(0.75rem, env(safe-area-inset-left, 0));
-    padding-right: max(0.75rem, env(safe-area-inset-right, 0));
-  }
-}
-
-/* Small phones */
-@media (max-width: 399.98px) {
-  body:not(.sp-home-zoom-layout) .sp-topnav-brand .sp-nav-home {
-    font-size: 0.85rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-nav-pill {
-    font-size: 0.68rem;
-    padding: 0.28rem 0.45rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-nav-pill--brand {
-    font-size: 0.62rem;
-    padding: 0.2rem 0.4rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-date-tab {
-    font-size: 0.68rem;
-    padding: 0.35rem 0.35rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-marquee-wrap {
-    font-size: 0.74rem;
-  }
-
-  body:not(.sp-home-zoom-layout) .sp-results-table thead th {
-    padding: 0.3rem 0.2rem !important;
-    font-size: 0.65rem;
-  }
-}
-
 /* =====================================================================
  * Home only — body.sp-home-zoom-layout (class toggled from Home.jsx)
- * Wide canvas + pinch-zoom / horizontal pan instead of mobile reflow.
- * Viewport scaling: public/index.html (user-scalable=yes, min/max scale).
+ * Fixed-width canvas; viewport fitting + manual zoom via `useCanvasZoom` (transform).
  * ===================================================================== */
 
 /*
@@ -1506,15 +979,21 @@ body.sp-home-zoom-layout .sp-table-shell {
   overscroll-behavior-x: auto;
 }
 
-/* Wide pigeon grids extend the canvas; body/html handles pan; pinch zooms the viewport. */
+/* Wide pigeon grids extend the canvas; horizontal pan on the document when zoomed out. */
 body.sp-home-zoom-layout .sp-results-table {
   width: max-content;
   min-width: 100%;
   max-width: none;
 }
 
-/* —— Fit-to-viewport (CSS transform scale on `.sp-public`) —— */
-body.sp-home-zoom-layout .sp-home-fit-outer {
+/* —— Programmatic canvas zoom (`CanvasZoomShell` + `useCanvasZoom`) —— */
+body.sp-home-zoom-layout .sp-canvas-zoom-stage {
+  width: 100%;
+  box-sizing: border-box;
+  touch-action: pan-x pan-y;
+}
+
+body.sp-home-zoom-layout .sp-canvas-zoom-root {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1522,25 +1001,28 @@ body.sp-home-zoom-layout .sp-home-fit-outer {
   box-sizing: border-box;
 }
 
-body.sp-home-zoom-layout .sp-home-fit-bridge {
+body.sp-home-zoom-layout .sp-canvas-zoom-bridge {
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
   max-width: 100%;
 }
 
-/* Before first measure: same wrapper tree, normal flow (no remount of `.sp-public`). */
-body.sp-home-zoom-layout .sp-home-fit-bridge--flow {
+body.sp-home-zoom-layout .sp-canvas-zoom-bridge--flow {
   overflow: visible;
   width: 100%;
   max-width: 100%;
+}
+
+body.sp-home-zoom-layout .sp-public.sp-canvas-zoom-content--smooth {
+  transition: transform 0.14s ease-out;
 }
 
 body.sp-home-zoom-layout.sp-home-fitted-scale {
   overflow-x: hidden;
 }
 
-body.sp-home-zoom-layout .sp-home-fit-bar {
+body.sp-home-zoom-layout .sp-canvas-zoom-bar {
   position: fixed;
   z-index: 10050;
   right: max(10px, env(safe-area-inset-right, 0));
@@ -1556,7 +1038,7 @@ body.sp-home-zoom-layout .sp-home-fit-bar {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
-body.sp-home-zoom-layout .sp-home-fit-bar__btn {
+body.sp-home-zoom-layout .sp-canvas-zoom-bar__btn {
   font: inherit;
   font-size: 0.8rem;
   font-weight: 600;
@@ -1568,11 +1050,19 @@ body.sp-home-zoom-layout .sp-home-fit-bar__btn {
   cursor: pointer;
 }
 
-body.sp-home-zoom-layout .sp-home-fit-bar__btn:active {
+body.sp-home-zoom-layout .sp-canvas-zoom-bar__btn--icon {
+  min-width: 2.25rem;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding-left: 0.35rem;
+  padding-right: 0.35rem;
+}
+
+body.sp-home-zoom-layout .sp-canvas-zoom-bar__btn:active {
   transform: scale(0.97);
 }
 
-body.sp-home-zoom-layout .sp-home-fit-bar__label {
+body.sp-home-zoom-layout .sp-canvas-zoom-bar__label {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--sp-gold-light, #e8d48b);

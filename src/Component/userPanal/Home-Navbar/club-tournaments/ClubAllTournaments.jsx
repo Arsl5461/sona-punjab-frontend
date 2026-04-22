@@ -1,10 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useHomeFitToScreen } from "../../../../helper/useHomeFitToScreen";
+import { useCanvasZoom } from "../../../../helper/useCanvasZoom";
 import { usePublicZoomLayout } from "../../../../helper/usePublicZoomLayout";
-import {
-  PublicPageFitBar,
-  PublicPageFitShell,
-} from "../../PublicPageFitShell";
+import { CanvasZoomShell, CanvasZoomToolbar } from "../../CanvasZoomShell";
 import Marquee from "react-fast-marquee";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -291,23 +288,33 @@ const ClubAllTournaments = () => {
 
   const {
     contentRef,
-    scaledLayoutActive,
+    transformActive,
     bridgeStyle,
     scaledStyle,
-    setFitAuto,
-    setFitNatural,
-    mode,
-    fitScale,
-    isMobileFit,
-  } = useHomeFitToScreen(clubFitLayoutKey);
+    contentTransition,
+    onWheel,
+    onTouchStart,
+    onTouchMove,
+    endPinch,
+    zoomIn,
+    zoomOut,
+    fitToViewport,
+    scale,
+  } = useCanvasZoom(clubFitLayoutKey);
 
   return (
     <>
-      <PublicPageFitShell
-        scaledLayoutActive={scaledLayoutActive}
+      <CanvasZoomShell
+        transformActive={transformActive}
         bridgeStyle={bridgeStyle}
         scaledStyle={scaledStyle}
         contentRef={contentRef}
+        contentTransition={contentTransition}
+        onWheelCapture={onWheel}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={endPinch}
+        onTouchCancel={endPinch}
       >
       <HomeBanner />
       <HomeNavbar />
@@ -557,14 +564,13 @@ const ClubAllTournaments = () => {
           })
         )}
       </div>
-      </PublicPageFitShell>
-      <PublicPageFitBar
+      </CanvasZoomShell>
+      <CanvasZoomToolbar
         show={Boolean(clubName)}
-        onFit={setFitAuto}
-        onReset={setFitNatural}
-        mode={mode}
-        fitScale={fitScale}
-        isMobileFit={isMobileFit}
+        onFit={fitToViewport}
+        onZoomIn={zoomIn}
+        onZoomOut={zoomOut}
+        scalePct={Math.round(scale * 100)}
       />
     </>
   );

@@ -19,7 +19,7 @@ export function isChromeIOS() {
 /**
  * Public “wide canvas” pages: body.sp-home-zoom-layout + optional html classes
  * so iOS Safari / Chrome can use viewport pinch-zoom without nested scrollers
- * stealing gestures (see apna-shauq-home.css).
+ * stealing gestures (see apna-shauq-home.css + `useCanvasZoom`).
  */
 export function usePublicZoomLayout() {
   useEffect(() => {

@@ -1,10 +1,7 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { usePublicZoomLayout } from "../../helper/usePublicZoomLayout";
-import { useHomeFitToScreen } from "../../helper/useHomeFitToScreen";
-import {
-  PublicPageFitBar,
-  PublicPageFitShell,
-} from "./PublicPageFitShell";
+import { useCanvasZoom } from "../../helper/useCanvasZoom";
+import { CanvasZoomShell, CanvasZoomToolbar } from "./CanvasZoomShell";
 import Marquee from "react-fast-marquee";
 import HomeBanner from "./Home-Banne/HomeBanner";
 import HomeNavbar from "./Home-Navbar/HomeNavbar";
@@ -709,7 +706,7 @@ const Home = () => {
     currentTournament?.helperPigeons,
   ]);
 
-  const homeFitLayoutKey = useMemo(
+  const canvasZoomLayoutKey = useMemo(
     () =>
       [
         currentTournament?._id ?? "",
@@ -721,23 +718,33 @@ const Home = () => {
 
   const {
     contentRef,
-    scaledLayoutActive,
+    transformActive,
     bridgeStyle,
     scaledStyle,
-    setFitAuto,
-    setFitNatural,
-    mode,
-    fitScale,
-    isMobileFit,
-  } = useHomeFitToScreen(homeFitLayoutKey);
+    contentTransition,
+    onWheel,
+    onTouchStart,
+    onTouchMove,
+    endPinch,
+    zoomIn,
+    zoomOut,
+    fitToViewport,
+    scale,
+  } = useCanvasZoom(canvasZoomLayoutKey);
 
   return (
     <>
-      <PublicPageFitShell
-        scaledLayoutActive={scaledLayoutActive}
+      <CanvasZoomShell
+        transformActive={transformActive}
         bridgeStyle={bridgeStyle}
         scaledStyle={scaledStyle}
         contentRef={contentRef}
+        contentTransition={contentTransition}
+        onWheelCapture={onWheel}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={endPinch}
+        onTouchCancel={endPinch}
       >
       <HomeBanner />
       <HomeNavbar />
@@ -1248,14 +1255,13 @@ const Home = () => {
       </div>
         </>
       )}
-      </PublicPageFitShell>
-      <PublicPageFitBar
+      </CanvasZoomShell>
+      <CanvasZoomToolbar
         show={!!currentTournament?._id}
-        onFit={setFitAuto}
-        onReset={setFitNatural}
-        mode={mode}
-        fitScale={fitScale}
-        isMobileFit={isMobileFit}
+        onFit={fitToViewport}
+        onZoomIn={zoomIn}
+        onZoomOut={zoomOut}
+        scalePct={Math.round(scale * 100)}
       />
     </>
   );

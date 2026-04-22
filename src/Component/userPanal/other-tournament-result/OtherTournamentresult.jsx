@@ -1,10 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useHomeFitToScreen } from "../../../helper/useHomeFitToScreen";
+import { useCanvasZoom } from "../../../helper/useCanvasZoom";
 import { usePublicZoomLayout } from "../../../helper/usePublicZoomLayout";
-import {
-  PublicPageFitBar,
-  PublicPageFitShell,
-} from "../PublicPageFitShell";
+import { CanvasZoomShell, CanvasZoomToolbar } from "../CanvasZoomShell";
 import Marquee from "react-fast-marquee";
 import {
   getResultByDate,
@@ -780,23 +777,33 @@ const OtherTournamentresult = () => {
 
   const {
     contentRef,
-    scaledLayoutActive,
+    transformActive,
     bridgeStyle,
     scaledStyle,
-    setFitAuto,
-    setFitNatural,
-    mode,
-    fitScale,
-    isMobileFit,
-  } = useHomeFitToScreen(publicFitLayoutKey);
+    contentTransition,
+    onWheel,
+    onTouchStart,
+    onTouchMove,
+    endPinch,
+    zoomIn,
+    zoomOut,
+    fitToViewport,
+    scale,
+  } = useCanvasZoom(publicFitLayoutKey);
 
   return (
     <>
-      <PublicPageFitShell
-        scaledLayoutActive={scaledLayoutActive}
+      <CanvasZoomShell
+        transformActive={transformActive}
         bridgeStyle={bridgeStyle}
         scaledStyle={scaledStyle}
         contentRef={contentRef}
+        contentTransition={contentTransition}
+        onWheelCapture={onWheel}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={endPinch}
+        onTouchCancel={endPinch}
       >
       <HomeBanner />
       <HomeNavbar />
@@ -1294,14 +1301,13 @@ const OtherTournamentresult = () => {
           </tbody>
         </table>
       </div>
-      </PublicPageFitShell>
-      <PublicPageFitBar
+      </CanvasZoomShell>
+      <CanvasZoomToolbar
         show={!!currentTournament?._id}
-        onFit={setFitAuto}
-        onReset={setFitNatural}
-        mode={mode}
-        fitScale={fitScale}
-        isMobileFit={isMobileFit}
+        onFit={fitToViewport}
+        onZoomIn={zoomIn}
+        onZoomOut={zoomOut}
+        scalePct={Math.round(scale * 100)}
       />
     </>
   );
