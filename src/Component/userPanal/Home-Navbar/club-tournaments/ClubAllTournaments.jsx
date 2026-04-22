@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { usePublicZoomLayout } from "../../../../helper/usePublicZoomLayout";
 import Marquee from "react-fast-marquee";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -259,14 +260,7 @@ const ClubAllTournaments = () => {
     }
   }, [clubAllTournaments]);
 
-  /**
-   * Match Home: `body.sp-home-zoom-layout` fixed canvas; breakpoint rules that
-   * shrink public UI are disabled while this class is on — use browser zoom.
-   */
-  useEffect(() => {
-    document.body.classList.add("sp-home-zoom-layout");
-    return () => document.body.classList.remove("sp-home-zoom-layout");
-  }, []);
+  usePublicZoomLayout();
 
   return (
     <div className="sp-public">

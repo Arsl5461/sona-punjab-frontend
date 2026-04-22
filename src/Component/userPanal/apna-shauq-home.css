@@ -1401,9 +1401,9 @@
  * ===================================================================== */
 
 /*
- * iOS Safari: nested overflow-x: auto (table shell, stats, nav) steals pinch gestures
- * for inner scrolling so viewport zoom-in/out feels broken on wide tournaments.
- * Use one horizontal scroll on the document + explicit pinch-zoom touch-action.
+ * iOS (Safari + Chrome on iPhone): nested overflow-x: auto steals pinch gestures.
+ * Use one horizontal scroll on the document. touch-action: pinch-zoom is unreliable
+ * on WebKit; iOS-specific rules use default touch-action + scroll (see .sp-ios-touch).
  */
 html:has(body.sp-home-zoom-layout) {
   overflow-x: visible;
@@ -1411,8 +1411,29 @@ html:has(body.sp-home-zoom-layout) {
 
 body.sp-home-zoom-layout {
   overflow-x: auto;
-  touch-action: pan-x pan-y pinch-zoom;
   -webkit-overflow-scrolling: touch;
+}
+
+/* WebKit on iPhone / iPad — viewport pinch-zoom + pan (Chrome iOS uses same engine). */
+html.sp-ios-touch:has(body.sp-home-zoom-layout) {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html.sp-ios-touch body.sp-home-zoom-layout {
+  touch-action: auto;
+  overflow-x: scroll;
+}
+
+/* Google Chrome on iOS: avoid “stuck” minimum scale; keep gesture model minimal. */
+html.sp-ios-chrome:has(body.sp-home-zoom-layout) {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html.sp-ios-chrome body.sp-home-zoom-layout {
+  touch-action: auto;
+  overflow-x: scroll;
 }
 
 body.sp-home-zoom-layout .sp-public {

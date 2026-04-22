@@ -16,6 +16,7 @@ const RouteScrollToTop = () => {
       )
     ) {
       document.body.classList.remove("sp-home-zoom-layout");
+      document.documentElement.classList.remove("sp-ios-touch", "sp-ios-chrome");
     }
   }, [pathname]);
 

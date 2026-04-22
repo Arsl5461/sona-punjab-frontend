@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { usePublicZoomLayout } from "../../../helper/usePublicZoomLayout";
 import Marquee from "react-fast-marquee";
 import {
   getResultByDate,
@@ -42,14 +43,7 @@ const OtherTournamentresult = () => {
     getCurrentTournament();
   }, [tournamentId]);
 
-  /**
-   * Match Home: `body.sp-home-zoom-layout` fixed canvas; viewport breakpoint CSS
-   * is gated off so the page does not reflow — users zoom the browser view.
-   */
-  useEffect(() => {
-    document.body.classList.add("sp-home-zoom-layout");
-    return () => document.body.classList.remove("sp-home-zoom-layout");
-  }, []);
+  usePublicZoomLayout();
 
   // const handleDateSelect = (date, index) => {
   //   // Convert "YYYY-MM-DD" to "DD-MM-YYYY"

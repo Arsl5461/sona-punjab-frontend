@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { usePublicZoomLayout } from "../../helper/usePublicZoomLayout";
 import Marquee from "react-fast-marquee";
 import HomeBanner from "./Home-Banne/HomeBanner";
 import HomeNavbar from "./Home-Navbar/HomeNavbar";
@@ -36,16 +37,8 @@ const Home = () => {
     getCurrentTournament();
   }, []);
 
-  /**
-   * Home uses a fixed minimum canvas (see apna-shauq-home.css
-   * `body.sp-home-zoom-layout`). Viewport breakpoint rules are disabled for this
-   * body class so layout does not reflow on small screens — users zoom the page
-   * (see public/index.html viewport). Class removed on unmount.
-   */
-  useEffect(() => {
-    document.body.classList.add("sp-home-zoom-layout");
-    return () => document.body.classList.remove("sp-home-zoom-layout");
-  }, []);
+  /** Wide canvas + iOS-friendly zoom classes (see `usePublicZoomLayout`). */
+  usePublicZoomLayout();
 
   // const handleDateSelect = (date, index) => {
   //   // Convert "YYYY-MM-DD" to "DD-MM-YYYY"
