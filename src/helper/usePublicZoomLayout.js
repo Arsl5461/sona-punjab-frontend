@@ -17,24 +17,48 @@ export function isChromeIOS() {
   return /CriOS/i.test(navigator.userAgent);
 }
 
+/** Matches Bootstrap `md` — phones / small tablets only (not laptops). */
+const WIDE_CANVAS_MEDIA = "(max-width: 991.98px)";
+
+function clearZoomLayout(html) {
+  document.body.classList.remove("sp-home-zoom-layout");
+  html.classList.remove("sp-ios-touch", "sp-ios-chrome");
+}
+
+function applyZoomLayout(html) {
+  document.body.classList.add("sp-home-zoom-layout");
+  const ios = isAppleTouchDevice();
+  if (ios) html.classList.add("sp-ios-touch");
+  else html.classList.remove("sp-ios-touch");
+  if (ios && isChromeIOS()) html.classList.add("sp-ios-chrome");
+  else html.classList.remove("sp-ios-chrome");
+}
+
 /**
- * Public “wide canvas” home / tournament / club pages: `body.sp-home-zoom-layout`
- * so the layout stays desktop-width; users **pinch-zoom** the viewport (see
- * `public/index.html` meta + `apna-shauq-home.css`) to shrink the whole page on
- * phones — same idea as your reference screenshot.
+ * On **narrow viewports only** (≤992px): `body.sp-home-zoom-layout` keeps a
+ * desktop-wide canvas so users can **pinch-zoom** the whole page on phones.
+ *
+ * On **laptops and wide browsers**: the class is **not** applied — normal fluid
+ * layout (`width: 100%`, no forced `min-width: 1024px`) so nothing looks zoomed-in.
  */
 export function usePublicZoomLayout() {
   useEffect(() => {
     const html = document.documentElement;
-    document.body.classList.add("sp-home-zoom-layout");
+    const mq = window.matchMedia(WIDE_CANVAS_MEDIA);
 
-    const ios = isAppleTouchDevice();
-    if (ios) html.classList.add("sp-ios-touch");
-    if (ios && isChromeIOS()) html.classList.add("sp-ios-chrome");
+    const sync = () => {
+      if (mq.matches) applyZoomLayout(html);
+      else clearZoomLayout(html);
+    };
+
+    sync();
+    mq.addEventListener("change", sync);
+    window.addEventListener("orientationchange", sync);
 
     return () => {
-      document.body.classList.remove("sp-home-zoom-layout");
-      html.classList.remove("sp-ios-touch", "sp-ios-chrome");
+      mq.removeEventListener("change", sync);
+      window.removeEventListener("orientationchange", sync);
+      clearZoomLayout(html);
     };
   }, []);
 }
