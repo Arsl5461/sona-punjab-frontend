@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useHomeFitToScreen } from "../../../../helper/useHomeFitToScreen";
 import { usePublicZoomLayout } from "../../../../helper/usePublicZoomLayout";
+import {
+  PublicPageFitBar,
+  PublicPageFitShell,
+} from "../../PublicPageFitShell";
 import Marquee from "react-fast-marquee";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -262,8 +267,47 @@ const ClubAllTournaments = () => {
 
   usePublicZoomLayout();
 
+  const clubFitLayoutKey = useMemo(
+    () =>
+      [
+        clubName ?? "",
+        activeYear ?? "",
+        loading ? "1" : "0",
+        clubAllTournaments.length,
+        refreshClub ? "1" : "0",
+        Object.keys(tournamentOwners).length,
+        Object.keys(tournamentResults).length,
+      ].join("|"),
+    [
+      clubName,
+      activeYear,
+      loading,
+      clubAllTournaments.length,
+      refreshClub,
+      tournamentOwners,
+      tournamentResults,
+    ]
+  );
+
+  const {
+    contentRef,
+    needsScaleBridge,
+    bridgeStyle,
+    scaledStyle,
+    setFitAuto,
+    setFitNatural,
+    mode,
+    fitScale,
+  } = useHomeFitToScreen(clubFitLayoutKey);
+
   return (
-    <div className="sp-public">
+    <>
+      <PublicPageFitShell
+        needsScaleBridge={needsScaleBridge}
+        bridgeStyle={bridgeStyle}
+        scaledStyle={scaledStyle}
+        contentRef={contentRef}
+      >
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
@@ -512,7 +556,15 @@ const ClubAllTournaments = () => {
           })
         )}
       </div>
-    </div>
+      </PublicPageFitShell>
+      <PublicPageFitBar
+        show={Boolean(clubName)}
+        onFit={setFitAuto}
+        onReset={setFitNatural}
+        mode={mode}
+        fitScale={fitScale}
+      />
+    </>
   );
 };
 

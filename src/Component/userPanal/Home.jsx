@@ -1,5 +1,10 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { usePublicZoomLayout } from "../../helper/usePublicZoomLayout";
+import { useHomeFitToScreen } from "../../helper/useHomeFitToScreen";
+import {
+  PublicPageFitBar,
+  PublicPageFitShell,
+} from "./PublicPageFitShell";
 import Marquee from "react-fast-marquee";
 import HomeBanner from "./Home-Banne/HomeBanner";
 import HomeNavbar from "./Home-Navbar/HomeNavbar";
@@ -704,8 +709,35 @@ const Home = () => {
     currentTournament?.helperPigeons,
   ]);
 
+  const homeFitLayoutKey = useMemo(
+    () =>
+      [
+        currentTournament?._id ?? "",
+        selectedDateIndex,
+        resultDate?.date ?? "",
+      ].join("|"),
+    [currentTournament?._id, selectedDateIndex, resultDate?.date]
+  );
+
+  const {
+    contentRef,
+    needsScaleBridge,
+    bridgeStyle,
+    scaledStyle,
+    setFitAuto,
+    setFitNatural,
+    mode,
+    fitScale,
+  } = useHomeFitToScreen(homeFitLayoutKey);
+
   return (
-    <div className="sp-public">
+    <>
+      <PublicPageFitShell
+        needsScaleBridge={needsScaleBridge}
+        bridgeStyle={bridgeStyle}
+        scaledStyle={scaledStyle}
+        contentRef={contentRef}
+      >
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
@@ -1215,7 +1247,15 @@ const Home = () => {
       </div>
         </>
       )}
-    </div>
+      </PublicPageFitShell>
+      <PublicPageFitBar
+        show={!!currentTournament?._id}
+        onFit={setFitAuto}
+        onReset={setFitNatural}
+        mode={mode}
+        fitScale={fitScale}
+      />
+    </>
   );
 };
 

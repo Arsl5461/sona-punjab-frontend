@@ -1513,3 +1513,63 @@ body.sp-home-zoom-layout .sp-results-table {
   max-width: none;
 }
 
+/* —— Fit-to-viewport (CSS transform scale on `.sp-public`) —— */
+body.sp-home-zoom-layout .sp-home-fit-outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+body.sp-home-zoom-layout .sp-home-fit-bridge {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  max-width: 100%;
+}
+
+body.sp-home-zoom-layout.sp-home-fitted-scale {
+  overflow-x: hidden;
+}
+
+body.sp-home-zoom-layout .sp-home-fit-bar {
+  position: fixed;
+  z-index: 10050;
+  right: max(10px, env(safe-area-inset-right, 0));
+  bottom: max(10px, env(safe-area-inset-bottom, 0));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(18, 38, 84, 0.92);
+  border: 1px solid var(--sp-gold, #c9a227);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+body.sp-home-zoom-layout .sp-home-fit-bar__btn {
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  color: #f5f7fc;
+  cursor: pointer;
+}
+
+body.sp-home-zoom-layout .sp-home-fit-bar__btn:active {
+  transform: scale(0.97);
+}
+
+body.sp-home-zoom-layout .sp-home-fit-bar__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--sp-gold-light, #e8d48b);
+  padding: 0 0.15rem;
+  white-space: nowrap;
+}
+

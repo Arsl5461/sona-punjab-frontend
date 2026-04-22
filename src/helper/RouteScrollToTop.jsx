@@ -15,7 +15,10 @@ const RouteScrollToTop = () => {
         pathname.startsWith("/club-all-tournaments/")
       )
     ) {
-      document.body.classList.remove("sp-home-zoom-layout");
+      document.body.classList.remove(
+        "sp-home-zoom-layout",
+        "sp-home-fitted-scale"
+      );
       document.documentElement.classList.remove("sp-ios-touch", "sp-ios-chrome");
     }
   }, [pathname]);
