@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { usePublicZoomLayout } from "../../helper/usePublicZoomLayout";
 import Marquee from "react-fast-marquee";
 import HomeBanner from "./Home-Banne/HomeBanner";
@@ -689,6 +689,21 @@ const Home = () => {
       ? findFirstPigeonHighestTime()
       : null;
 
+  const { pigeonSlots, helperSlots } = useMemo(() => {
+    const rawP = Number(currentTournament?.numberOfPigeons);
+    const rawH = Number(currentTournament?.helperPigeons);
+    const p = Number.isFinite(rawP) ? Math.floor(rawP) : 0;
+    const h = Number.isFinite(rawH) ? Math.floor(rawH) : 0;
+    return {
+      pigeonSlots: Math.max(0, Math.min(50, p)),
+      helperSlots: Math.max(0, Math.min(50, h)),
+    };
+  }, [
+    currentTournament?._id,
+    currentTournament?.numberOfPigeons,
+    currentTournament?.helperPigeons,
+  ]);
+
   return (
     <div className="sp-public">
       <HomeBanner />
@@ -817,8 +832,7 @@ const Home = () => {
           <div>
             <span className="fw-bold">Pigeons:</span>{" "}
             <span>
-              {(currentTournament?.numberOfPigeons +
-                (currentTournament?.helperPigeons || 0)) *
+              {(pigeonSlots + helperSlots) *
                 currentTournament?.participatingLofts?.length}
             </span>{" "}
           </div>
@@ -852,8 +866,7 @@ const Home = () => {
             <span>
               {(() => {
                 const totalPigeons =
-                  (currentTournament?.numberOfPigeons +
-                    (currentTournament?.helperPigeons || 0)) *
+                  (pigeonSlots + helperSlots) *
                   currentTournament?.participatingLofts?.length;
 
                 const landedPigeons = showTotal
@@ -910,22 +923,16 @@ const Home = () => {
               ) : (
                 // Show pigeon numbers when specific date is selected
                 <>
-                  {Array.from(
-                    { length: currentTournament?.numberOfPigeons },
-                    (_, index) => (
-                      <th key={index} scope="col" className="text-center">
-                        #{index + 1}
-                      </th>
-                    )
-                  )}
-                  {Array.from(
-                    { length: currentTournament?.helperPigeons || 0 },
-                    (_, index) => (
-                      <th key={`helper-${index}`} scope="col" className="text-center">
-                        #{currentTournament?.numberOfPigeons + index + 1}
-                      </th>
-                    )
-                  )}
+                  {Array.from({ length: pigeonSlots }, (_, index) => (
+                    <th key={index} scope="col" className="text-center">
+                      #{index + 1}
+                    </th>
+                  ))}
+                  {Array.from({ length: helperSlots }, (_, index) => (
+                    <th key={`helper-${index}`} scope="col" className="text-center">
+                      #{pigeonSlots + index + 1}
+                    </th>
+                  ))}
                 </>
               )}
               <th scope="col" className="text-center">
@@ -1080,9 +1087,7 @@ const Home = () => {
                         );
                       })} */}
                       {Array.from({
-                        length:
-                          currentTournament?.numberOfPigeons +
-                          (currentTournament?.helperPigeons || 0),
+                        length: pigeonSlots + helperSlots,
                       }).map((_, index) => {
                         const pigeonTime = showTotal
                           ? ownerResult?.pigeons?.[index]?.totalTime
@@ -1108,8 +1113,7 @@ const Home = () => {
                           index === lastIdxGlobal;
                         const isExcluded =
                           ownerResult?.excludedIndices?.includes(index);
-                        const isHelper =
-                          index >= currentTournament?.numberOfPigeons;
+                        const isHelper = index >= pigeonSlots;
                         const isFirstWinnerCell =
                           !isExcluded &&
                           index === 0 &&

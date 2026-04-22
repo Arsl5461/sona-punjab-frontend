@@ -272,15 +272,22 @@ export const getTournamentsForCurrentMonth = async (req, res) => {
 
 export const getActiveTournament = async (req, res) => {
   try {
-    const tournament =
-      (await Tournament.findOne({ status: "Active" })) ||
-      (await Tournament.findOne({ status: { $regex: /^active$/i } }));
-    if (!tournament) {
+    const activeQuery = { status: { $regex: /^active$/i } };
+    // Newest first: matches "last turned on" when several rows still say Active (legacy data / races).
+    let list = await Tournament.find(activeQuery).sort({ _id: -1 }).lean();
+    if (!list.length) {
       return res.status(404).json({ error: "No active tournament found" });
+    }
+    if (list.length > 1) {
+      const keepId = list[0]._id;
+      await Tournament.updateMany(
+        { ...activeQuery, _id: { $ne: keepId } },
+        { $set: { status: "Non-Active" } }
+      );
     }
     res.status(200).json({
       success: true,
-      data: normalizeTournamentDoc(tournament),
+      data: normalizeTournamentDoc(list[0]),
     });
   } catch (error) {
     console.error("Error fetching active tournament:", error);
