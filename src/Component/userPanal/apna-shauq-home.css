@@ -104,7 +104,7 @@
 
 /* Compact title — Nastaliq reads large at equal font-size */
 .sp-tournament-head:not(.sp-club-head) .sp-tournament-title {
-  font-size: 0.88rem;
+  font-size: clamp(0.72rem, 2.2vw, 0.95rem);
   font-weight: 700;
   color: var(--sp-green-dark);
   margin: 0 0 0.2rem;
@@ -131,14 +131,14 @@
 }
 
 .sp-club-head .sp-tournament-title {
-  font-size: 0.82rem;
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
   font-weight: 700;
   line-height: 1.25;
 }
 
 /* Club tournament cards: wider table area */
 .sp-club-tournament-card {
-  max-width: 1180px;
+  max-width: min(100%, 1180px);
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
@@ -356,7 +356,7 @@
 
 /* Tournament title above table (h6 + class) */
 .sp-club-tournament-card .card-header h6.sp-club-card-title {
-  font-size: 1.05rem;
+  font-size: clamp(0.9rem, 2.2vw, 1.08rem);
   font-weight: 700;
   line-height: 1.35;
   margin-bottom: 0.2rem;
@@ -589,7 +589,7 @@
 /* —— Results table —— */
 .sp-table-shell {
   margin: 0 0.5rem 1.25rem;
-  max-width: calc(100vw - 1rem);
+  max-width: 100%;
   width: 100%;
   box-sizing: border-box;
   border-radius: 8px;
@@ -868,161 +868,8 @@
   padding: 0.24rem 0.48rem;
 }
 
-/* =====================================================================
- * Home only — body.sp-home-zoom-layout (class toggled from Home.jsx)
- * Fixed-width canvas; viewport fitting + manual zoom via `useCanvasZoom` (transform).
- * ===================================================================== */
-
-/*
- * iOS (Safari + Chrome on iPhone): nested overflow-x: auto steals pinch gestures.
- * Use one horizontal scroll on the document. touch-action: pinch-zoom is unreliable
- * on WebKit; iOS-specific rules use default touch-action + scroll (see .sp-ios-touch).
- */
-html:has(body.sp-home-zoom-layout) {
-  overflow-x: visible;
-}
-
-body.sp-home-zoom-layout {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* WebKit on iPhone / iPad — viewport pinch-zoom + pan (Chrome iOS uses same engine). */
-html.sp-ios-touch:has(body.sp-home-zoom-layout) {
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
-
-html.sp-ios-touch body.sp-home-zoom-layout {
-  touch-action: auto;
-  overflow-x: scroll;
-}
-
-/* Google Chrome on iOS: avoid “stuck” minimum scale; keep gesture model minimal. */
-html.sp-ios-chrome:has(body.sp-home-zoom-layout) {
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
-
-html.sp-ios-chrome body.sp-home-zoom-layout {
-  touch-action: auto;
-  overflow-x: scroll;
-}
-
-body.sp-home-zoom-layout .sp-public {
-  min-width: 1024px;
-  max-width: none;
-  width: max-content;
-  margin-left: auto;
-  margin-right: auto;
-  box-sizing: border-box;
-}
-
-body.sp-home-zoom-layout .sp-topnav-row {
-  max-width: none;
-}
-
-body.sp-home-zoom-layout .sp-topnav-scroll {
-  overflow-x: visible;
-  -webkit-overflow-scrolling: auto;
-}
-
-body.sp-home-zoom-layout .sp-tournament-head:not(.sp-club-head) {
-  overflow-x: visible;
-}
-
-body.sp-home-zoom-layout .sp-stats-row {
-  overflow-x: visible;
-  overscroll-behavior-x: auto;
-  flex-wrap: nowrap;
-  justify-content: center;
-}
-
-body.sp-home-zoom-layout .sp-stats-strip {
-  max-width: none;
-}
-/* Fixed canvas on zoom routes — no breakpoint reflow; use browser zoom (viewport meta). */
-body.sp-home-zoom-layout .sp-tournament-head:not(.sp-club-head) .sp-tournament-title {
-  font-size: 0.88rem !important;
-}
-
-body.sp-home-zoom-layout .sp-date-row {
-  max-width: none;
-}
-
-body.sp-home-zoom-layout .sp-winner-box--dual {
-  flex-wrap: nowrap;
-}
-
-body.sp-home-zoom-layout .sp-marquee-wrap .rfm-marquee-container {
-  min-width: auto;
-}
-
-body.sp-home-zoom-layout .sp-banner-slide-img {
-  max-height: 640px !important;
-}
-
-body.sp-home-zoom-layout .sp-banner-placeholder {
-  min-height: 180px;
-  font-size: 0.9rem;
-}
-
-/* Table shell must follow the fixed canvas width, not the device viewport (100vw),
-   or the grid stays narrow with empty space beside it on phones. */
-body.sp-home-zoom-layout .sp-table-shell {
-  max-width: none;
-  width: 100%;
-  box-sizing: border-box;
-  /* Let the page/body scroll horizontally — do not nest a second scroller (iOS zoom). */
-  overflow-x: visible;
-  -webkit-overflow-scrolling: auto;
-  overscroll-behavior-x: auto;
-}
-
-/* Wide pigeon grids extend the canvas; horizontal pan on the document when zoomed out. */
-body.sp-home-zoom-layout .sp-results-table {
-  width: max-content;
-  min-width: 100%;
-  max-width: none;
-}
-
-/* —— Programmatic canvas zoom (`CanvasZoomShell` + `useCanvasZoom`) —— */
-body.sp-home-zoom-layout .sp-canvas-zoom-stage {
-  width: 100%;
-  box-sizing: border-box;
-  touch-action: pan-x pan-y;
-}
-
-body.sp-home-zoom-layout .sp-canvas-zoom-root {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-body.sp-home-zoom-layout .sp-canvas-zoom-bridge {
-  position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
-  max-width: 100%;
-}
-
-body.sp-home-zoom-layout .sp-canvas-zoom-bridge--flow {
-  overflow: visible;
-  width: 100%;
-  max-width: 100%;
-}
-
-body.sp-home-zoom-layout .sp-public.sp-canvas-zoom-content--smooth {
-  transition: transform 0.14s ease-out;
-}
-
-body.sp-home-zoom-layout.sp-home-fitted-scale {
-  overflow-x: hidden;
-}
-
-body.sp-home-zoom-layout .sp-canvas-zoom-bar {
+/* —— Simple UI zoom toolbar (`useSimpleUiZoom` + `SimpleZoomToolbar`) —— */
+.sp-simple-zoom-bar {
   position: fixed;
   z-index: 10050;
   right: max(10px, env(safe-area-inset-right, 0));
@@ -1038,7 +885,7 @@ body.sp-home-zoom-layout .sp-canvas-zoom-bar {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
-body.sp-home-zoom-layout .sp-canvas-zoom-bar__btn {
+.sp-simple-zoom-bar__btn {
   font: inherit;
   font-size: 0.8rem;
   font-weight: 600;
@@ -1048,21 +895,14 @@ body.sp-home-zoom-layout .sp-canvas-zoom-bar__btn {
   background: rgba(255, 255, 255, 0.12);
   color: #f5f7fc;
   cursor: pointer;
-}
-
-body.sp-home-zoom-layout .sp-canvas-zoom-bar__btn--icon {
   min-width: 2.25rem;
-  font-size: 1.1rem;
-  line-height: 1;
-  padding-left: 0.35rem;
-  padding-right: 0.35rem;
 }
 
-body.sp-home-zoom-layout .sp-canvas-zoom-bar__btn:active {
+.sp-simple-zoom-bar__btn:active {
   transform: scale(0.97);
 }
 
-body.sp-home-zoom-layout .sp-canvas-zoom-bar__label {
+.sp-simple-zoom-bar__label {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--sp-gold-light, #e8d48b);
@@ -1070,3 +910,61 @@ body.sp-home-zoom-layout .sp-canvas-zoom-bar__label {
   white-space: nowrap;
 }
 
+/* —— Responsive layout (viewport-width; wide tables scroll inside `.sp-table-shell`) —— */
+@media (max-width: 991.98px) {
+  .sp-date-row {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    gap: 0.45rem;
+    scrollbar-width: thin;
+  }
+
+  .sp-date-tab {
+    flex: 0 0 auto;
+  }
+
+  .sp-stats-row {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .sp-topnav-row {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .sp-topnav-scroll {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 0.4rem;
+    margin-top: 0.25rem;
+  }
+
+  .sp-marquee-wrap {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sp-results-table {
+    font-size: 0.72rem;
+  }
+
+  .sp-results-table thead th,
+  .sp-results-table tbody td {
+    padding: 0.3rem 0.28rem !important;
+  }
+
+  .sp-winner-box--dual {
+    flex-direction: column;
+  }
+}

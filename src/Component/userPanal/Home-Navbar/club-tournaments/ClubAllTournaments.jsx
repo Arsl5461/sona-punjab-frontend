@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useCanvasZoom } from "../../../../helper/useCanvasZoom";
-import { usePublicZoomLayout } from "../../../../helper/usePublicZoomLayout";
-import { CanvasZoomShell, CanvasZoomToolbar } from "../../CanvasZoomShell";
+import React, { useEffect, useState } from "react";
+import { useSimpleUiZoom } from "../../../../helper/useSimpleUiZoom";
+import { SimpleZoomToolbar } from "../../SimpleZoomToolbar";
 import Marquee from "react-fast-marquee";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -262,60 +261,12 @@ const ClubAllTournaments = () => {
     }
   }, [clubAllTournaments]);
 
-  usePublicZoomLayout();
-
-  const clubFitLayoutKey = useMemo(
-    () =>
-      [
-        clubName ?? "",
-        activeYear ?? "",
-        loading ? "1" : "0",
-        clubAllTournaments.length,
-        refreshClub ? "1" : "0",
-        Object.keys(tournamentOwners).length,
-        Object.keys(tournamentResults).length,
-      ].join("|"),
-    [
-      clubName,
-      activeYear,
-      loading,
-      clubAllTournaments.length,
-      refreshClub,
-      tournamentOwners,
-      tournamentResults,
-    ]
-  );
-
-  const {
-    contentRef,
-    transformActive,
-    bridgeStyle,
-    scaledStyle,
-    contentTransition,
-    onWheel,
-    onTouchStart,
-    onTouchMove,
-    endPinch,
-    zoomIn,
-    zoomOut,
-    fitToViewport,
-    scale,
-  } = useCanvasZoom(clubFitLayoutKey);
+  const { zoomIn, zoomOut, resetZoom, zoomStyle, zoomPercent } =
+    useSimpleUiZoom();
 
   return (
     <>
-      <CanvasZoomShell
-        transformActive={transformActive}
-        bridgeStyle={bridgeStyle}
-        scaledStyle={scaledStyle}
-        contentRef={contentRef}
-        contentTransition={contentTransition}
-        onWheelCapture={onWheel}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={endPinch}
-        onTouchCancel={endPinch}
-      >
+      <div className="sp-public" style={zoomStyle}>
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
@@ -564,13 +515,13 @@ const ClubAllTournaments = () => {
           })
         )}
       </div>
-      </CanvasZoomShell>
-      <CanvasZoomToolbar
+      </div>
+      <SimpleZoomToolbar
         show={Boolean(clubName)}
-        onFit={fitToViewport}
+        zoomPercent={zoomPercent}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
-        scalePct={Math.round(scale * 100)}
+        onReset={resetZoom}
       />
     </>
   );

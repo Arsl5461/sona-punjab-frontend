@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { usePublicZoomLayout } from "../../helper/usePublicZoomLayout";
-import { useCanvasZoom } from "../../helper/useCanvasZoom";
-import { CanvasZoomShell, CanvasZoomToolbar } from "./CanvasZoomShell";
+import { useSimpleUiZoom } from "../../helper/useSimpleUiZoom";
+import { SimpleZoomToolbar } from "./SimpleZoomToolbar";
 import Marquee from "react-fast-marquee";
 import HomeBanner from "./Home-Banne/HomeBanner";
 import HomeNavbar from "./Home-Navbar/HomeNavbar";
@@ -38,9 +37,6 @@ const Home = () => {
   useEffect(() => {
     getCurrentTournament();
   }, []);
-
-  /** Wide canvas + iOS-friendly zoom classes (see `usePublicZoomLayout`). */
-  usePublicZoomLayout();
 
   // const handleDateSelect = (date, index) => {
   //   // Convert "YYYY-MM-DD" to "DD-MM-YYYY"
@@ -706,46 +702,12 @@ const Home = () => {
     currentTournament?.helperPigeons,
   ]);
 
-  const canvasZoomLayoutKey = useMemo(
-    () =>
-      [
-        currentTournament?._id ?? "",
-        selectedDateIndex,
-        resultDate?.date ?? "",
-      ].join("|"),
-    [currentTournament?._id, selectedDateIndex, resultDate?.date]
-  );
-
-  const {
-    contentRef,
-    transformActive,
-    bridgeStyle,
-    scaledStyle,
-    contentTransition,
-    onWheel,
-    onTouchStart,
-    onTouchMove,
-    endPinch,
-    zoomIn,
-    zoomOut,
-    fitToViewport,
-    scale,
-  } = useCanvasZoom(canvasZoomLayoutKey);
+  const { zoomIn, zoomOut, resetZoom, zoomStyle, zoomPercent } =
+    useSimpleUiZoom();
 
   return (
     <>
-      <CanvasZoomShell
-        transformActive={transformActive}
-        bridgeStyle={bridgeStyle}
-        scaledStyle={scaledStyle}
-        contentRef={contentRef}
-        contentTransition={contentTransition}
-        onWheelCapture={onWheel}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={endPinch}
-        onTouchCancel={endPinch}
-      >
+      <div className="sp-public" style={zoomStyle}>
       <HomeBanner />
       <HomeNavbar />
       <div className="sp-marquee-wrap">
@@ -1255,13 +1217,13 @@ const Home = () => {
       </div>
         </>
       )}
-      </CanvasZoomShell>
-      <CanvasZoomToolbar
+      </div>
+      <SimpleZoomToolbar
         show={!!currentTournament?._id}
-        onFit={fitToViewport}
+        zoomPercent={zoomPercent}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
-        scalePct={Math.round(scale * 100)}
+        onReset={resetZoom}
       />
     </>
   );

@@ -6,8 +6,7 @@ const RouteScrollToTop = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Safety: if user navigates away from public pages,
-    // ensure zoom-layout class doesn't linger.
+    // Safety: clear legacy layout classes when leaving public routes.
     if (
       !(
         pathname === "/" ||
