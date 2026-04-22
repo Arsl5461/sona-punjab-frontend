@@ -1439,7 +1439,14 @@ html.sp-ios-chrome body.sp-home-zoom-layout {
 body.sp-home-zoom-layout .sp-public {
   min-width: 1024px;
   max-width: none;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
   box-sizing: border-box;
+}
+
+body.sp-home-zoom-layout .sp-topnav-row {
+  max-width: none;
 }
 
 body.sp-home-zoom-layout .sp-topnav-scroll {
@@ -1454,7 +1461,7 @@ body.sp-home-zoom-layout .sp-tournament-head:not(.sp-club-head) {
 body.sp-home-zoom-layout .sp-stats-row {
   overflow-x: visible;
   overscroll-behavior-x: auto;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
 }
 
@@ -1463,11 +1470,23 @@ body.sp-home-zoom-layout .sp-stats-strip {
 }
 /* Fixed canvas on zoom routes — no breakpoint reflow; use browser zoom (viewport meta). */
 body.sp-home-zoom-layout .sp-tournament-head:not(.sp-club-head) .sp-tournament-title {
-  font-size: 0.88rem;
+  font-size: 0.88rem !important;
+}
+
+body.sp-home-zoom-layout .sp-date-row {
+  max-width: none;
+}
+
+body.sp-home-zoom-layout .sp-winner-box--dual {
+  flex-wrap: nowrap;
+}
+
+body.sp-home-zoom-layout .sp-marquee-wrap .rfm-marquee-container {
+  min-width: auto;
 }
 
 body.sp-home-zoom-layout .sp-banner-slide-img {
-  max-height: min(74vh, 640px) !important;
+  max-height: 640px !important;
 }
 
 body.sp-home-zoom-layout .sp-banner-placeholder {
