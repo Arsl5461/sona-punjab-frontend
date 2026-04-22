@@ -1400,18 +1400,45 @@
  * Viewport scaling: public/index.html (user-scalable=yes, min/max scale).
  * ===================================================================== */
 
+/*
+ * iOS Safari: nested overflow-x: auto (table shell, stats, nav) steals pinch gestures
+ * for inner scrolling so viewport zoom-in/out feels broken on wide tournaments.
+ * Use one horizontal scroll on the document + explicit pinch-zoom touch-action.
+ */
 html:has(body.sp-home-zoom-layout) {
-  overflow-x: auto;
+  overflow-x: visible;
 }
 
 body.sp-home-zoom-layout {
   overflow-x: auto;
+  touch-action: pan-x pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
 }
 
 body.sp-home-zoom-layout .sp-public {
   min-width: 1024px;
   max-width: none;
   box-sizing: border-box;
+}
+
+body.sp-home-zoom-layout .sp-topnav-scroll {
+  overflow-x: visible;
+  -webkit-overflow-scrolling: auto;
+}
+
+body.sp-home-zoom-layout .sp-tournament-head:not(.sp-club-head) {
+  overflow-x: visible;
+}
+
+body.sp-home-zoom-layout .sp-stats-row {
+  overflow-x: visible;
+  overscroll-behavior-x: auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+body.sp-home-zoom-layout .sp-stats-strip {
+  max-width: none;
 }
 /* Fixed canvas on zoom routes — no breakpoint reflow; use browser zoom (viewport meta). */
 body.sp-home-zoom-layout .sp-tournament-head:not(.sp-club-head) .sp-tournament-title {
@@ -1433,17 +1460,16 @@ body.sp-home-zoom-layout .sp-table-shell {
   max-width: none;
   width: 100%;
   box-sizing: border-box;
+  /* Let the page/body scroll horizontally — do not nest a second scroller (iOS zoom). */
+  overflow-x: visible;
+  -webkit-overflow-scrolling: auto;
+  overscroll-behavior-x: auto;
 }
 
-/* At least full shell width; grow past it when there are many pigeon columns (shell scrolls). */
+/* Wide pigeon grids extend the canvas; body/html handles pan; pinch zooms the viewport. */
 body.sp-home-zoom-layout .sp-results-table {
-  width: 100%;
+  width: max-content;
   min-width: 100%;
-}
-
-@supports (width: max(1px, 2px)) {
-  body.sp-home-zoom-layout .sp-results-table {
-    min-width: max(100%, max-content);
-  }
+  max-width: none;
 }
 
